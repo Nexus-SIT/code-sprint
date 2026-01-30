@@ -37,28 +37,31 @@ const Home: React.FC = () => {
             </div>
 
             {/* Game Mode Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8">
                 {/* Tutorial Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl border-4 p-8 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
+                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         ? 'bg-gray-800 border-gray-700 hover:border-green-500'
                         : 'bg-wood border-wood-dark hover:border-green-600'
                         }`}
                 >
                     <div className="flex flex-col items-center text-center">
-                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-green-900/30' : 'bg-green-600/20'}`}>
-                            <BookOpen size={48} className="text-green-500" />
+                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-green-900/30' : 'bg-green-600/20'
+                            }`}>
+                            <BookOpen size={40} className="text-green-500" />
                         </div>
-                        <h3 className={`text-2xl font-pixel mb-3 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'}`}>
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                            }`}>
                             TUTORIAL
                         </h3>
-                        <p className={`text-sm mb-6 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'}`}>
-                            Learn the basics. Master the market.
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                            }`}>
+                            Learn the basics.
                         </p>
                         <button
-                            onClick={() => navigate('/roadmap')}
-                            className="w-full bg-success text-white border-b-4 border-green-900 active:border-b-0 active:translate-y-1 rounded-lg py-4 font-pixel text-sm hover:bg-green-600 transition-all shadow-lg"
+                            onClick={() => navigate('/learn')}
+                            className="w-full bg-success text-white border-b-4 border-green-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-green-600 transition-all shadow-lg"
                         >
                             START LEARNING
                         </button>
@@ -68,26 +71,59 @@ const Home: React.FC = () => {
                 {/* Ranked Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl border-4 p-8 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
+                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         ? 'bg-gray-800 border-gray-700 hover:border-blue-500'
                         : 'bg-wood border-wood-dark hover:border-blue-600'
                         }`}
                 >
                     <div className="flex flex-col items-center text-center">
-                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-600/20'}`}>
-                            <Trophy size={48} className="text-yellow-500" />
+                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-600/20'
+                            }`}>
+                            <Trophy size={40} className="text-yellow-500" />
                         </div>
-                        <h3 className={`text-2xl font-pixel mb-3 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'}`}>
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                            }`}>
                             RANKED
                         </h3>
-                        <p className={`text-sm mb-6 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'}`}>
-                            Compete for glory. Earn rewards.
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                            }`}>
+                            Compete for glory.
                         </p>
                         <button
                             onClick={() => navigate('/game')}
-                            className="w-full bg-blue-600 text-white border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded-lg py-4 font-pixel text-sm hover:bg-blue-500 transition-all shadow-lg"
+                            className="w-full bg-blue-600 text-white border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-blue-500 transition-all shadow-lg"
                         >
                             FARM FUNDS
+                        </button>
+                    </div>
+                </motion.div>
+
+                {/* Leaderboard Card - NEW */}
+                <motion.div
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
+                        ? 'bg-gray-800 border-gray-700 hover:border-purple-500'
+                        : 'bg-wood border-wood-dark hover:border-purple-600'
+                        }`}
+                >
+                    <div className="flex flex-col items-center text-center">
+                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-600/20'
+                            }`}>
+                            <Award size={40} className="text-purple-400" />
+                        </div>
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                            }`}>
+                            LEADERBOARD
+                        </h3>
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                            }`}>
+                            Check top traders.
+                        </p>
+                        <button
+                            onClick={() => navigate('/leaderboard')}
+                            className="w-full bg-purple-600 text-white border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-purple-500 transition-all shadow-lg"
+                        >
+                            VIEW RANKINGS
                         </button>
                     </div>
                 </motion.div>
@@ -99,16 +135,18 @@ const Home: React.FC = () => {
                 : 'bg-wood-dark border-wood'
                 }`}>
                 <div className="flex justify-around items-center flex-wrap gap-6">
-                    {/* Funds */}
                     <div className="flex items-center gap-4">
-                        <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-wood'}`}>
+                        <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-wood'
+                            }`}>
                             <Coins size={32} className="text-yellow-400" />
                         </div>
                         <div>
-                            <div className={`text-xs font-pixel uppercase mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-wood-light'}`}>
+                            <div className={`text-xs font-pixel uppercase mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-wood-light'
+                                }`}>
                                 FARM FUNDS
                             </div>
-                            <div className={`font-pixel text-2xl ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'}`}>
+                            <div className={`font-pixel text-2xl ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                                }`}>
                                 ${walletBalance.toLocaleString()}
                             </div>
                         </div>
@@ -116,7 +154,6 @@ const Home: React.FC = () => {
 
                     <div className={`h-16 w-1 rounded-full ${theme === 'dark' ? 'bg-gray-600' : 'bg-wood'}`}></div>
 
-                    {/* XP */}
                     <div className="flex items-center gap-4">
                         <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-wood'}`}>
                             <Star size={32} className="text-yellow-400" />
@@ -134,7 +171,7 @@ const Home: React.FC = () => {
                     {userProfile && (
                         <>
                             <div className={`h-16 w-1 rounded-full ${theme === 'dark' ? 'bg-gray-600' : 'bg-wood'}`}></div>
-                            {/* Profit */}
+
                             <div className="flex items-center gap-4">
                                 <div className={`p-3 rounded-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-wood'}`}>
                                     <TrendingUp size={32} className={userProfile.totalProfit >= 0 ? 'text-green-500' : 'text-red-500'} />
@@ -161,9 +198,13 @@ const Home: React.FC = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 }}
-                        className={`rounded-xl border-4 p-6 shadow-pixel ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-wood border-wood-dark'}`}
+                        className={`rounded-xl border-4 p-6 shadow-pixel ${theme === 'dark'
+                            ? 'bg-gray-800 border-gray-700'
+                            : 'bg-wood border-wood-dark'
+                            }`}
                     >
-                        <h2 className={`text-2xl font-pixel mb-6 text-center ${theme === 'dark' ? 'text-amber-400' : 'text-parchment'}`}>
+                        <h2 className={`text-2xl font-pixel mb-6 text-center ${theme === 'dark' ? 'text-amber-400' : 'text-parchment'
+                            }`}>
                             TRADING STATS
                         </h2>
 
@@ -179,12 +220,16 @@ const Home: React.FC = () => {
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: 0.4 + i * 0.1 }}
-                                    className={`p-4 rounded-lg border-2 ${theme === 'dark' ? 'bg-gray-700/50 border-gray-600' : 'bg-wood-dark/30 border-wood-light/30'}`}
+                                    className={`p-4 rounded-lg border-2 ${theme === 'dark'
+                                        ? 'bg-gray-700/50 border-gray-600'
+                                        : 'bg-wood-dark/30 border-wood-light/30'
+                                        }`}
                                 >
                                     <div className={`${stat.color} mb-2`}>
                                         {stat.icon}
                                     </div>
-                                    <div className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-wood-light'}`}>
+                                    <div className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-wood-light'
+                                        }`}>
                                         {stat.label}
                                     </div>
                                     <div className={`text-xl font-pixel ${stat.color}`}>
@@ -205,7 +250,8 @@ const Home: React.FC = () => {
                     </motion.div>
                 </div>
             )}
-        </div>
+        </div >
+
     );
 };
 
