@@ -92,9 +92,12 @@ const LearningMode: React.FC = () => {
           <ArrowLeft className="mr-2 w-4 h-4" /> EXIT CLASS
         </button>
 
-        <h1 className="text-xl md:text-2xl text-parchment font-pixel tracking-tighter drop-shadow-md text-center flex-1">
-          TRADING 101
-        </h1>
+        <div className="flex-1 flex items-center justify-center gap-3">
+          <img src="/CCLogo.png" alt="Logo" className="h-8 w-auto object-contain drop-shadow-sm" />
+          <h1 className="text-xl md:text-2xl text-parchment font-pixel tracking-tighter drop-shadow-md">
+            TRADING 101
+          </h1>
+        </div>
 
         <div className="w-20"></div> {/* Spacer balance */}
       </div>

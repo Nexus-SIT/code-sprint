@@ -21,92 +21,20 @@ const Home: React.FC = () => {
             {/* Background Texture */}
             <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#7C492E 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
 
-            {/* Main Content Container */}
-            <div className="w-full max-w-7xl mx-auto z-10">
-
-                {/* Header with Title and Rank */}
-                <div className="text-center mb-8 mt-8">
-                    <motion.h1
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        className={`text-6xl md:text-7xl font-pixel mb-4 tracking-tighter drop-shadow-pixel ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'
-                            }`}
-                    >
-                        CANDLE CRUSH
-                    </motion.h1>
-
-                    <div className="flex items-center justify-center gap-2 mb-6">
-                        <div className={`h-1 w-12 ${theme === 'dark' ? 'bg-amber-600' : 'bg-wood-dark'}`}></div>
-                        <p className={`text-xl font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-amber-300' : 'text-wood'
-                            }`}>
-                            Trading Valley
-                        </p>
-                        <div className={`h-1 w-12 ${theme === 'dark' ? 'bg-amber-600' : 'bg-wood-dark'}`}></div>
-                    </div>
-
-                    {/* PROMINENT RANK DISPLAY */}
-                    {userProfile && (
-                        <motion.div
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="flex justify-center mb-8"
-                        >
-                            <div className={`relative rounded-2xl border-4 p-6 shadow-2xl ${theme === 'dark'
-                                    ? 'bg-gray-800 border-gray-700'
-                                    : 'bg-wood border-wood-dark'
-                                }`}>
-                                {/* Rank Icon - Large and Centered */}
-                                <div className="flex flex-col items-center">
-                                    <motion.div
-                                        animate={{
-                                            scale: [1, 1.05, 1],
-                                        }}
-                                        transition={{
-                                            duration: 2,
-                                            repeat: Infinity,
-                                            ease: "easeInOut"
-                                        }}
-                                        className="mb-4"
-                                    >
-                                        {getRankIcon(userProfile.rank, 120)}
-                                    </motion.div>
-
-                                    <h2 className={`text-3xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
-                                        }`}>
-                                        {userProfile.rankName.toUpperCase()}
-                                    </h2>
-
-                                    {/* Progress Bar */}
-                                    <div className="w-64 mt-4">
-                                        <div className="flex justify-between text-xs mb-1">
-                                            <span className={theme === 'dark' ? 'text-gray-400' : 'text-parchment/70'}>
-                                                PROGRESS
-                                            </span>
-                                            <span className={theme === 'dark' ? 'text-gray-400' : 'text-parchment/70'}>
-                                                {userProfile.rank < 6 ? `${Math.floor((userProfile.totalProfit / [0, 50000, 150000, 300000, 600000, 1000000][userProfile.rank + 1]) * 100)}%` : 'MAX'}
-                                            </span>
-                                        </div>
-                                        <div className={`w-full h-3 rounded-full overflow-hidden ${theme === 'dark' ? 'bg-gray-700' : 'bg-wood-dark'
-                                            }`}>
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{
-                                                    width: userProfile.rank < 6
-                                                        ? `${Math.min((userProfile.totalProfit / [0, 50000, 150000, 300000, 600000, 1000000][userProfile.rank + 1]) * 100, 100)}%`
-                                                        : '100%'
-                                                }}
-                                                transition={{ duration: 1, ease: 'easeOut' }}
-                                                className={`h-full ${getRankColor(userProfile.rank)}`}
-                                                style={{ background: `linear-gradient(90deg, ${getRankColor(userProfile.rank)}, ${getRankColor(userProfile.rank + 1)})` }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
+            <div className="text-center mb-12 z-10 relative">
+                <img
+                    src="/CCLogo.png"
+                    alt="Candle Crush Logo"
+                    className="w-64 md:w-96 mx-auto mb-6 drop-shadow-pixel filter hover:scale-105 transition-transform duration-300"
+                />
+                <div className="flex items-center justify-center gap-2">
+                    <div className="h-1 w-12 bg-wood-dark"></div>
+                    <p className="text-wood text-xl font-bold uppercase tracking-widest">
+                        Trading Valley
+                    </p>
+                    <div className="h-1 w-12 bg-wood-dark"></div>
                 </div>
+            </div>
 
                 {/* Game Mode Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-8">
