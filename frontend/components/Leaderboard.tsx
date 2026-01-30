@@ -58,13 +58,16 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
     }
 
     return (
-        <div className="bg-parchment dark:bg-gray-800 rounded-lg border-4 border-wood-dark dark:border-gray-700 p-6 shadow-pixel">
-            <div className="flex items-center gap-3 mb-6">
-                <Trophy className="w-8 h-8 text-yellow-500" />
-                <h2 className="text-2xl font-pixel text-coffee dark:text-gray-100">HALL OF FAME</h2>
+
+        <div className="bg-wood-dark/50 rounded-xl border-4 border-wood-dark p-1 relative">
+            {/* Header Sign */}
+            <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-wood border-4 border-wood-dark px-6 py-2 rounded-lg shadow-xl z-10 flex items-center gap-2 transform hover:scale-105 transition-transform cursor-default">
+                <Trophy className="w-5 h-5 text-yellow-500" />
+                <h2 className="text-lg font-pixel text-parchment uppercase tracking-wider text-shadow-sm">LEADERBOARD</h2>
+                <Trophy className="w-5 h-5 text-yellow-500" />
             </div>
 
-            <div className="space-y-3">
+            <div className="bg-parchment/10 p-4 pt-8 rounded-lg space-y-3 h-full overflow-y-auto custom-scrollbar">
                 <AnimatePresence>
                     {leaderboard.map((entry, index) => {
                         const isCurrentUser = userId && entry.userId === userId;
@@ -76,45 +79,43 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: 20 }}
                                 transition={{ delay: index * 0.05 }}
-                                className={`flex items-center gap-4 p-3 rounded-lg border-2 transition-all ${isCurrentUser
-                                        ? 'bg-success/20 dark:bg-green-900/30 border-success dark:border-green-600 shadow-lg'
-                                        : 'bg-wood/10 dark:bg-gray-700/50 border-wood-light/30 dark:border-gray-600 hover:bg-wood/20 dark:hover:bg-gray-700'
-                                    }`}
+                                className={`relative group ${isCurrentUser ? 'z-10 scale-[1.02]' : ''}`}
                             >
-                                {/* Position */}
-                                <div className={`flex items-center justify-center w-10 h-10 font-pixel text-lg ${getMedalColor(entry.position)}`}>
-                                    {entry.position <= 3 ? (
-                                        <Trophy className="w-6 h-6" />
-                                    ) : (
-                                        <span>#{entry.position}</span>
-                                    )}
-                                </div>
+                                {/* Wooden Slat Background */}
+                                <div className={`absolute inset-0 rounded border-b-4 shadow-md transition-colors ${isCurrentUser
+                                    ? 'bg-amber-700 border-amber-900'
+                                    : 'bg-parchment border-[#cbbfa6]'
+                                    }`}></div>
 
-                                {/* Rank Icon */}
-                                <div className="flex-shrink-0">
-                                    <RankIcon tier={entry.rank} size={40} />
-                                </div>
+                                {/* Content */}
+                                <div className="relative p-2 flex items-center gap-3">
+                                    {/* Rank Icon Container */}
+                                    <div className="flex-shrink-0 relative">
+                                        <RankIcon tier={entry.rank} size={36} />
+                                        {/* Position Badge */}
+                                        <div className={`absolute -top-2 -left-2 w-6 h-6 rounded-full flex items-center justify-center font-pixel text-[10px] border-2 shadow-sm ${entry.position <= 3 ? 'bg-yellow-400 border-yellow-600 text-yellow-900' : 'bg-wood-dark border-wood text-parchment'
+                                            }`}>
+                                            {entry.position}
+                                        </div>
+                                    </div>
 
-                                {/* User Info */}
-                                <div className="flex-1 min-w-0">
-                                    <div className="font-pixel text-sm text-coffee dark:text-gray-100 truncate">
-                                        {entry.username}
+                                    {/* User Info */}
+                                    <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                        <div className={`font-pixel text-sm truncate leading-tight ${isCurrentUser ? 'text-parchment' : 'text-coffee'
+                                            }`}>
+                                            {entry.username}
+                                        </div>
+                                        <div className={`text-[10px] font-pixel uppercase opacity-70 ${isCurrentUser ? 'text-parchment' : 'text-wood-light'
+                                            }`}>
+                                            {entry.rankName}
+                                        </div>
                                     </div>
-                                    <div className="text-xs font-body text-wood-light dark:text-gray-400">
-                                        {entry.rankName}
-                                    </div>
-                                </div>
 
-                                {/* Stats */}
-                                <div className="flex flex-col items-end gap-1">
-                                    <div className={`font-pixel text-sm flex items-center gap-1 ${entry.totalProfit >= 0 ? 'text-success dark:text-green-400' : 'text-failure dark:text-red-400'
-                                        }`}>
-                                        <TrendingUp className="w-4 h-4" />
-                                        {entry.totalProfit >= 0 ? '+' : ''}{entry.totalProfit.toLocaleString()}
-                                    </div>
-                                    <div className="text-xs font-body text-wood-light dark:text-gray-400 flex items-center gap-1">
-                                        <Target className="w-3 h-3" />
-                                        {entry.winRate}% WR
+                                    {/* Stats (Right Side) */}
+                                    <div className={`text-right ${isCurrentUser ? 'text-parchment' : 'text-coffee'}`}>
+                                        <div className="font-pixel text-xs">
+                                            ₹{entry.totalProfit.toLocaleString()}
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
@@ -123,18 +124,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
                 </AnimatePresence>
             </div>
 
-            {/* User's position if not in top 10 */}
-            {userId && userPosition && userPosition > limit && (
-                <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-4 pt-4 border-t-2 border-wood-dark/30 dark:border-gray-600"
-                >
-                    <div className="text-center font-pixel text-sm text-wood-light dark:text-gray-400">
-                        Your Position: #{userPosition}
-                    </div>
-                </motion.div>
-            )}
+            {/* User's position fixed at bottom if needed (omitted for cleaner scroll look as per request) */}
         </div>
     );
 };

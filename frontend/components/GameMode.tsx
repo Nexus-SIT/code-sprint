@@ -202,13 +202,13 @@ const GameMode: React.FC = () => {
             <ArrowLeft className="mr-2 w-4 h-4" /> LEAVE
           </button>
 
-        <div className="flex-1 flex justify-center">
-          <img
-            src="/CCLogo.png"
-            alt="Candle Crush"
-            className="h-10 md:h-12 w-auto object-contain drop-shadow-sm"
-          />
-        </div>
+          <div className="flex-1 flex justify-center">
+            <img
+              src="/CCLogo.png"
+              alt="Candle Crush"
+              className="h-10 md:h-12 w-auto object-contain drop-shadow-sm"
+            />
+          </div>
 
           <div className="flex gap-4">
             {/* Rank Display */}
