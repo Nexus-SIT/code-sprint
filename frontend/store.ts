@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GameState, Mode, Theme, UserProfile } from './types';
+import { GameState, Theme, UserProfile } from './types';
 
 // Load theme from localStorage
 const getInitialTheme = (): Theme => {
@@ -19,15 +19,12 @@ const getInitialUserId = (): string | null => {
 };
 
 export const useStore = create<GameState>((set) => ({
-  mode: 'HOME',
   theme: getInitialTheme(),
   userId: getInitialUserId(),
   userProfile: null,
   walletBalance: 100000,
   userRank: 1,
   xp: 0,
-
-  setMode: (mode: Mode) => set({ mode }),
 
   toggleTheme: () => set((state) => {
     const newTheme = state.theme === 'light' ? 'dark' : 'light';

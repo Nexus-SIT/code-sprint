@@ -1,4 +1,3 @@
-export type Mode = 'HOME' | 'LEARNING' | 'GAME';
 export type Theme = 'light' | 'dark';
 
 export interface Candle {
@@ -70,14 +69,12 @@ export interface LeaderboardEntry {
 }
 
 export interface GameState {
-  mode: Mode;
   theme: Theme;
   userId: string | null;
   userProfile: UserProfile | null;
   walletBalance: number;
   userRank: number;
   xp: number;
-  setMode: (mode: Mode) => void;
   toggleTheme: () => void;
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;

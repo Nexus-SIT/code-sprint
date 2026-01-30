@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import { generateCandles } from '../utils/dataGenerator';
 import CandleChart from './CandleChart';
@@ -14,7 +15,8 @@ import AchievementNotifications from './AchievementNotifications';
 type GamePhase = 'BETTING' | 'SIMULATING' | 'RESULT';
 
 const GameMode: React.FC = () => {
-  const { setMode, walletBalance, updateBalance, addXp, userId, userProfile, setUserProfile, theme } = useStore();
+  const navigate = useNavigate();
+  const { walletBalance, updateBalance, addXp, userId, userProfile, setUserProfile, theme } = useStore();
 
   const [fullData, setFullData] = useState<Candle[]>([]);
   const [visibleData, setVisibleData] = useState<Candle[]>([]);
@@ -196,7 +198,7 @@ const GameMode: React.FC = () => {
           : 'bg-wood border-wood-dark'
           }`}>
           <button
-            onClick={() => setMode('HOME')}
+            onClick={() => navigate('/')}
             className="bg-failure text-white border-b-4 border-red-900 active:border-b-0 active:translate-y-1 active:mt-1 rounded px-4 py-2 font-pixel text-xs flex items-center hover:bg-red-700 transition-colors"
           >
             <ArrowLeft className="mr-2 w-4 h-4" /> LEAVE

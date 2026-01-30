@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useStore } from './store';
 import Home from './components/Home';
 import LearningMode from './components/LearningMode';
@@ -6,7 +7,7 @@ import GameMode from './components/GameMode';
 import api from './services/api';
 
 const App: React.FC = () => {
-  const { mode, theme, userId, setUserId, setUserProfile } = useStore();
+  const { theme, userId, setUserId, setUserProfile } = useStore();
 
   // Initialize user on app load
   useEffect(() => {
@@ -35,14 +36,18 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-indigo-500 selection:text-white transition-colors duration-300 ${theme === 'dark'
+    <BrowserRouter>
+      <div className={`min-h-screen font-sans selection:bg-indigo-500 selection:text-white transition-colors duration-300 ${theme === 'dark'
         ? 'bg-gray-900 text-gray-100'
-        : 'bg-gray-900 text-gray-100'
-      }`}>
-      {mode === 'HOME' && <Home />}
-      {mode === 'LEARNING' && <LearningMode />}
-      {mode === 'GAME' && <GameMode />}
-    </div>
+        : 'bg-parchment text-coffee'
+        }`}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/learn" element={<LearningMode />} />
+          <Route path="/game" element={<GameMode />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 };
 
