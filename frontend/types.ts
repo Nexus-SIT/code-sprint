@@ -9,7 +9,7 @@ export interface Candle {
   close: number;
 }
 
-export type MentorEmotion = 'happy' | 'neutral' | 'alert' | 'thinking';
+export type MentorEmotion = 'happy' | 'neutral' | 'alert' | 'thinking' | 'sad';
 
 export interface RankTier {
   tier: number;
