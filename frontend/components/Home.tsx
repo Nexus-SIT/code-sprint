@@ -21,11 +21,11 @@ const Home: React.FC = () => {
             {/* Background Texture */}
             <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#7C492E 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
 
-            <div className="text-center mb-12 z-10 relative">
+            <div className="text-center mb-8 z-10 relative">
                 <img
                     src="/CCLogo.png"
                     alt="Candle Crush Logo"
-                    className="w-64 md:w-96 mx-auto mb-6 drop-shadow-pixel filter hover:scale-105 transition-transform duration-300"
+                    className="w-64 md:w-96 mx-auto drop-shadow-pixel filter hover:scale-105 transition-transform duration-300"
                 />
                 <div className="flex items-center justify-center gap-2">
                     <div className="h-1 w-12 bg-wood-dark"></div>
