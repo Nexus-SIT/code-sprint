@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { auth } from './firebase'; // Import auth
 import { useStore } from './store';
@@ -13,17 +13,10 @@ import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
 import Auth from './components/Auth'; // Import Auth
 import Footer from './components/Footer';
-import TopicExplanationPage from './components/TopicExplanationPage';
-import MarketSimChallenge from './components/challenges/MarketSimChallenge';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
 import { UserProfile } from './types';
-
-// ✅ Safe UUID generator (NO crypto issues)
-const generateUserId = () => {
-  return 'user_' + Math.random().toString(36).slice(2, 11);
-};
 
 // Global error tracker for debugging
 let globalError = "";
@@ -53,7 +46,7 @@ const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
   };
 };
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const {
     theme,
     userId,
@@ -64,6 +57,7 @@ const App: React.FC = () => {
 
   const [initializing, setInitializing] = React.useState(true);
   const [showAuth, setShowAuth] = React.useState(false);
+  const location = useLocation();
 
   // 🔥 Auth Listener
   useEffect(() => {
@@ -79,7 +73,11 @@ const App: React.FC = () => {
           setUserProfile(userProfile);
           setShowAuth(false);
         } catch (error: any) {
-          logError('Error loading user profile: ' + (error.message || error));
+          const errMsg = error.message || error;
+          logError('Error loading user profile: ' + errMsg);
+          // If it's a permission error, we still want to hide the auth modal 
+          // if the user is technically authed, but show the error banner.
+          setShowAuth(false);
         }
       } else {
         setUserId(''); // Clear user
@@ -105,6 +103,7 @@ const App: React.FC = () => {
       syncFromFirebase({
         balance: data.balance,
         xp: data.xp,
+        totalProfit: data.totalProfit || 0,
         rank: data.rankScore, // Corrected from data.rank
       });
     });
@@ -120,38 +119,45 @@ const App: React.FC = () => {
     );
   }
 
+  const hideFooter = location.pathname.startsWith('/game') || location.pathname.includes('/learn/');
+
+  return (
+    <div
+      className={`min-h-screen font-sans flex flex-col selection:bg-indigo-500 selection:text-white transition-colors duration-300 ${theme === 'dark'
+        ? 'bg-gray-900 text-gray-100'
+        : 'bg-parchment text-coffee'
+        }`}
+    >
+      {showAuth && (
+        <Auth onLoginSuccess={() => setShowAuth(false)} />
+      )}
+
+      {/* DEBUG ERROR BANNER */}
+      {globalError && (
+        <div className="fixed top-0 left-0 right-0 bg-red-600 text-white p-2 z-50 text-center font-bold">
+          DEBUG ERROR: {globalError}
+        </div>
+      )}
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/roadmap" element={<RoadmapPage />} />
+        <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
+        <Route path="/learn" element={<RoadmapPage />} />
+        <Route path="/game" element={<GameMode />} />
+        <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
+      </Routes>
+
+      {!hideFooter && <Footer />}
+    </div>
+  );
+};
+
+const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <div
-        className={`min-h-screen font-sans flex flex-col selection:bg-indigo-500 selection:text-white transition-colors duration-300 ${theme === 'dark'
-          ? 'bg-gray-900 text-gray-100'
-          : 'bg-parchment text-coffee'
-          }`}
-      >
-        {showAuth && (
-          <Auth onLoginSuccess={() => setShowAuth(false)} />
-        )}
-
-        {/* DEBUG ERROR BANNER */}
-        {globalError && (
-          <div className="fixed top-0 left-0 right-0 bg-red-600 text-white p-2 z-50 text-center font-bold">
-            DEBUG ERROR: {globalError}
-          </div>
-        )}
-
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/roadmap" element={<RoadmapPage />} />
-          <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
-          <Route path="/learn" element={<RoadmapPage />} />
-          <Route path="/game" element={<GameMode />} />
-          <Route path="/room-1-1" element={<MarketSimChallenge />} />
-          <Route path="/learning/module/:moduleId/topic/:roomId" element={<TopicExplanationPage />} />
-          <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
-        </Routes>
-        <Footer />
-      </div>
-    </BrowserRouter >
+      <AppContent />
+    </BrowserRouter>
   );
 };
 

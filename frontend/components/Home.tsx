@@ -194,60 +194,12 @@ const Home: React.FC = () => {
                 </div>
             </div>
 
-            {/* Bottom Section: Stats and Leaderboard */}
+            {/* Bottom Section: Leaderboard */}
             {userProfile && userId && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto relative z-10">
-                    {/* Trading Stats */}
+                <div className="max-w-4xl mx-auto w-full relative z-10">
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className={`rounded-xl border-4 p-6 shadow-pixel ${theme === 'dark'
-                            ? 'bg-gray-800 border-gray-700'
-                            : 'bg-wood border-wood-dark'
-                            }`}
-                    >
-                        <h2 className={`text-2xl font-pixel mb-6 text-center ${theme === 'dark' ? 'text-amber-400' : 'text-parchment'
-                            }`}>
-                            TRADING STATS
-                        </h2>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            {[
-                                { icon: <Target size={24} />, label: 'Win Rate', value: `${userProfile.totalTrades > 0 ? ((userProfile.winningTrades / userProfile.totalTrades) * 100).toFixed(1) : 0}%`, color: 'text-blue-500' },
-                                { icon: <Award size={24} />, label: 'Best Trade', value: `₹${userProfile.bestTrade.toLocaleString()}`, color: 'text-yellow-500' },
-                                { icon: <Zap size={24} />, label: 'Win Streak', value: `${userProfile.currentStreak}`, color: 'text-purple-500' },
-                                { icon: <TrendingUp size={24} />, label: 'Total Trades', value: `${userProfile.totalTrades}`, color: 'text-green-500' }
-                            ].map((stat, i) => (
-                                <motion.div
-                                    key={stat.label}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: 0.4 + i * 0.1 }}
-                                    className={`p-4 rounded-lg border-2 ${theme === 'dark'
-                                        ? 'bg-gray-700/50 border-gray-600'
-                                        : 'bg-wood-dark/30 border-wood-light/30'
-                                        }`}
-                                >
-                                    <div className={`${stat.color} mb-2`}>
-                                        {stat.icon}
-                                    </div>
-                                    <div className={`text-xs mb-1 ${theme === 'dark' ? 'text-gray-400' : 'text-wood-light'
-                                        }`}>
-                                        {stat.label}
-                                    </div>
-                                    <div className={`text-xl font-pixel ${stat.color}`}>
-                                        {stat.value}
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-
-                    {/* Leaderboard */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
                     >
                         <Leaderboard userId={userId} limit={5} />

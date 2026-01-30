@@ -80,7 +80,7 @@ export interface GameState {
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;
   addXp: (amount: number) => void;
-  syncFromFirebase: (data: { balance: number; xp: number; rank?: number }) => void;
+  syncFromFirebase: (data: { balance: number; xp: number; totalProfit: number; rank?: number }) => void;
   updateBalance: (amount: number) => void;
 }
 

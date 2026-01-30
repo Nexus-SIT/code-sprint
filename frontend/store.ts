@@ -53,17 +53,26 @@ export const useStore = create<GameState>((set) => ({
       userRank: profile.rank ?? 0,
     }),
 
-  // 🔥 Sync directly from Firebase doc
   syncFromFirebase: (data: {
     balance: number;
     xp: number;
+    totalProfit: number;
     rank?: number;
   }) =>
-    set({
+    set((state) => ({
       walletBalance: data.balance,
       xp: data.xp,
       userRank: data.rank ?? 0,
-    }),
+      userProfile: state.userProfile
+        ? {
+          ...state.userProfile,
+          totalProfit: data.totalProfit,
+          walletBalance: data.balance,
+          xp: data.xp,
+          rank: data.rank ?? 0,
+        }
+        : null,
+    })),
 
   // ❌ Local-only updates removed
   updateBalance: () => { },

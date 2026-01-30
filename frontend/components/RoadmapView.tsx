@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Path, Room } from '../types';
@@ -48,6 +47,28 @@ const RoomNode: React.FC<{
           )}
         </div>
 
+        {/* 3D Platform Wrapper */}
+        <div className="relative w-32 h-24 flex items-center justify-center">
+          {/* Shadow/Base */}
+          <div className="absolute bottom-2 w-24 h-12 bg-black/20 rounded-[100%] blur-md" />
+
+          {/* The Isometric Block */}
+          <div className="relative w-24 h-14">
+            {/* Top Surface */}
+            <div className={`absolute top-0 w-full h-full rounded-xl transition-all duration-300 
+              ${completed ? 'bg-lime-500' : 'bg-[#2d4a3e] group-hover:bg-[#3d5a4e]'} 
+              border-b-8 border-black/20 shadow-lg`}
+              style={{ transform: 'rotateX(45deg) rotateZ(-10deg)' }}
+            >
+              {/* Inner highlight */}
+              <div className="absolute inset-1 border border-white/10 rounded-lg" />
+            </div>
+
+            {/* The Icon (Floating above) */}
+            <div className="absolute inset-0 flex items-center justify-center text-3xl mb-8 filter drop-shadow-xl animate-float">
+              <span className="group-hover:-translate-y-2 transition-transform duration-500">
+                {icons[room.iconType as keyof typeof icons] || '📍'}
+              </span>
         {/* Pixel Art Node Wrapper */}
         <div className="relative w-20 h-20 flex items-center justify-center">
           {/* Base Block */}
