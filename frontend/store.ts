@@ -21,18 +21,21 @@ const getInitialUserId = (): string | null => {
 export const useStore = create<GameState>((set) => ({
   theme: getInitialTheme(),
   userId: getInitialUserId(),
+
+  // 🔥 backend-driven state
   userProfile: null,
-  walletBalance: 100000,
-  userRank: 1,
+  walletBalance: 0,
+  userRank: 0,
   xp: 0,
 
-  toggleTheme: () => set((state) => {
-    const newTheme = state.theme === 'light' ? 'dark' : 'light';
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('theme', newTheme);
-    }
-    return { theme: newTheme };
-  }),
+  toggleTheme: () =>
+    set((state) => {
+      const newTheme = state.theme === 'light' ? 'dark' : 'light';
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('theme', newTheme);
+      }
+      return { theme: newTheme };
+    }),
 
   setUserId: (userId: string) => {
     if (typeof window !== 'undefined') {
@@ -41,18 +44,28 @@ export const useStore = create<GameState>((set) => ({
     set({ userId });
   },
 
-  setUserProfile: (profile: UserProfile) => set({
-    userProfile: profile,
-    walletBalance: profile.walletBalance,
-    userRank: profile.rank,
-    xp: profile.xp
-  }),
+  // 🔥 Called after Firebase fetch
+  setUserProfile: (profile: UserProfile) =>
+    set({
+      userProfile: profile,
+      walletBalance: profile.walletBalance,
+      xp: profile.xp,
+      userRank: profile.rank ?? 0,
+    }),
 
-  updateBalance: (amount: number) => set((state) => ({
-    walletBalance: state.walletBalance + amount
-  })),
+  // 🔥 Sync directly from Firebase doc
+  syncFromFirebase: (data: {
+    balance: number;
+    xp: number;
+    rank?: number;
+  }) =>
+    set({
+      walletBalance: data.balance,
+      xp: data.xp,
+      userRank: data.rank ?? 0,
+    }),
 
-  addXp: (amount: number) => set((state) => ({
-    xp: state.xp + amount
-  })),
+  // ❌ Local-only updates removed
+  updateBalance: () => {},
+  addXp: () => {},
 }));

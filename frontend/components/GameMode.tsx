@@ -8,6 +8,7 @@ import { Candle, MentorEmotion } from '../types';
 import { ArrowLeft, TrendingUp, TrendingDown, Minus, Coins, X, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import api from '../services/api';
+import { settleTrade } from '../services/firebaseApi'; // Import settleTrade
 import RankDisplay from './RankDisplay';
 import ThemeToggle from './ThemeToggle';
 import AchievementNotifications from './AchievementNotifications';
@@ -117,31 +118,19 @@ const GameMode: React.FC = () => {
     // Execute trade on backend if user is logged in
     if (userId) {
       try {
-        const result = await api.executeTrade({
-          userId,
-          symbol: 'MARKET',
+        await settleTrade(userId, pnl, {
+          symbol: 'MARKET', // TODO: Use actual symbol if available
           position: position!,
           betAmount: amount,
           entryPrice,
           exitPrice,
-          duration: 50 // seconds
         });
 
-        // Update user profile with new data
-        if (result.user) {
-          setUserProfile(result.user);
-        }
+        // Note: Global state (balance/xp) updates automatically via App.tsx listener
 
-        // Show new achievements
-        if (result.newAchievements && result.newAchievements.length > 0) {
-          setNewAchievements(result.newAchievements);
-          setShowAchievements(result.newAchievements);
+        // TODO: Re-implement Achievements check if needed
+        setShowAchievements([]);
 
-          // Auto-dismiss after 5 seconds
-          setTimeout(() => {
-            setShowAchievements([]);
-          }, 5000);
-        }
       } catch (error) {
         console.error('Failed to execute trade on backend:', error);
       }
