@@ -17,7 +17,7 @@ type GamePhase = 'BETTING' | 'SIMULATING' | 'RESULT';
 
 const GameMode: React.FC = () => {
   const navigate = useNavigate();
-  const { walletBalance, updateBalance, addXp, userId, userProfile, setUserProfile, theme } = useStore();
+  const { walletBalance, userId, userProfile, setUserProfile, theme } = useStore();
 
   const [fullData, setFullData] = useState<Candle[]>([]);
   const [visibleData, setVisibleData] = useState<Candle[]>([]);
@@ -112,8 +112,8 @@ const GameMode: React.FC = () => {
     }
 
     setResultPnL(pnl);
-    updateBalance(pnl);
-    addXp(pnl > 0 ? 100 : 10);
+    // updateBalance(pnl); // Handled by Firebase sync
+    // addXp(pnl > 0 ? 100 : 10); // Handled by Firebase sync
 
     // Execute trade on backend if user is logged in
     if (userId) {
