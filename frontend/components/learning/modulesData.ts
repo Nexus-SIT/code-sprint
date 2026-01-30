@@ -204,9 +204,9 @@ export const modules: Module[] = [
       type: 'MCQ',
       question: 'If you buy 1 share, what do you own?',
       options: [
-        { id: 'opt-1-1', text: 'A Loan', isCorrect: false, emoji: '❌' },
-        { id: 'opt-1-2', text: 'Ownership', isCorrect: true, emoji: '✅' },
-        { id: 'opt-1-3', text: 'A Job', isCorrect: false, emoji: '❌' },
+        { id: 'opt-1-1', text: 'A Loan', isCorrect: false, emoji: '🏦' },
+        { id: 'opt-1-2', text: 'Ownership', isCorrect: true, emoji: '📜' },
+        { id: 'opt-1-3', text: 'A Job', isCorrect: false, emoji: '💼' },
       ],
     },
   },
@@ -697,8 +697,8 @@ export const modules: Module[] = [
       type: 'MCQ',
       question: 'Where do you put a Stop Loss for a Buy trade?',
       options: [
-        { id: 'opt-13-1', text: 'Below the recent Low', isCorrect: true, emoji: '✅' },
-        { id: 'opt-13-2', text: 'Where I entered', isCorrect: false, emoji: '❌' },
+        { id: 'opt-13-1', text: 'Below the recent Low', isCorrect: true, emoji: '🛡️' },
+        { id: 'opt-13-2', text: 'Where I entered', isCorrect: false, emoji: '🛑' },
         { id: 'opt-13-3', text: 'No stop loss needed', isCorrect: false, emoji: '💀' },
       ]
     },
@@ -741,7 +741,7 @@ export const modules: Module[] = [
       options: [
         { id: 'opt-14-1', text: 'They predict the future', isCorrect: false, emoji: '🔮' },
         { id: 'opt-14-2', text: 'They lag behind price', isCorrect: true, emoji: '🐢' },
-        { id: 'opt-14-3', text: 'They replace charts', isCorrect: false, emoji: '❌' },
+        { id: 'opt-14-3', text: 'They replace charts', isCorrect: false, emoji: '📉' },
       ]
     },
   },
