@@ -41,9 +41,9 @@ const LearningMode: React.FC = () => {
       <div className="flex items-center justify-between mb-6">
         <button 
           onClick={() => setMode('HOME')}
-          className="flex items-center text-gray-400 hover:text-white transition-colors"
+          className="bg-failure text-white border-b-4 border-red-900 active:border-b-0 active:translate-y-1 active:mt-1 rounded px-4 py-2 font-pixel text-xs flex items-center hover:bg-red-700 transition-colors"
         >
-          <ArrowLeft className="mr-2" size={20} /> Exit
+          <ArrowLeft className="mr-2 w-4 h-4" /> EXIT CLASS
         </button>
         <h1 className="text-3xl font-bold text-indigo-400">📚 Stock Market Academy</h1>
         <div className="text-right">

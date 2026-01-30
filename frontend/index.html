@@ -1,22 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TradeLeague</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
-      
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #111827; /* gray-900 */
-        color: #f3f4f6; /* gray-100 */
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CandleCrush</title>
+  <link rel="icon" type="image/png" href="/CCLogo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            parchment: '#F8E7B9',
+            wood: {
+              DEFAULT: '#7C492E',
+              light: '#8D5E3C', // Slightly lighter wood
+              dark: '#5C321F',
+            },
+            success: '#2D6A4F',
+            failure: '#A4243B',
+            coffee: '#3E2723',
+          },
+          fontFamily: {
+            pixel: ['"Press Start 2P"', 'cursive'],
+            body: ['"VT323"', 'monospace'],
+          },
+          boxShadow: {
+            'pixel': '3px 3px 0px 0px rgba(62, 39, 35, 1)', // Hard dark shadow
+            'pixel-sm': '1px 1px 0px 0px rgba(62, 39, 35, 1)',
+          },
+          animation: {
+            'spin-slow': 'spin 3s linear infinite',
+          }
+        }
       }
-      .font-mono {
-        font-family: 'JetBrains Mono', monospace;
-      }
-    </style>
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'VT323', monospace;
+      background-color: #F8E7B9;
+      /* parchment */
+      color: #3E2723;
+      /* coffee */
+      /* background-image: url('path/to/noise.png'); Optional texture hint */
+    }
+
+    /* Custom scrollbar for Webkit */
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #F8E7B9;
+      border: 2px solid #5C321F;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #7C492E;
+      border: 2px solid #5C321F;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -30,10 +77,12 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
+
+<body>
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>

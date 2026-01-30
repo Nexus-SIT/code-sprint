@@ -1,142 +1,220 @@
-# 🏆 Gamified Virtual Trading League for Students
+# 🎮 Gamified Virtual Trading League
 
-A **gamified, risk-free virtual stock trading platform** designed to help students learn **stock market and FinTech concepts** through real-time simulated trading, competitions, and rewards — **without using real money**.
+A **gamified, risk-free virtual stock trading platform** with RPG-inspired design, ranking system, and real-time market data integration.
 
----
+## ✨ Features
 
-## 📌 Problem Statement
+### 🎯 Core Features
+- **Virtual Trading** with real-time market data from Yahoo Finance
+- **7-Tier Ranking System** (Novice → Legendary Trader)
+- **Day/Night Mode** toggle with theme persistence
+- **Leaderboard** with top traders
+- **Achievement System** with badges and XP rewards
+- **Portfolio Tracking** with profit/loss analytics
+- **RPG-Inspired UI** with rustic wooden theme
 
-Students often lack practical exposure to stock market and FinTech concepts.  
-Traditional education is mostly theoretical, while real trading platforms involve **financial risk**, making them unsuitable for beginners.
+### 🏆 Ranking Tiers
+1. **Novice Trader** (Bronze) - Starting rank
+2. **Apprentice Trader** (Silver) - ₹0 - ₹50,000 profit
+3. **Skilled Trader** (Gold) - ₹50,000 - ₹150,000 profit
+4. **Expert Trader** (Blue) - ₹150,000 - ₹300,000 profit
+5. **Master Trader** (Purple) - ₹300,000 - ₹600,000 profit
+6. **Elite Trader** (Red) - ₹600,000 - ₹1,000,000 profit
+7. **Legendary Trader** (Golden) - ₹1,000,000+ profit
 
-There is a need for a **safe, engaging, and practical learning platform** where students can:
-- Understand market dynamics
-- Practice trading strategies
-- Learn financial discipline
-- Compete and improve through gamification
+### 🎖️ Achievement Badges
+- First Steps, Hot Streak, Unstoppable
+- Rising Star, Six Figures, Market Master
+- Active Trader, Veteran Trader, Trading Legend
+- And many more!
 
+## 🚀 Quick Start
 
----
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
 
-## 💡 Solution Overview
+### Installation
 
-The **Gamified Virtual Trading League** provides students with:
-- **Virtual capital** to trade in real-time market conditions
-- **League-based competitions** to encourage learning through competition
-- **Gamification elements** like points, ranks, badges, and leaderboards
-- **Educational insights** into stock market behavior and FinTech systems
+1. **Clone the repository**
+```bash
+cd c:\Users\shetty\code-sprint\code-sprint
+```
 
-This platform bridges the gap between **theory and real-world financial experience**.
+2. **Install Backend Dependencies**
+```bash
+cd backend
+npm install
+```
 
----
+3. **Install Frontend Dependencies**
+```bash
+cd ../frontend
+npm install
+```
 
-## 🎯 Key Objectives
+### Running the Application
 
-- Improve **financial literacy** among students  
-- Provide **hands-on trading experience** without financial risk  
-- Encourage **smart investing habits**  
-- Make finance education **fun, interactive, and competitive**  
-- Prepare students for real-world **FinTech and investment platforms**
+#### Start Backend Server (Terminal 1)
+```bash
+cd backend
+npm start
+```
+Backend will run on `http://localhost:3000`
 
----
+#### Start Frontend Dev Server (Terminal 2)
+```bash
+cd frontend
+npm run dev
+```
+Frontend will run on `http://localhost:5173` (or next available port)
 
-## 👥 Target Audience
+### API Endpoints
 
-- College and university students  
-- Beginners in stock market trading  
-- FinTech learners  
-- Student clubs, institutions, and training programs  
+#### Market Data
+- `GET /api/market/candles/:symbol` - Get candle data
+- `GET /api/market/price/:symbol` - Get current price
+- `GET /api/market/symbols` - Get popular symbols
 
----
+#### User Management
+- `POST /api/user/register` - Create/get user
+- `GET /api/user/:userId` - Get user profile
+- `PUT /api/user/:userId` - Update user profile
 
-## 🕹️ Core Features
+#### Trading
+- `POST /api/trade/execute` - Execute trade
+- `GET /api/trade/history/:userId` - Get trade history
 
-- Virtual trading using **real-time market data**
-- League-based competitions (weekly / monthly)
-- Leaderboards and rankings
-- Portfolio performance tracking
-- Rewards, badges, and achievements
-- Risk analysis and learning insights
-- Secure authentication and user profiles
+#### Leaderboard & Rankings
+- `GET /api/leaderboard` - Get top traders
+- `GET /api/leaderboard/position/:userId` - Get user position
+- `GET /api/ranks` - Get all rank tiers
 
----
+#### Achievements
+- `GET /api/achievements` - Get all achievements
+- `GET /api/achievements/:userId` - Get user achievements
 
-## 🧠 How It Works
+## 🎨 Tech Stack
 
-1. Student registers on the platform  
-2. Receives a fixed amount of **virtual money**  
-3. Trades stocks in a simulated real-market environment  
-4. Portfolio value changes based on live market data  
-5. Users compete in leagues and climb leaderboards  
-6. Learning improves through performance feedback  
+### Backend
+- **Express.js** - REST API server
+- **Yahoo Finance 2** - Real-time market data
+- **JSON File Storage** - User & trade persistence
 
----
+### Frontend
+- **React** - UI framework
+- **TypeScript** - Type safety
+- **Zustand** - State management
+- **Recharts** - Candlestick charts
+- **Framer Motion** - Animations
+- **Tailwind CSS** - Styling
+- **Lucide React** - Icons
 
-## 🏗️ System Architecture (High-Level)
+## 🎮 How to Play
 
-- User Interface for trading and analytics  
-- Backend services for user, league, and trade management  
-- Market data integration for real-time price simulation  
-- Gamification engine for scoring and ranking  
-- Secure data storage and authentication  
+1. **Start** - Launch the app and create your profile
+2. **Choose Mode** - Select "RANKED" for competitive trading
+3. **Analyze** - View the candlestick chart showing market movement
+4. **Bet** - Choose your position (BUY/SELL/HOLD) and wager amount
+5. **Watch** - See the market simulation play out
+6. **Earn** - Gain profits, XP, and climb the ranks!
 
-*(Detailed architecture will be added later)*
+## 🌙 Theme Toggle
 
----
+Click the sun/moon icon in the top-right corner to switch between:
+- **Light Mode** - Classic parchment and wood theme
+- **Dark Mode** - Modern dark theme with amber accents
 
-## 🔐 Security & Fair Play
+Theme preference is saved to localStorage.
 
-- No real money involved  
-- Secure authentication and authorization  
-- Trade limits and anti-abuse mechanisms  
-- Rate limiting and data validation  
+## 📊 Ranking System
 
----
+Your rank is determined by **total profit**:
+- Make profitable trades → Rank increases
+- Lose money → Rank decreases
+- Each rank has unique animated icon
+- Progress bar shows distance to next rank
 
-## 🚀 Impact
+## 🎯 Achievements
 
-- Builds confidence before real investing  
-- Reduces financial risk for beginners  
-- Encourages long-term financial awareness  
-- Makes stock market learning accessible to all students  
+Unlock achievements by:
+- Completing trades
+- Winning streaks
+- Reaching profit milestones
+- Maintaining high win rates
 
----
+Each achievement awards XP to level up faster!
 
-## 🧩 Tech Stack
+## 📁 Project Structure
 
-> ⚠️ Tech stack details will be added later.
+```
+code-sprint/
+├── backend/
+│   ├── models/
+│   │   ├── User.js          # User model with rank logic
+│   │   └── Trade.js         # Trade execution model
+│   ├── services/
+│   │   ├── marketService.js # Yahoo Finance integration
+│   │   └── achievementService.js # Achievement logic
+│   ├── data/
+│   │   ├── users.json       # User storage
+│   │   └── trades.json      # Trade history
+│   └── index.js             # Express server
+│
+└── frontend/
+    ├── components/
+    │   ├── Home.tsx         # Landing page
+    │   ├── GameMode.tsx     # Trading game
+    │   ├── ThemeToggle.tsx  # Day/night toggle
+    │   ├── RankDisplay.tsx  # Rank icon & progress
+    │   └── Leaderboard.tsx  # Top traders
+    ├── services/
+    │   └── api.ts           # Backend API client
+    ├── utils/
+    │   └── rankIcons.tsx    # 7 unique rank SVGs
+    ├── store.ts             # Zustand state
+    └── types.ts             # TypeScript types
+```
 
----
+## 🔧 Development
 
-## 📦 Installation & Setup
+### Backend Development
+```bash
+cd backend
+npm run dev
+```
 
-> ⚠️ Setup instructions will be added once the tech stack is finalized.
+### Frontend Development
+```bash
+cd frontend
+npm run dev
+```
 
----
+### Build for Production
+```bash
+cd frontend
+npm run build
+```
 
-## 📈 Future Enhancements
+## 🎯 Future Enhancements
 
-- AI-based trading insights  
-- Peer-to-peer challenges  
-- Institutional dashboards  
-- Certification and skill badges  
-- Mobile application support  
-
----
+- [ ] Trade history display component
+- [ ] Profile stats dashboard
+- [ ] Achievement notification animations
+- [ ] Sound effects for trades
+- [ ] Mobile app version
+- [ ] Real-time multiplayer competitions
+- [ ] AI trading assistant
+- [ ] Database migration (MongoDB/PostgreSQL)
 
 ## 📜 License
 
 This project is developed for **educational and learning purposes**.
 
----
+## 🙌 Credits
 
-## 🤝 Contributing
-
-Contributions, ideas, and improvements are welcome.  
-Please follow standard contribution guidelines.
+Built with ❤️ for improving financial literacy among students.
 
 ---
 
-## 🙌 Acknowledgements
-
-Inspired by the need to improve **financial literacy and FinTech education** among students.
+**Happy Trading! 📈🎮**
