@@ -92,7 +92,15 @@ export const CURRICULUM: Module[] = [
                 tasks: [
                     { id: 'task-2-1-1', title: 'Higher High', description: 'Uptrend structure.', type: 'CHART_SELECT', challengeText: 'Click the higher high.' },
                     { id: 'task-2-1-2', title: 'Higher Low', description: 'Buying dip.', type: 'CHART_SELECT', challengeText: 'Click the higher low.' },
-                    { id: 'task-2-1-3', title: 'Trend Direction', description: 'Identify the flow.', type: 'QUIZ', challengeText: 'Identify trend direction.' },
+                    {
+                        id: 'task-2-1-3',
+                        title: 'Trend Direction',
+                        description: 'Identify the flow.',
+                        type: 'QUIZ',
+                        challengeText: 'What is the current trend direction?',
+                        options: ['Uptrend', 'Downtrend', 'Sideways', 'Random'],
+                        correctAnswer: 'Uptrend'
+                    },
                 ]
             },
             {
@@ -110,7 +118,15 @@ export const CURRICULUM: Module[] = [
                 iconType: 'sword',
                 tasks: [
                     { id: 'task-2-3-1', title: 'Break', description: 'Change of character.', type: 'CHART_SELECT', challengeText: 'Click candle that broke structure.' },
-                    { id: 'task-2-3-2', title: 'Fake vs Real', description: 'Liquidity grabs.', type: 'QUIZ', challengeText: 'Identify fake break vs real break.' },
+                    {
+                        id: 'task-2-3-2',
+                        title: 'Fake vs Real',
+                        description: 'Liquidity grabs.',
+                        type: 'QUIZ',
+                        challengeText: 'What confirms a real breakout?',
+                        options: ['Strong Candle Close', 'Just a Wick', 'Low Volume', 'News Event'],
+                        correctAnswer: 'Strong Candle Close'
+                    },
                 ]
             }
         ]

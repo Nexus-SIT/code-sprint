@@ -16,10 +16,12 @@ export const QuizComponent: React.FC<TaskComponentProps> = ({ task, onComplete }
     // Placeholder options logic (since we didn't define options in data yet)
     // For now, we simulate a simple interaction
     const handleCheck = () => {
-        // In a real app, we'd check against task.correctAnswer or task.options
-        // For this prototype, just marked as correct to proceed
-        setIsCorrect(true);
-        setTimeout(onComplete, 1000);
+        const isCorrectAnswer = selected === task.correctAnswer;
+        setIsCorrect(isCorrectAnswer);
+
+        if (isCorrectAnswer) {
+            setTimeout(onComplete, 1000);
+        }
     };
 
     return (
@@ -28,13 +30,15 @@ export const QuizComponent: React.FC<TaskComponentProps> = ({ task, onComplete }
             <p className="text-gray-300 mb-6">{task.challengeText}</p>
 
             <div className="space-y-3">
-                {/* Simulated Options */}
-                <button onClick={() => setSelected('A')} className={`w-full p-4 rounded-lg text-left border ${selected === 'A' ? 'border-indigo-500 bg-indigo-900/30' : 'border-gray-600 bg-gray-700 hover:bg-gray-600'} transition-all`}>
-                    A. Option 1 (Simulated)
-                </button>
-                <button onClick={() => setSelected('B')} className={`w-full p-4 rounded-lg text-left border ${selected === 'B' ? 'border-indigo-500 bg-indigo-900/30' : 'border-gray-600 bg-gray-700 hover:bg-gray-600'} transition-all`}>
-                    B. Option 2 (Simulated)
-                </button>
+                {task.options?.map((option, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => setSelected(option)}
+                        className={`w-full p-4 rounded-lg text-left border ${selected === option ? 'border-indigo-500 bg-indigo-900/30' : 'border-gray-600 bg-gray-700 hover:bg-gray-600'} transition-all`}
+                    >
+                        {String.fromCharCode(65 + idx)}. {option}
+                    </button>
+                ))}
             </div>
 
             <button

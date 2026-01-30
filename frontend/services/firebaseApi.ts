@@ -50,7 +50,7 @@ export const createUserIfNotExists = async (
     if (!snap.exists()) {
         const newUser: UserDoc = {
             name: userName,
-            balance: 10000,
+            balance: 100000,
             totalProfit: 0,
             xp: 0,
             rankScore: 0,
@@ -150,6 +150,8 @@ export const subscribeToLeaderboard = (
         });
 
         callback(entries);
+    }, (error) => {
+        console.error("Leaderboard subscription error:", error);
     });
 };
 
