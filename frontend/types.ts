@@ -84,20 +84,20 @@ export interface GameState {
 
 // --- New Types for Learning System ---
 
-export type MascotState = 'happy' | 'neutral' | 'dizzy' | 'thinking' | 'surprised';
+// export type MascotState = 'happy' | 'neutral' | 'dizzy' | 'thinking' | 'surprised';
 
-export interface OHLCData {
-  time: number;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
+// export interface OHLCData {
+//   time: number;
+//   open: number;
+//   high: number;
+//   low: number;
+//   close: number;
+//   volume: number;
+// }
 
 
 
-export type TaskType = 'INFO' | 'QUIZ' | 'CHART_SELECT' | 'DRAW_LINE' | 'ACTION' | 'WAIT';
+// export type TaskType = 'INFO' | 'QUIZ' | 'CHART_SELECT' | 'DRAW_LINE' | 'ACTION' | 'WAIT';
 
 export interface Task {
   id: string;
