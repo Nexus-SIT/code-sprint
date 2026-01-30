@@ -34,29 +34,14 @@ const Classroom: React.FC = () => {
         return <div className="text-white p-8">Loading Classroom...</div>;
     }
 
-    const handleTaskComplete = async () => {
-        if (!userId || !currentRoom || !activeTask) return;
-        setTaskError(null);
-
-        try {
-            const currentIdx = currentRoom.tasks.findIndex(t => t.id === activeTask.id);
-            const isRoomLastTask = currentIdx === currentRoom.tasks.length - 1;
-
-            // Calculate reward (Mock logic for now, could be dynamic per task)
-            const reward = activeTask.reward || 50;
-
-            // Update Backend
-            await completeTask(userId, currentRoom.id, reward, isRoomLastTask);
-
-            // Move to next or finish
-            if (!isRoomLastTask) {
-                setActiveTask(currentRoom.tasks[currentIdx + 1]);
-            } else {
-                navigate('/roadmap');
-            }
-        } catch (err) {
-            console.error("Task completion failed:", err);
-            setTaskError("System Breach: Connection Failed. Retrying...");
+    const handleNextTask = () => {
+        const currentIdx = currentRoom.tasks.findIndex(t => t.id === activeTask.id);
+        if (currentIdx < currentRoom.tasks.length - 1) {
+            setActiveTask(currentRoom.tasks[currentIdx + 1]);
+        } else {
+            // Room Complete - Go back to map
+            // Ideally should mark room as complete here
+            navigate('/learn');
         }
     };
 
@@ -66,7 +51,7 @@ const Classroom: React.FC = () => {
             {/* Sidebar - Task List */}
             <aside className="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
                 <div className="p-4 border-b border-gray-700 flex items-center gap-2">
-                    <button onClick={() => navigate('/roadmap')} className="text-gray-400 hover:text-white">
+                    <button onClick={() => navigate('/learn')} className="text-gray-400 hover:text-white">
                         <ArrowLeft size={20} />
                     </button>
                     <div className="overflow-hidden">
@@ -100,35 +85,35 @@ const Classroom: React.FC = () => {
             </aside>
 
             {/* Main Content Split */}
-            <main className="flex-1 flex flex-col md:flex-row">
+            <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
 
                 {/* Left: Theory & Instructions */}
-                <div className="w-full md:w-1/3 bg-gray-800/50 p-8 border-r border-gray-700 overflow-y-auto">
+                <div className="w-full md:w-1/4 bg-gray-800/50 p-4 md:p-6 border-r border-gray-700 overflow-y-auto">
                     <div className="max-w-md mx-auto">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/50 text-indigo-300 text-xs font-mono mb-6 border border-indigo-500/30">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/50 text-indigo-300 text-[10px] font-mono mb-4 border border-indigo-500/30">
                             <HelpCircle size={12} />
                             THEORY
                         </div>
 
-                        <h1 className="text-3xl font-bold mb-4 text-white">{activeTask.title}</h1>
-                        <p className="text-gray-300 leading-relaxed mb-8 text-lg">
+                        <h1 className="text-xl md:text-2xl font-bold mb-3 text-white leading-tight">{activeTask.title}</h1>
+                        <p className="text-gray-400 leading-relaxed mb-6 text-sm md:text-base">
                             {activeTask.description}
                         </p>
 
-                        <div className="bg-gray-900/80 rounded-xl p-6 border border-indigo-500/30 relative overflow-hidden shadow-lg">
+                        <div className="bg-gray-900/80 rounded-lg p-4 border border-indigo-500/30 relative overflow-hidden shadow-lg">
                             <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
-                            <h3 className="text-indigo-400 font-bold mb-2 text-sm uppercase tracking-wider">Your Challenge</h3>
-                            <p className="text-xl text-white font-medium">
+                            <h3 className="text-indigo-400 font-bold mb-1 text-[10px] uppercase tracking-wider">Your Challenge</h3>
+                            <p className="text-base md:text-lg text-white font-medium">
                                 {activeTask.challengeText}
                             </p>
                         </div>
 
-                        <div className="mt-12">
+                        <div className="mt-8">
                             <button
-                                onClick={handleTaskComplete}
-                                className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors"
+                                onClick={handleNextTask}
+                                className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-xs"
                             >
-                                Skip Task (Debug) <ChevronRight size={16} />
+                                Skip Task (Debug) <ChevronRight size={14} />
                             </button>
                         </div>
                     </div>
@@ -139,7 +124,7 @@ const Classroom: React.FC = () => {
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
 
                     {/* Conditional Rendering of Interaction Components */}
-                    <div className="w-full h-full flex items-center justify-center p-8">
+                    <div className="w-full h-full flex items-center justify-center p-2 md:p-4">
                         {activeTask.type === TaskType.MULTIPLE_CHOICE && (
                             <QuizComponent task={activeTask} onComplete={handleTaskComplete} />
                         )}

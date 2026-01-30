@@ -33,22 +33,23 @@ export const TRADER_PATH: Path = {
                 title: 'Ownership Concept',
                 description: 'Think like a business owner.',
                 iconType: 'shield',
-                chartData: [],
+                chartData: generateChart(50, 100, 2), // Added chart data
                 thumbnail: '',
                 tasks: [{
                     id: 't1',
                     title: 'The Ownership Concept',
                     theory: [
-                        'A company needs money to grow—to open new branches, buy machines, or expand globally.',
-                        'Instead of taking loans, companies raise money by selling small parts of ownership to the public.',
-                        'Each small part is called a share. When you buy one share, you become a part-owner of that company.',
-                        'Example: If a pizza shop is divided into 100 pieces and you buy 1 piece, you own 1% of the shop.'
+                        'Imagine you want to start a massive Pizza franchise, but you only have money for one oven.',
+                        'To grow, you need more money. You could borrow it (Loan) OR you could sell a piece of your business (Equity).',
+                        'The Stock Market is simply a place where businesses sell these small pieces (shares) to the public.',
+                        'When you buy a share, you are not just gambling on numbers. You are ensuring legal PART-OWNERSHIP of that company.',
+                        'As the company grows and earns profits, the value of your small piece grows with it.'
                     ],
-                    question: 'If you buy 1 share, what do you own?',
+                    question: 'If you buy 1 share of Apple, what do you actually have?',
                     type: TaskType.MULTIPLE_CHOICE,
-                    options: ['Loan', 'Job', 'Ownership'],
+                    options: ['A lottery ticket', 'A digital coin', 'Partial legal ownership'],
                     correctIndex: 2,
-                    hint: 'Ownership > Loans.',
+                    hint: 'It is a real claim on the business.',
                     reward: 50,
                     penalty: 10
                 }]

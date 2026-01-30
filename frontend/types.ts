@@ -9,7 +9,7 @@ export interface Candle {
   close: number;
 }
 
-export type MentorEmotion = 'happy' | 'neutral' | 'alert' | 'thinking';
+export type MentorEmotion = 'happy' | 'neutral' | 'alert' | 'thinking' | 'sad';
 
 export interface RankTier {
   tier: number;
@@ -82,7 +82,7 @@ export interface GameState {
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;
   addXp: (amount: number) => void;
-  syncFromFirebase: (data: { balance: number; xp: number; rank?: number; completedRooms?: string[] }) => void;
+  syncFromFirebase: (data: { balance: number; xp: number; totalProfit: number; rank?: number }) => void;
   updateBalance: (amount: number) => void;
 }
 

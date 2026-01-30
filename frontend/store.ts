@@ -55,19 +55,27 @@ export const useStore = create<GameState>((set) => ({
       completedRooms: profile.completedRooms || [],
     }),
 
-  // 🔥 Sync directly from Firebase doc
   syncFromFirebase: (data: {
     balance: number;
     xp: number;
+    totalProfit: number;
     rank?: number;
     completedRooms?: string[];
   }) =>
-    set({
+    set((state) => ({
       walletBalance: data.balance,
       xp: data.xp,
       userRank: data.rank ?? 0,
-      completedRooms: data.completedRooms || [],
-    }),
+      userProfile: state.userProfile
+        ? {
+          ...state.userProfile,
+          totalProfit: data.totalProfit,
+          walletBalance: data.balance,
+          xp: data.xp,
+          rank: data.rank ?? 0,
+        }
+        : null,
+    })),
 
   // ❌ Local-only updates removed
   updateBalance: () => { },
