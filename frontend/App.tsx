@@ -6,7 +6,9 @@ import { useStore } from './store';
 import { db } from './firebase';
 
 import Home from './components/Home';
-import LearningMode from './components/LearningMode';
+import LearningMode from './components/LearningMode'; // Legacy for now
+import RoadmapPage from './components/RoadmapPage';
+import Classroom from './components/Classroom';
 import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
 import Auth from './components/Auth'; // Import Auth
@@ -121,12 +123,14 @@ const App: React.FC = () => {
 
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/roadmap" element={<RoadmapPage />} />
+          <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
           <Route path="/learn" element={<LearningMode />} />
           <Route path="/game" element={<GameMode />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 };
 

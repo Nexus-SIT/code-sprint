@@ -12,7 +12,7 @@ const LearningMode: React.FC = () => {
   const { addXp } = useStore();
 
   const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
-  const [completedModules, setCompletedModules] = useState<number[]>([]);
+  const [completedModules, setCompletedModules] = useState<string[]>([]);
   const [totalPoints, setTotalPoints] = useState(0);
 
   // Full dataset
@@ -27,6 +27,8 @@ const LearningMode: React.FC = () => {
     emotion: 'happy',
     text: "Welcome to Trading 101! Let's watch the market move.",
   });
+
+
 
   const isComplete = currentModuleIndex >= modules.length;
 
