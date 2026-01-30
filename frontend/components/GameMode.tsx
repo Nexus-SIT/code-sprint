@@ -197,7 +197,7 @@ const GameMode: React.FC = () => {
             <img
               src="/CCLogo.png"
               alt="Candle Crush"
-              className="h-6 md:h-8 w-auto object-contain drop-shadow-sm"
+              className="h-10 md:h-16 w-auto object-contain drop-shadow-sm transform hover:scale-105 transition-transform"
             />
           </div>
 
