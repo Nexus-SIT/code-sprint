@@ -49,7 +49,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
     }
 
     return (
-        <div className="bg-wood-dark/50 rounded-xl border-4 border-wood-dark p-1 relative">
+        <div className="bg-wood-dark/50 rounded-xl border-4 border-wood-dark p-1 relative mt-16">
             {/* Header Sign */}
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-wood border-4 border-wood-dark px-6 py-2 rounded-lg shadow-xl z-10 flex items-center gap-2 transform hover:scale-105 transition-transform cursor-default">
                 <Trophy className="w-5 h-5 text-yellow-500" />

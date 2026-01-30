@@ -9,6 +9,7 @@ import Home from './components/Home';
 
 import RoadmapPage from './components/RoadmapPage';
 import Classroom from './components/Classroom';
+import LearningMode from './components/LearningMode';
 import TopicExplanationPage from './components/TopicExplanationPage';
 import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
@@ -20,6 +21,7 @@ import ContestGame from './components/ContestGame';
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
 import { UserProfile } from './types';
+import { getRankName } from './utils/rankIcons';
 
 // Global error tracker for debugging
 let globalError = "";
@@ -27,6 +29,10 @@ const logError = (msg: string) => {
   console.error(msg);
   globalError = msg;
 };
+
+
+
+// ...
 
 const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
   return {
@@ -37,7 +43,7 @@ const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
     xp: doc.xp,
     level: 1, // Default
     rank: doc.rankScore,
-    rankName: 'Novice', // Default
+    rankName: getRankName(doc.rankScore),
     totalTrades: 0,
     winningTrades: 0,
     losingTrades: 0,
@@ -147,6 +153,7 @@ const AppContent: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/roadmap" element={<RoadmapPage />} />
+        <Route path="/module/:moduleId" element={<LearningMode />} />
         <Route path="/learn/:moduleId/:roomId" element={<TopicExplanationPage />} />
         <Route path="/learn/:moduleId/:roomId/classroom" element={<Classroom />} />
         <Route path="/learn" element={<RoadmapPage />} />

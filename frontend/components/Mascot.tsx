@@ -44,7 +44,7 @@ const Mascot: React.FC<MascotProps> = ({ state, message }) => {
         <h3 className="font-bold text-emerald-400 text-sm mb-1 uppercase tracking-wider">Cipher the Cat</h3>
         {message && (
           <div className="bg-slate-900 px-4 py-2 rounded-lg border border-slate-700 text-xs text-slate-300 max-w-[200px] leading-relaxed">
-             {message}
+            {message}
           </div>
         )}
       </div>

@@ -307,7 +307,7 @@ export const subscribeToLeaderboard = (
 // Helper
 const RANK_THRESHOLDS = [
     { tier: 0, name: 'Novice Trader', minProfit: -Infinity },
-    { tier: 1, name: 'Apprentice Trader', minProfit: 0 },
+    { tier: 1, name: 'Apprentice Trader', minProfit: 1000 },
     { tier: 2, name: 'Skilled Trader', minProfit: 50000 },
     { tier: 3, name: 'Expert Trader', minProfit: 150000 },
     { tier: 4, name: 'Master Trader', minProfit: 300000 },

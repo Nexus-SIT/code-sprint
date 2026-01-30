@@ -134,7 +134,7 @@ const TopicExplanationPage: React.FC = () => {
                 >
                     <div className="w-full h-full bg-black/20 rounded-lg shadow-inner overflow-hidden relative flex items-end justify-center">
                         <img
-                            src={isMouthOpen ? '/mentor/CatNormalOpen.png' : '/mentor/CatNormal.png'}
+                            src={isMouthOpen ? '/mentor/cat-normal-open.png' : '/mentor/cat-normal-closed.png'}
                             alt="Mentor"
                             className="h-[90%] object-contain filter drop-shadow-xl"
                         />

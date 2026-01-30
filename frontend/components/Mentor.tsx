@@ -32,7 +32,7 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
       case 'thinking':
       default:
         // Use CatNormalOpen.png when mouth should be open
-        return isMouthOpen ? '/mentor/CatNormalOpen.png' : '/mentor/CatNormal.png';
+        return isMouthOpen ? '/mentor/cat-normal-open.png' : '/mentor/cat-normal-closed.png';
     }
   };
 
@@ -47,7 +47,7 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
       {/* Avatar Container */}
       <div className="flex-shrink-0 w-24 h-24 bg-wood/20 border-2 border-wood-dark rounded flex items-center justify-center relative overflow-hidden">
         <motion.img
-          key={`${emotion}-${isMouthOpen}`} // Key change triggers re-render but we want smooth transition.
+          key={emotion} // Key change triggers re-render but we want smooth transition.
           // Actually, standard img src change is fast enough. 
           // Framer motion key might cause full unmount/remount flicker which is good for expression change but maybe not for talking.
           // Let's keep key as just emotion for big changes, but for talking we rely on src update.

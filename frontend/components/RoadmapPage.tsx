@@ -1,26 +1,54 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Monitor, Layout, GitBranch, ArrowLeft } from 'lucide-react';
-import { TRADER_PATH } from '../data/mockData';
+import { modules } from './learning/modulesData';
 import RoadmapView from './RoadmapView';
-import { Path } from '../types';
+
+import { Path, Module, Room } from '../types';
 import { useStore } from '../store';
 
 const RoadmapPage: React.FC = () => {
     const navigate = useNavigate();
-    const { theme } = useStore();
-    const [viewMode, setViewMode] = useState<'dashboard' | 'path'>('path');
-    const [completedRooms, setCompletedRooms] = useState<string[]>(['r1']); // Updated ID to match mockData
+    const { theme, completedModules } = useStore();
 
-    // Use the path from mockData
-    const learningPath = TRADER_PATH;
+
+    // Helper to convert our flat modules to the Path structure
+    const createPathFromModules = (): Path => {
+        const createSection = (id: string, title: string, desc: string, moduleSlice: typeof modules) => ({
+            id,
+            title,
+            description: desc,
+            rooms: moduleSlice.map(m => ({
+                id: m.id,
+                title: m.title,
+                description: m.description,
+                iconType: 'chart', // Default icon
+                tasks: [],
+                // Custom prop to store the original module
+                originalModule: m
+            } as any as Room)) // Type casting to satisfy Room interface which is slightly different
+        });
+
+        return {
+            id: 'learning-path',
+            title: 'Trading Mastery Path',
+            description: 'Master the markets step by step.',
+            modules: [
+                createSection('sect-1', '🟢 The Basics', 'Foundation of knowledge', modules.slice(0, 5)),
+                createSection('sect-2', '🟡 Technical Analysis', 'Reading the charts', modules.slice(5, 10)),
+                createSection('sect-3', '🟠 Advanced Concepts', 'Professional strategies', modules.slice(10, 15)),
+                createSection('sect-4', '🔴 Mastery & Psychology', 'The final steps', modules.slice(15, 18)),
+            ]
+        };
+    };
+
+    const learningPath = createPathFromModules();
 
     const handleEnterRoom = (moduleIndex: number, roomIndex: number) => {
-        const module = learningPath.modules[moduleIndex];
-        if (module && module.rooms[roomIndex]) {
-            const room = module.rooms[roomIndex];
-            navigate(`/learn/${module.id}/${room.id}`);
-        }
+        const section = learningPath.modules[moduleIndex];
+        const room = section.rooms[roomIndex];
+        // Navigate to the new learning mode route
+        navigate(`/module/${room.id}`);
     };
 
     return (
@@ -52,57 +80,24 @@ const RoadmapPage: React.FC = () => {
                             <span className="hidden sm:inline">Trading Valley Path</span>
                         </h1>
                     </div>
-
-                    {/* View Toggle */}
-                    <div className={`flex p-1 rounded-lg border backdrop-blur-sm
-                        ${theme === 'dark' ? 'bg-gray-900/50 border-gray-700' : 'bg-wood-dark/50 border-wood-light'}
-                    `}>
-                        <button
-                            onClick={() => setViewMode('dashboard')}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-pixel transition-all
-                                ${viewMode === 'dashboard'
-                                    ? (theme === 'dark' ? 'bg-gray-700 text-white shadow-sm' : 'bg-parchment text-wood-dark shadow-sm')
-                                    : (theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-wood-light hover:text-parchment')
-                                }`}
-                        >
-                            <Layout size={14} /> DASHBOARD
-                        </button>
-                        <button
-                            onClick={() => setViewMode('path')}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-pixel transition-all
-                                ${viewMode === 'path'
-                                    ? (theme === 'dark' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-parchment text-wood-dark shadow-sm')
-                                    : (theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-wood-light hover:text-parchment')
-                                }`}
-                        >
-                            <GitBranch size={14} /> PATH
-                        </button>
-                    </div>
                 </div>
             </header>
 
             <main className="flex-1 flex flex-col relative z-10">
-                {viewMode === 'dashboard' ? (
-                    <DashboardView
-                        path={learningPath}
-                        stats={stats}
-                        completedRooms={completedRooms}
-                        onSelectRoom={handleEnterRoom}
-                    />
-                ) : (
-                    <RoadmapView
-                        path={learningPath}
-                        completedRooms={completedRooms}
-                        onSelectRoom={handleEnterRoom}
-                    />
-                )}
+                <RoadmapView
+                    path={learningPath}
+                    completedRooms={completedModules}
+                    onSelectRoom={handleEnterRoom}
+                />
             </main>
 
             {/* Background Pattern for Light Mode */}
-            {theme !== 'dark' && (
-                <div className="absolute inset-0 pointer-events-none opacity-10 z-0" style={{ backgroundImage: "url('/tile.png')", backgroundSize: '128px' }}></div>
-            )}
-        </div>
+            {
+                theme !== 'dark' && (
+                    <div className="absolute inset-0 pointer-events-none opacity-10 z-0" style={{ backgroundImage: "url('/tile.png')", backgroundSize: '128px' }}></div>
+                )
+            }
+        </div >
     );
 };
 

@@ -8,8 +8,18 @@ interface TaskMatchProps {
   onComplete: (isCorrect: boolean) => void;
 }
 
+// Define a palette of distinct colors for pairs
+const PAIR_COLORS = [
+  { bg: 'bg-blue-100', border: 'border-blue-500', dot: 'bg-blue-500', hover: 'hover:bg-blue-50' },
+  { bg: 'bg-green-100', border: 'border-green-500', dot: 'bg-green-500', hover: 'hover:bg-green-50' },
+  { bg: 'bg-purple-100', border: 'border-purple-500', dot: 'bg-purple-500', hover: 'hover:bg-purple-50' },
+  { bg: 'bg-orange-100', border: 'border-orange-500', dot: 'bg-orange-500', hover: 'hover:bg-orange-50' },
+  { bg: 'bg-pink-100', border: 'border-pink-500', dot: 'bg-pink-500', hover: 'hover:bg-pink-50' },
+];
+
 const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
   const [connections, setConnections] = useState<{ [key: string]: string }>({});
+  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -23,12 +33,40 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
     return items;
   }, [matches]);
 
-  const handleConnect = (leftId: string, rightId: string) => {
-    if (!submitted) {
-      setConnections(prev => ({
-        ...prev,
-        [leftId]: rightId,
-      }));
+  const handleLeftClick = (id: string) => {
+    if (submitted) return;
+    if (connections[id]) {
+      setSelectedLeft(id);
+    } else {
+      setSelectedLeft(id === selectedLeft ? null : id);
+    }
+  };
+
+  const handleRightClick = (rightId: string) => {
+    if (submitted) return;
+
+    if (selectedLeft) {
+      // Remove any existing connection to this rightId from other lefts
+      setConnections(prev => {
+        const next = { ...prev };
+        Object.keys(next).forEach(key => {
+          if (next[key] === rightId) delete next[key];
+        });
+        next[selectedLeft] = rightId;
+        return next;
+      });
+      setSelectedLeft(null);
+    } else {
+      // Disconnect if clicking a connected right item directly
+      const entries = Object.entries(connections);
+      const linkedLeft = entries.find(([_, rId]) => rId === rightId)?.[0];
+      if (linkedLeft) {
+        setConnections(prev => {
+          const next = { ...prev };
+          delete next[linkedLeft];
+          return next;
+        });
+      }
     }
   };
 
@@ -39,109 +77,139 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
     const correct = matches.every(match => {
       const connectedRightId = connections[match.id];
       const rightItem = rightItems.find(item => item.id === connectedRightId);
-      return rightItem && rightItem.left === match.left;
+      return rightItem && rightItem.id === match.id;
     });
 
     setIsCorrect(correct);
     setSubmitted(true);
   };
 
-  const handleFeedbackComplete = () => {
+  const handleFeedbackComplete = React.useCallback(() => {
     onComplete(isCorrect);
-  };
+    if (!isCorrect) {
+      setSubmitted(false);
+      setConnections({});
+      setIsCorrect(false);
+    }
+  }, [onComplete, isCorrect]);
 
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="bg-gray-800/50 border-2 border-indigo-500/40 rounded-2xl p-6 backdrop-blur-sm"
+        transition={{ duration: 0.4 }}
+        className="w-full"
       >
-        {/* Instructions */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mb-6"
-        >
-          <h3 className="text-xl font-bold text-indigo-300 mb-2">🎯 Match the Pairs</h3>
-          <p className="text-sm text-gray-300">Click on the left item and then the right item to connect them</p>
-        </motion.div>
+        {/* Helper Text */}
+        <div className="mb-4 text-center">
+          {selectedLeft ? (
+            <p className="text-[#E65100] font-bold text-sm bg-[#FFF3E0] inline-block px-3 py-1 rounded-full border border-[#FFCC80] animate-pulse">
+              👇 Now tap the matching item on the right!
+            </p>
+          ) : (
+            <p className="text-[#8D6E63] font-bold text-sm bg-[#EFEBE9] inline-block px-3 py-1 rounded-full border border-[#D7CCC8]">
+              💡 Tap a left item, then tap its match on the right.
+            </p>
+          )}
+        </div>
 
         {/* Matching Container */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-2 gap-4 md:gap-12 mb-6 relative min-h-[300px]">
+          {/* Center Connection Line (Visual Only) */}
+          <div className="absolute left-1/2 top-4 bottom-4 w-1 bg-[#D7CCC8]/30 -translate-x-1/2 rounded-full hidden md:block"></div>
+
           {/* Left Column */}
-          <div className="space-y-3">
-            {matches.map((match, index) => (
-              <motion.div
-                key={match.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + index * 0.1 }}
-              >
-                <motion.button
-                  onClick={() => {
-                    // Show available right items
-                    const unmatched = rightItems.filter(r => 
-                      !Object.values(connections).includes(r.id) || 
-                      connections[match.id] === r.id
-                    );
-                    // Auto-highlight first unmatched
-                    if (unmatched.length > 0) {
-                      handleConnect(match.id, unmatched[0].id);
-                    }
-                  }}
-                  whileHover={!submitted ? { scale: 1.05 } : {}}
-                  whileTap={!submitted ? { scale: 0.95 } : {}}
-                  className={`w-full p-3 rounded-lg text-left transition-all border-2 ${
-                    connections[match.id]
-                      ? 'bg-indigo-600/40 border-indigo-400'
-                      : 'bg-gray-700/30 border-gray-600/40 hover:border-indigo-500/50'
-                  }`}
+          <div className="space-y-4 flex flex-col justify-center">
+            {matches.map((match, index) => {
+              const isSelected = selectedLeft === match.id;
+              const isConnected = !!connections[match.id];
+              const color = PAIR_COLORS[index % PAIR_COLORS.length]; // Assign color by index
+
+              return (
+                <motion.div
+                  key={match.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + index * 0.1 }}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">{match.emoji || '📌'}</span>
-                    <span className="text-sm font-medium text-gray-100">{match.left}</span>
-                  </div>
-                </motion.button>
-              </motion.div>
-            ))}
+                  <motion.button
+                    onClick={() => handleLeftClick(match.id)}
+                    whileHover={!submitted ? { scale: 1.02, x: 4 } : {}}
+                    whileTap={!submitted ? { scale: 0.98 } : {}}
+                    disabled={submitted}
+                    className={`w-full p-4 rounded-xl transition-all border-b-4 relative z-10 font-bold text-[#4E342E] group text-left
+                      ${isSelected
+                        ? `${color.bg} ${color.border} ring-2 ring-opacity-50 translate-x-2` // Selected State
+                        : isConnected
+                          ? `${color.bg} ${color.border}` // Connected State
+                          : `bg-white border-[#BCAAA4] hover:bg-[#F5F5F5]` // Default
+                      }
+                      ${submitted && isConnected && isCorrect ? '!bg-[#C8E6C9] !border-[#2E7D32]' : ''}
+                      ${submitted && !isCorrect && isConnected ? '!bg-[#FFCDD2] !border-[#C62828]' : ''}
+                      `}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="text-2xl w-8 text-center">{match.emoji || '📌'}</div>
+                      <span className="text-sm font-pixel leading-tight">{match.left}</span>
+                    </div>
+
+                    {/* Connector Dot Right */}
+                    <div className={`absolute right-[-6px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-[#5D4037] transition-colors
+                           ${isConnected || isSelected ? color.dot : 'bg-[#D7CCC8] group-hover:bg-[#BCAAA4]'}
+                      `}></div>
+                  </motion.button>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Right Column */}
-          <div className="space-y-3">
+          <div className="space-y-4 flex flex-col justify-center">
             {rightItems.map((item, index) => {
-              const isConnected = Object.values(connections).includes(item.id);
-              const connectedLeft = Object.entries(connections).find(
-                ([_, rightId]) => rightId === item.id
-              )?.[0];
+              // Find if this right item is targeted by any connection
+              const connectedLeftId = Object.keys(connections).find(key => connections[key] === item.id);
+
+              // Find the index of the connected left item to get the color
+              const leftIndex = matches.findIndex(m => m.id === connectedLeftId);
+              const color = leftIndex !== -1 ? PAIR_COLORS[leftIndex % PAIR_COLORS.length] : null;
+
+              // Check if we are selecting a left item that corresponds to this right item's pair (for hinting)? No, that gives it away.
+
+              const isConnected = !!connectedLeftId;
+              const isSelectedLeftColor = selectedLeft ? PAIR_COLORS[matches.findIndex(m => m.id === selectedLeft) % PAIR_COLORS.length] : null;
 
               return (
                 <motion.div
                   key={item.id}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
+                  transition={{ delay: 0.1 + index * 0.1 }}
                 >
                   <motion.button
-                    onClick={() => {
-                      if (connectedLeft) {
-                        handleConnect(connectedLeft, '');
+                    onClick={() => handleRightClick(item.id)}
+                    whileHover={!submitted ? { scale: 1.02, x: -4 } : {}}
+                    whileTap={!submitted ? { scale: 0.98 } : {}}
+                    disabled={submitted}
+                    className={`w-full p-4 rounded-xl transition-all border-b-4 relative z-10 font-bold text-[#4E342E] text-left group
+                        ${isConnected && color
+                        ? `${color.bg} ${color.border}` // Connected
+                        : selectedLeft && isSelectedLeftColor
+                          ? `bg-white border-[#BCAAA4] ${isSelectedLeftColor.hover} cursor-pointer` // Waiting for selection
+                          : 'bg-[#ECEFF1] border-[#CFD8DC] text-opacity-60' // Idle/Waiting
                       }
-                    }}
-                    whileHover={!submitted && isConnected ? { scale: 1.05 } : {}}
-                    whileTap={!submitted && isConnected ? { scale: 0.95 } : {}}
-                    disabled={!isConnected && submitted}
-                    className={`w-full p-3 rounded-lg text-left transition-all border-2 ${
-                      isConnected
-                        ? 'bg-emerald-600/40 border-emerald-400 cursor-pointer'
-                        : 'bg-gray-700/20 border-gray-600/30 opacity-50'
-                    }`}
+                        ${submitted && isConnected && isCorrect ? '!bg-[#C8E6C9] !border-[#2E7D32]' : ''}
+                        ${submitted && isConnected && !isCorrect ? '!bg-[#FFCDD2] !border-[#C62828]' : ''}
+                     `}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">{item.emoji || '📌'}</span>
-                      <span className="text-sm font-medium text-gray-100">{item.right}</span>
+                    {/* Connector Dot Left */}
+                    <div className={`absolute left-[-6px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-[#5D4037] transition-colors
+                        ${isConnected && color ? color.dot : 'bg-[#CFD8DC] group-hover:bg-[#BCAAA4]'}
+                    `}></div>
+
+                    <div className="flex items-center gap-3">
+                      {/* Maybe show emoji again? Or just text. Right usually has long text. */}
+                      <span className="text-sm font-pixel leading-tight">{item.right}</span>
                     </div>
                   </motion.button>
                 </motion.div>
@@ -150,71 +218,42 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
           </div>
         </div>
 
-        {/* Connection Display */}
-        {Object.keys(connections).length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-gray-700/30 p-3 rounded-lg mb-6 text-sm text-gray-300"
-          >
-            <p className="font-semibold text-indigo-300 mb-2">Connections:</p>
-            <div className="space-y-1">
-              {matches.map(match => {
-                const connectedId = connections[match.id];
-                const connectedRight = rightItems.find(r => r.id === connectedId);
-                if (connectedRight) {
-                  return (
-                    <motion.div
-                      key={match.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="flex items-center gap-2 text-xs"
-                    >
-                      <span className="text-indigo-400">{match.left}</span>
-                      <span className="text-gray-500">→</span>
-                      <span className="text-emerald-400">{connectedRight.right}</span>
-                    </motion.div>
-                  );
-                }
-                return null;
-              })}
-            </div>
-          </motion.div>
-        )}
-
         {/* Submit Button */}
         {!submitted && (
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.2 }}
             onClick={handleSubmit}
             disabled={Object.keys(connections).length < matches.length}
-            whileHover={Object.keys(connections).length === matches.length ? { scale: 1.05 } : {}}
-            whileTap={Object.keys(connections).length === matches.length ? { scale: 0.95 } : {}}
-            className={`w-full py-3 rounded-xl font-bold text-lg transition-all ${
-              Object.keys(connections).length === matches.length
-                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-black hover:shadow-lg hover:shadow-green-500/50 cursor-pointer'
-                : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
-            }`}
+            whileHover={Object.keys(connections).length === matches.length ? { scale: 1.02 } : {}}
+            whileTap={Object.keys(connections).length === matches.length ? { scale: 0.98 } : {}}
+            className={`w-full py-4 rounded-xl font-bold text-xl border-b-4 transition-all font-pixel uppercase tracking-widest shadow-xl flex items-center justify-center gap-2
+              ${Object.keys(connections).length === matches.length
+                ? 'bg-[#FFEB3B] text-[#3E2723] border-[#FBC02D] hover:bg-[#FDD835] active:border-b-0 active:translate-y-1'
+                : 'bg-[#D7CCC8] text-[#A1887F] border-[#A1887F] cursor-not-allowed shadow-none'
+              }`}
           >
-            Check Matches 🎯
+            {Object.keys(connections).length === matches.length ? 'VERIFY MATCHES ⚡' : 'CONNECT ALL PAIRS'}
           </motion.button>
         )}
 
         {/* Result Message */}
         {submitted && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.8 }}
-            className={`mt-4 p-4 rounded-xl text-center font-bold text-lg ${
-              isCorrect
-                ? 'bg-green-600/30 text-green-300 border border-green-500'
-                : 'bg-red-600/30 text-red-300 border border-red-500'
-            }`}
+            className={`mt-6 p-6 rounded-xl text-center font-bold border-4 shadow-lg flex flex-col items-center gap-2
+              ${isCorrect
+                ? 'bg-[#E8F5E9] text-[#2E7D32] border-[#2E7D32]'
+                : 'bg-[#FFEBEE] text-[#C62828] border-[#C62828]'
+              }`}
           >
-            {isCorrect ? '🎉 Perfect matches!' : '💡 Not quite right. Try again!'}
+            <div className="text-4xl">{isCorrect ? '✨' : '💥'}</div>
+            <div className="font-pixel text-lg">{isCorrect ? 'PERFECT MATCH!' : 'MISMATCH DETECTED'}</div>
+            <div className="text-sm opacity-90 font-medium">
+              {isCorrect ? 'Everything is connected perfectly.' : 'Some wires are crossed. Try again!'}
+            </div>
           </motion.div>
         )}
       </motion.div>
@@ -222,8 +261,8 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
       {/* Feedback Animation */}
       <AnimatePresence>
         {submitted && (
-          <ProgressFeedback 
-            isCorrect={isCorrect} 
+          <ProgressFeedback
+            isCorrect={isCorrect}
             onComplete={handleFeedbackComplete}
             delay={0.2}
           />
