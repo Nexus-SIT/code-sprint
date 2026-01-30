@@ -105,7 +105,8 @@ export enum TaskType {
   CLICK_CANDLE = 'CHART_SELECT',
   DRAW_LINE = 'DRAW_LINE',
   ACTION = 'ACTION',
-  WAIT_TASK = 'WAIT'
+  WAIT_TASK = 'WAIT',
+  PREDICT_PRICE = 'PREDICT'
 }
 
 export interface Task {
