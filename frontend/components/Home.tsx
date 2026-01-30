@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             </div>
 
             {/* Background Image */}
-            <div className="absolute inset-0 pointer-events-none opacity-30 z-0" style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+            <div className="absolute inset-0 pointer-events-none opacity-50 z-0 blur-sm" style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
 
             <div className="text-center mb-8 z-10 relative">
                 <img
@@ -37,14 +37,15 @@ const Home: React.FC = () => {
             </div>
 
             {/* Game Mode Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8 relative z-10">
                 {/* Tutorial Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         ? 'bg-gray-800 border-gray-700 hover:border-green-500'
-                        : 'bg-wood border-wood-dark hover:border-green-600'
+                        : 'border-wood-dark hover:border-green-600'
                         }`}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
                 >
                     <div className="flex flex-col items-center text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-green-900/30' : 'bg-green-600/20'
@@ -73,8 +74,9 @@ const Home: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         ? 'bg-gray-800 border-gray-700 hover:border-blue-500'
-                        : 'bg-wood border-wood-dark hover:border-blue-600'
+                        : 'border-wood-dark hover:border-blue-600'
                         }`}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
                 >
                     <div className="flex flex-col items-center text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-600/20'
@@ -103,8 +105,9 @@ const Home: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         ? 'bg-gray-800 border-gray-700 hover:border-purple-500'
-                        : 'bg-wood border-wood-dark hover:border-purple-600'
+                        : 'border-wood-dark hover:border-purple-600'
                         }`}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
                 >
                     <div className="flex flex-col items-center text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-600/20'
@@ -130,7 +133,7 @@ const Home: React.FC = () => {
             </div>
 
             {/* Stats Bar */}
-            <div className={`max-w-4xl mx-auto mb-12 rounded-xl border-4 p-6 shadow-pixel ${theme === 'dark'
+            <div className={`max-w-4xl mx-auto mb-12 rounded-xl border-4 p-6 shadow-pixel relative z-10 ${theme === 'dark'
                 ? 'bg-gray-800 border-gray-700'
                 : 'bg-wood-dark border-wood'
                 }`}>
@@ -192,7 +195,7 @@ const Home: React.FC = () => {
 
             {/* Bottom Section: Stats and Leaderboard */}
             {userProfile && userId && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto relative z-10">
                     {/* Trading Stats */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}

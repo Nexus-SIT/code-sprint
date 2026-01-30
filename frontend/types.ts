@@ -79,6 +79,7 @@ export interface GameState {
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;
   addXp: (amount: number) => void;
+  updateBalance: (amount: number) => void;
 }
 
 // --- New Types for Learning System ---
