@@ -66,6 +66,6 @@ export const useStore = create<GameState>((set) => ({
     }),
 
   // ❌ Local-only updates removed
-  // updateBalance: () => {},
+  updateBalance: () => { },
   addXp: () => { },
 }));
