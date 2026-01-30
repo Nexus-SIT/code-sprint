@@ -1,4 +1,4 @@
-# 🎮 Gamified Virtual Trading League
+# 🎮 CandleCrush
 
 A **gamified, risk-free virtual stock trading platform** with RPG-inspired design, ranking system, and real-time market data integration.
 
