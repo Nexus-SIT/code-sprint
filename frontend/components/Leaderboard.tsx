@@ -3,7 +3,8 @@ import { Trophy, TrendingUp, Target } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RankIcon from '../utils/rankIcons';
 import { LeaderboardEntry } from '../types';
-import api from '../services/api';
+import { subscribeToLeaderboard } from '../services/firebaseApi'; // Import
+// import api from '../services/api'; // Remove api if unused for leaderboard logic now
 
 interface LeaderboardProps {
     userId?: string;
@@ -16,26 +17,25 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
     const [userPosition, setUserPosition] = useState<number | null>(null);
 
     useEffect(() => {
-        fetchLeaderboard();
-    }, [limit]);
-
-    const fetchLeaderboard = async () => {
-        try {
-            setLoading(true);
-            const data = await api.getLeaderboard(limit);
-            setLeaderboard(data);
-
-            // Get user's position if userId provided
-            if (userId) {
-                const posData = await api.getLeaderboardPosition(userId);
-                setUserPosition(posData.position);
-            }
-        } catch (error) {
-            console.error('Failed to fetch leaderboard:', error);
-        } finally {
+        setLoading(true);
+        const unsubscribe = subscribeToLeaderboard((entries) => {
+            setLeaderboard(entries);
             setLoading(false);
-        }
-    };
+
+            // Calculate user position from loaded entries if present
+            if (userId) {
+                const userEntry = entries.find(e => e.userId === userId);
+                if (userEntry) {
+                    setUserPosition(userEntry.position);
+                }
+            }
+        }, limit);
+
+        return () => unsubscribe();
+    }, [limit, userId]);
+
+    // Removed manual fetch
+    const fetchLeaderboard = async () => { };
 
     const getMedalColor = (position: number) => {
         if (position === 1) return 'text-yellow-400';
