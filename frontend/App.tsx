@@ -14,6 +14,8 @@ import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
 import Auth from './components/Auth'; // Import Auth
 import Footer from './components/Footer';
+import ContestLobby from './components/ContestLobby';
+import ContestGame from './components/ContestGame';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
@@ -150,6 +152,8 @@ const AppContent: React.FC = () => {
         <Route path="/learn" element={<RoadmapPage />} />
         <Route path="/game" element={<GameMode />} />
         <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
+        <Route path="/contest" element={<ContestLobby />} />
+        <Route path="/contest/:contestId" element={<ContestGame />} />
       </Routes>
 
       {!hideFooter && <Footer />}
