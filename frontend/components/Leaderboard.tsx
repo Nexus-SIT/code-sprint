@@ -111,7 +111,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
 
                                             {/* Profit */}
                                             <div className={`text-right font-pixel text-sm ${isCurrentUser ? 'text-parchment' : 'text-coffee'}`}>
-                                                ₹{entry.totalProfit.toLocaleString()}
+                                                ${entry.totalProfit.toLocaleString()}
                                             </div>
                                         </div>
                                     </motion.div>

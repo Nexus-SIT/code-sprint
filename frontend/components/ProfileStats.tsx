@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Target, Award, Zap, Calendar } from 'lucide-react';
+import { TrendingUp, TrendingDown, Target, Award, Zap, Calendar, Info } from 'lucide-react';
 import { useStore } from '../store';
 import api from '../services/api';
+import RankInfoModal from './RankInfoModal';
 
 interface ProfileStatsProps {
     userId?: string;
@@ -14,6 +15,7 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ userId: propUserId }) => {
 
     const [stats, setStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [isRankModalOpen, setIsRankModalOpen] = useState(false);
 
     useEffect(() => {
         if (userId) {
@@ -36,8 +38,8 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ userId: propUserId }) => {
     if (loading || !userProfile) {
         return (
             <div className={`rounded-lg border-4 p-6 ${theme === 'dark'
-                    ? 'bg-gray-800 border-gray-700'
-                    : 'bg-parchment border-wood-dark'
+                ? 'bg-gray-800 border-gray-700'
+                : 'bg-parchment border-wood-dark'
                 }`}>
                 <div className="animate-pulse space-y-4">
                     <div className="h-6 bg-wood/20 dark:bg-gray-700 rounded w-1/3"></div>
@@ -62,21 +64,21 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ userId: propUserId }) => {
         {
             icon: <TrendingUp className="w-6 h-6" />,
             label: 'Total Profit',
-            value: `₹${userProfile.totalProfit.toLocaleString()}`,
+            value: `$${userProfile.totalProfit.toLocaleString()}`,
             color: userProfile.totalProfit >= 0 ? 'text-green-500' : 'text-red-500',
             bgColor: userProfile.totalProfit >= 0 ? 'bg-green-500/10' : 'bg-red-500/10'
         },
         {
             icon: <Award className="w-6 h-6" />,
             label: 'Best Trade',
-            value: `₹${userProfile.bestTrade.toLocaleString()}`,
+            value: `$${userProfile.bestTrade.toLocaleString()}`,
             color: 'text-yellow-500',
             bgColor: 'bg-yellow-500/10'
         },
         {
             icon: <TrendingDown className="w-6 h-6" />,
             label: 'Worst Trade',
-            value: `₹${userProfile.worstTrade.toLocaleString()}`,
+            value: `$${userProfile.worstTrade.toLocaleString()}`,
             color: 'text-red-500',
             bgColor: 'bg-red-500/10'
         },
@@ -98,8 +100,8 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ userId: propUserId }) => {
 
     return (
         <div className={`rounded-lg border-4 p-6 shadow-pixel ${theme === 'dark'
-                ? 'bg-gray-800 border-gray-700'
-                : 'bg-parchment border-wood-dark'
+            ? 'bg-gray-800 border-gray-700'
+            : 'bg-parchment border-wood-dark'
             }`}>
             <h2 className={`text-2xl font-pixel mb-6 ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'
                 }`}>
@@ -137,10 +139,19 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ userId: propUserId }) => {
             {/* Level Progress */}
             <div className="mt-6">
                 <div className="flex items-center justify-between mb-2">
-                    <span className={`text-sm font-pixel ${theme === 'dark' ? 'text-gray-300' : 'text-coffee'
-                        }`}>
-                        Level {userProfile.level}
-                    </span>
+                    <div className="flex items-center gap-2">
+                        <span className={`text-sm font-pixel ${theme === 'dark' ? 'text-gray-300' : 'text-coffee'
+                            }`}>
+                            Level {userProfile.level}
+                        </span>
+                        <button
+                            onClick={() => setIsRankModalOpen(true)}
+                            className={`p-1 rounded-full transition-colors ${theme === 'dark' ? 'hover:bg-gray-700 text-amber-500' : 'hover:bg-wood-light/20 text-wood-dark'}`}
+                            title="View Rank Information"
+                        >
+                            <Info className="w-4 h-4" />
+                        </button>
+                    </div>
                     <span className={`text-xs font-body ${theme === 'dark' ? 'text-gray-400' : 'text-wood-light'
                         }`}>
                         {userProfile.xp % 1000} / 1000 XP
@@ -156,6 +167,12 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ userId: propUserId }) => {
                     />
                 </div>
             </div>
+
+            <RankInfoModal
+                isOpen={isRankModalOpen}
+                onClose={() => setIsRankModalOpen(false)}
+                theme={theme}
+            />
         </div>
     );
 };
