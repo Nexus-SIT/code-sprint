@@ -5,15 +5,14 @@ import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap } from 'l
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
-import { getRankIcon, getRankColor } from '../utils/rankIcons';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
     const { walletBalance, xp, userProfile, theme, userId } = useStore();
 
     return (
-        <div className={`min-h-screen flex flex-col items-center p-6 relative font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'
-            }`}>
+        <div className={`min-h-screen flex flex-col items-center p-6 relative font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'}`}>
+
             {/* Theme Toggle - Top Right */}
             <div className="absolute top-6 right-6 z-20">
                 <ThemeToggle />
