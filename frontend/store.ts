@@ -27,6 +27,7 @@ export const useStore = create<GameState>((set) => ({
   walletBalance: 0,
   userRank: 0,
   xp: 0,
+  completedRooms: [],
 
   toggleTheme: () =>
     set((state) => {
@@ -51,6 +52,7 @@ export const useStore = create<GameState>((set) => ({
       walletBalance: profile.walletBalance,
       xp: profile.xp,
       userRank: profile.rank ?? 0,
+      completedRooms: profile.completedRooms || [],
     }),
 
   syncFromFirebase: (data: {
@@ -58,6 +60,7 @@ export const useStore = create<GameState>((set) => ({
     xp: number;
     totalProfit: number;
     rank?: number;
+    completedRooms?: string[];
   }) =>
     set((state) => ({
       walletBalance: data.balance,

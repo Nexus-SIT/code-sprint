@@ -64,6 +64,44 @@ export const createUserIfNotExists = async (
     return snap.data() as UserDoc;
 };
 
+// --- Task Completion ---
+
+export const completeTask = async (
+    userId: string,
+    roomId: string,
+    pnl: number,
+    isRoomComplete: boolean = false
+): Promise<void> => {
+    const userRef = doc(db, 'users', userId);
+
+    await runTransaction(db, async (tx) => {
+        const snap = await tx.get(userRef);
+        if (!snap.exists()) throw new Error('User not found');
+
+        const user = snap.data() as UserDoc;
+
+        const newBalance = user.balance + pnl;
+        // Prevent negative balance from tasks if desired, or allow debt
+        // let safeBalance = Math.max(0, newBalance); 
+
+        let newXp = user.xp;
+        if (pnl > 0) newXp += 10; // Simple XP for task completion
+
+        // Update completedRooms if room is done
+        let newCompletedRooms = user.completedRooms || [];
+        if (isRoomComplete && !newCompletedRooms.includes(roomId)) {
+            newCompletedRooms = [...newCompletedRooms, roomId];
+            newXp += 200; // Bonus for room completion
+        }
+
+        tx.update(userRef, {
+            balance: newBalance,
+            xp: newXp,
+            completedRooms: newCompletedRooms,
+        });
+    });
+};
+
 // --- Trading & Sessions ---
 
 export const settleTrade = async (

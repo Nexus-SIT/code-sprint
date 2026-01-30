@@ -160,7 +160,7 @@ const Home: React.FC = () => {
                             </div>
                             <div className={`font-pixel text-2xl ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
                                 }`}>
-                                ${walletBalance.toLocaleString()}
+                                ${walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
                         </div>
                     </div>

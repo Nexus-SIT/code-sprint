@@ -45,6 +45,7 @@ export interface UserProfile {
   currentStreak: number;
   longestStreak: number;
   achievements: string[];
+  completedRooms: string[];
 }
 
 export interface TradeHistory {
@@ -76,6 +77,7 @@ export interface GameState {
   walletBalance: number;
   userRank: number;
   xp: number;
+  completedRooms: string[];
   toggleTheme: () => void;
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;
@@ -103,7 +105,8 @@ export enum TaskType {
   CLICK_CANDLE = 'CHART_SELECT',
   DRAW_LINE = 'DRAW_LINE',
   ACTION = 'ACTION',
-  WAIT_TASK = 'WAIT'
+  WAIT_TASK = 'WAIT',
+  PREDICT_PRICE = 'PREDICT'
 }
 
 export interface Task {

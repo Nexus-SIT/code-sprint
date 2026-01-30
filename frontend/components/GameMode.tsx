@@ -220,7 +220,7 @@ const GameMode: React.FC = () => {
               <Coins className="text-yellow-400 mr-1 md:mr-2 w-4 h-4 md:w-5 md:h-5" />
               <div className={`text-sm md:text-lg font-pixel ${walletBalance < 0 ? 'text-red-400' : theme === 'dark' ? 'text-gray-100' : 'text-parchment'
                 }`}>
-                ${walletBalance.toLocaleString()}
+                ₹{walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
           </div>
@@ -267,7 +267,7 @@ const GameMode: React.FC = () => {
                   />
                   <div className="flex justify-between text-xs text-parchment/70 mt-2 font-pixel">
                     <span>MIN: 100</span>
-                    <span>MAX: {walletBalance}</span>
+                    <span>MAX: {Math.floor(walletBalance).toLocaleString()}</span>
                   </div>
                 </div>
 

@@ -1,12 +1,12 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Play } from 'lucide-react';
 import { TRADER_PATH } from '../data/mockData';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { useStore } from '../store';
-import TradingChart from './TradingChart';
+import CandleChart from './CandleChart';
 
 const TopicExplanationPage: React.FC = () => {
     const { moduleId, roomId } = useParams<{ moduleId: string; roomId: string }>();
@@ -17,28 +17,32 @@ const TopicExplanationPage: React.FC = () => {
     const [currentLineIndex, setCurrentLineIndex] = useState(0);
     const [showContinue, setShowContinue] = useState(false);
     const [chartData, setChartData] = useState<any[]>([]);
+    const [isMouthOpen, setIsMouthOpen] = useState(false);
+
+    // Derived state for current module/room
+    const module = TRADER_PATH.modules.find(m => m.id === moduleId);
+    const room = module?.rooms.find(r => r.id === roomId);
 
     // Load content
     useEffect(() => {
-        // Find module in TRADER_PATH
-        const module = TRADER_PATH.modules.find(m => m.id === moduleId);
-        const room = module?.rooms.find(r => r.id === roomId);
-
         if (room) {
-            // Aggregate descriptions from tasks to form the "lesson"
-            // If tasks contain 'theory', use that as it's more detailed
             let descriptionLines: string[] = [];
 
+            // Aggregate theory from ALL tasks
             if (room.tasks && room.tasks.length > 0) {
-                // Prefer theory from the first task if available, effectively making the room about the first task's concept
-                if (room.tasks[0].theory) {
-                    descriptionLines = room.tasks[0].theory;
-                } else {
-                    descriptionLines = room.tasks.map(t => t.description || '');
-                }
+                room.tasks.forEach(task => {
+                    if (task.theory) {
+                        descriptionLines.push(...task.theory);
+                    } else if (task.description) {
+                        descriptionLines.push(task.description);
+                    }
+                });
             } else {
                 descriptionLines = [room.description || ''];
             }
+
+            // Remove duplicates just in case
+            descriptionLines = [...new Set(descriptionLines)];
 
             setLines(descriptionLines);
 
@@ -49,19 +53,27 @@ const TopicExplanationPage: React.FC = () => {
     }, [moduleId, roomId]);
 
     const currentText = lines[currentLineIndex] || '';
-    const { displayedText, isComplete } = useTypewriter(currentText, 30);
+    const { displayedText, isComplete } = useTypewriter(currentText, 25); // Faster typing speed
 
-    // Auto-advance logic
+    // Talking animation
     useEffect(() => {
-        if (isComplete) {
+        if (!isComplete) {
+            const interval = setInterval(() => setIsMouthOpen(prev => !prev), 150);
+            return () => clearInterval(interval);
+        } else {
+            setIsMouthOpen(false);
+        }
+    }, [isComplete]);
+
+    // Auto-advance logic (optional, user can also click)
+    useEffect(() => {
+        if (isComplete && currentLineIndex < lines.length - 1) {
             const timeout = setTimeout(() => {
-                if (currentLineIndex < lines.length - 1) {
-                    setCurrentLineIndex(prev => prev + 1);
-                } else {
-                    setShowContinue(true);
-                }
-            }, 1000); // 1s pause between lines
+                setCurrentLineIndex(prev => prev + 1);
+            }, 1200); // 1.2s pause between lines automatic advance
             return () => clearTimeout(timeout);
+        } else if (isComplete && currentLineIndex === lines.length - 1) {
+            setShowContinue(true);
         }
     }, [isComplete, currentLineIndex, lines.length]);
 
@@ -79,18 +91,27 @@ const TopicExplanationPage: React.FC = () => {
         navigate('/learn');
     };
 
+    // Quick skip
+    const handleSkip = () => {
+        setCurrentLineIndex(lines.length - 1);
+        setShowContinue(true);
+    };
+
+    if (!room) return <div>Loading...</div>;
+
     return (
-        <div className={`min-h-screen flex flex-col md:flex-row overflow-hidden font-body selection:bg-wood-light selection:text-parchment
+        <div className={`min-h-screen flex flex-col md:flex-row overflow-hidden font-body selection:bg-wood-light selection:text-parchment relative
             ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'}
         `}>
+            {/* Background Image */}
+            <div className="absolute inset-0 pointer-events-none opacity-20 z-0 blur-sm"
+                style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+            </div>
 
             {/* LEFT: Cat Mentor */}
-            <div className={`w-full md:w-5/12 flex items-center justify-center relative p-8 border-r-4
-                ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-wood border-wood-dark'}
+            <div className={`w-full md:w-5/12 flex items-center justify-center relative p-8 border-b-4 md:border-b-0 md:border-r-4 z-10
+                ${theme === 'dark' ? 'bg-gray-800/90 border-gray-700' : 'bg-wood/90 border-wood-dark'}
             `}>
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: "url('/tile.png')", backgroundSize: '64px' }}></div>
-
                 {/* Back Button */}
                 <button
                     onClick={handleBack}
@@ -107,93 +128,114 @@ const TopicExplanationPage: React.FC = () => {
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className={`relative z-10 w-80 h-80 md:w-[450px] md:h-[450px] p-4 rounded-xl border-4 shadow-2xl
+                    className={`relative z-10 w-64 h-64 md:w-96 md:h-96 p-4 rounded-xl border-4 shadow-2xl mt-12 md:mt-0
                         ${theme === 'dark' ? 'bg-gray-700 border-gray-900' : 'bg-[#eec39a] border-[#8b4513]'}
                     `}
                 >
-                    <div className="w-full h-full bg-black/20 rounded-lg shadow-inner overflow-hidden relative">
+                    <div className="w-full h-full bg-black/20 rounded-lg shadow-inner overflow-hidden relative flex items-end justify-center">
                         <img
-                            src={(!isComplete && Math.floor(Date.now() / 200) % 2 === 0) ? "/mentor/CatJoyFull.png" : "/mentor/CatNormal.png"}
-                            alt="Cat Mentor"
-                            className="w-full h-full object-contain filter drop-shadow-2xl"
+                            src={isMouthOpen ? '/mentor/CatNormalOpen.png' : '/mentor/CatNormal.png'}
+                            alt="Mentor"
+                            className="h-[90%] object-contain filter drop-shadow-xl"
                         />
-                    </div>
-                    {/* Nameplate */}
-                    <div className={`absolute -bottom-6 left-1/2 transform -translate-x-1/2 px-6 py-2 rounded-lg border-4 shadow-pixel
+                        {/* Nameplate */}
+                        <div className={`absolute -bottom-6 left-1/2 transform -translate-x-1/2 px-6 py-2 rounded-lg border-4 shadow-pixel min-w-[200px] text-center
                         ${theme === 'dark' ? 'bg-indigo-600 border-gray-900 text-white' : 'bg-wood-dark border-wood-light text-parchment'}
                     `}>
-                        <h3 className="font-pixel text-lg tracking-widest">MENTOR</h3>
+                            <h3 className="font-pixel text-lg tracking-widest">MENTOR</h3>
+                        </div>
                     </div>
                 </motion.div>
             </div>
 
             {/* RIGHT: Content */}
-            <div className={`w-full md:w-7/12 flex flex-col justify-center p-8 md:p-16 relative overflow-y-auto
-                ${theme === 'dark' ? 'bg-gray-900' : 'bg-parchment'}
+            <div className={`w-full md:w-7/12 flex flex-col relative z-10 h-[60vh] md:h-screen
+                ${theme === 'dark' ? 'bg-gray-900/95' : 'bg-parchment/95'}
             `}>
-                <div className="max-w-2xl mx-auto w-full">
-                    {/* Header */}
-                    <div className="mb-8">
-                        <h2 className={`text-[10px] font-black uppercase tracking-widest mb-2
-                            ${theme === 'dark' ? 'text-indigo-400' : 'text-wood-light'}
-                        `}>MENTOR EXPLANATION</h2>
-                        <h1 className={`text-2xl md:text-4xl font-black font-pixel mb-6
-                            ${theme === 'dark' ? 'text-white' : 'text-wood-dark'}
-                        `}>
-                            {TRADER_PATH.modules.find(m => m.id === moduleId)?.rooms.find(r => r.id === roomId)?.title}
-                        </h1>
-                    </div>
+                <div className="flex-1 overflow-y-auto p-6 md:p-12 pb-32">
+                    <div className="max-w-2xl mx-auto w-full">
+                        {/* Header */}
+                        <div className="mb-8 text-center md:text-left">
+                            <h2 className={`text-[10px] font-black uppercase tracking-widest mb-2
+                                ${theme === 'dark' ? 'text-indigo-400' : 'text-wood-light'}
+                            `}>{module?.title}</h2>
+                            <h1 className={`text-2xl md:text-4xl font-black font-pixel mb-6
+                                ${theme === 'dark' ? 'text-white' : 'text-wood-dark'}
+                            `}>
+                                {room.title}
+                            </h1>
+                        </div>
 
-                    {/* Chart Area */}
-                    {chartData.length > 0 && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="mb-8 w-full"
-                        >
-                            <TradingChart
-                                data={chartData}
-                                onCandleClick={() => { }} // No interaction needed for explanation phase usually, but required by props
-                            />
-                        </motion.div>
-                    )}
-
-                    {/* Dialogue Box */}
-                    <div className={`min-h-[250px] p-6 md:p-8 rounded-xl border-4 shadow-pixel relative
-                        ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-wood-light/30 border-wood'}
-                    `}>
-                        <AnimatePresence mode="popLayout">
-                            {lines.slice(0, currentLineIndex + 1).map((line, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className={`mb-4 pb-2 border-b-2 border-dashed last:border-0
-                                        ${theme === 'dark' ? 'border-gray-700' : 'border-wood/20'}
-                                    `}
-                                >
-                                    <p className={`text-lg md:text-xl font-medium font-pixel leading-relaxed
-                                        ${theme === 'dark' ? 'text-gray-200' : 'text-coffee'}
-                                    `}>
-                                        {idx === currentLineIndex ? displayedText : line}
-                                        {idx === currentLineIndex && !isComplete && <span className="animate-pulse">|</span>}
-                                    </p>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-
-                        {/* Triangle indicator for next line */}
-                        {!isComplete && (
-                            <div className={`absolute bottom-4 right-4 animate-bounce
-                                ${theme === 'dark' ? 'text-indigo-400' : 'text-wood-dark'}
-                            `}>▼</div>
+                        {/* Chart Area - Styled like Game Mode */}
+                        {chartData.length > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="mb-8 w-full"
+                            >
+                                <div className={`rounded-lg border-4 shadow-pixel relative flex flex-col p-1 overflow-hidden h-64 md:h-80
+                                     ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-parchment border-wood-dark'}
+                                `}>
+                                    {/* Window Frame Inner Border */}
+                                    <div className="absolute inset-0 border-2 border-wood opacity-30 pointer-events-none rounded sm:hidden"></div>
+                                    <div className="flex-1 w-full h-full p-2">
+                                        <CandleChart data={chartData} height="100%" />
+                                    </div>
+                                    {/* Chart Caption */}
+                                    <div className="absolute top-2 left-2 px-2 py-1 bg-black/50 text-white text-[10px] font-pixel rounded">
+                                        MARKET DATA VISUALIZATION
+                                    </div>
+                                </div>
+                            </motion.div>
                         )}
 
-                    </div>
+                        {/* Dialogue Box */}
+                        <div className={`min-h-[200px] p-6 md:p-8 rounded-xl border-4 shadow-pixel relative mb-24
+                            ${theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-wood-light/30 border-wood'}
+                        `}>
+                            <div className="space-y-4">
+                                {lines.slice(0, currentLineIndex + 1).map((line, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        className={`pb-2 ${idx !== lines.length - 1 ? 'border-b border-dashed border-gray-400/30' : ''}`}
+                                    >
+                                        <p className={`text-lg md:text-xl font-medium font-pixel leading-relaxed
+                                            ${theme === 'dark' ? 'text-gray-200' : 'text-coffee'}
+                                        `}>
+                                            {idx === currentLineIndex ? displayedText : line}
+                                            {idx === currentLineIndex && !isComplete && <span className="animate-pulse">|</span>}
+                                        </p>
+                                    </motion.div>
+                                ))}
+                            </div>
 
-                    {/* Action Area */}
-                    <div className="h-24 mt-8 flex items-center justify-end">
-                        {showContinue && (
+                            {/* Skip Button (if not done) */}
+                            {!showContinue && (
+                                <button
+                                    onClick={handleSkip}
+                                    className="absolute bottom-2 right-2 text-xs opacity-50 hover:opacity-100 font-bold uppercase tracking-widest"
+                                >
+                                    Skip »
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer Action Area - Fixed at bottom */}
+                <div className={`absolute bottom-0 left-0 right-0 p-6 border-t-4 backdrop-blur-md
+                    ${theme === 'dark'
+                        ? 'bg-gray-900/90 border-gray-700'
+                        : 'bg-wood/90 border-wood-dark'}
+                `}>
+                    <div className="max-w-2xl mx-auto flex justify-between items-center">
+                        <div className="text-xs font-bold uppercase tracking-widest opacity-60">
+                            {currentLineIndex + 1} / {lines.length} SEGMENTS
+                        </div>
+
+                        {showContinue ? (
                             <motion.button
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -208,11 +250,18 @@ const TopicExplanationPage: React.FC = () => {
                             >
                                 START CHALLENGES <ArrowRight size={20} />
                             </motion.button>
+                        ) : (
+                            <button
+                                onClick={() => setCurrentLineIndex(prev => Math.min(prev + 1, lines.length - 1))}
+                                disabled={!isComplete && currentLineIndex < lines.length - 1}
+                                className="px-6 py-3 rounded-lg bg-gray-500/20 font-bold opacity-50 cursor-not-allowed"
+                            >
+                                ...
+                            </button>
                         )}
                     </div>
                 </div>
             </div>
-
         </div>
     );
 };

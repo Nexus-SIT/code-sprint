@@ -6,7 +6,7 @@ import { useStore } from './store';
 import { db } from './firebase';
 
 import Home from './components/Home';
-import LearningMode from './components/LearningMode'; // Legacy for now
+
 import RoadmapPage from './components/RoadmapPage';
 import Classroom from './components/Classroom';
 import TopicExplanationPage from './components/TopicExplanationPage';
@@ -44,6 +44,7 @@ const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
     currentStreak: 0,
     longestStreak: 0,
     achievements: [],
+    completedRooms: doc.completedRooms || [],
   };
 };
 
@@ -106,6 +107,7 @@ const AppContent: React.FC = () => {
         xp: data.xp,
         totalProfit: data.totalProfit || 0,
         rank: data.rankScore, // Corrected from data.rank
+        completedRooms: data.completedRooms,
       });
     });
 
