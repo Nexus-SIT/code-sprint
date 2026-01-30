@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useStore } from './store';
 import Home from './components/Home';
-import LearningMode from './components/LearningMode';
+import LearningMode from './components/LearningMode'; // Legacy for now
+import RoadmapPage from './components/RoadmapPage';
+import Classroom from './components/Classroom';
 import GameMode from './components/GameMode';
 import api from './services/api';
 
@@ -43,11 +45,13 @@ const App: React.FC = () => {
         }`}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/roadmap" element={<RoadmapPage />} />
+          <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
           <Route path="/learn" element={<LearningMode />} />
           <Route path="/game" element={<GameMode />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 };
 
