@@ -14,25 +14,25 @@ const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-        setLoading(true);
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //     setError('');
+    //     setLoading(true);
 
-        try {
-            if (isLogin) {
-                await signInWithEmail(email, password);
-            } else {
-                if (!name) throw new Error('Name is required');
-                await signUpWithEmail(email, password, name);
-            }
-            onLoginSuccess();
-        } catch (err: any) {
-            setError(err.message || 'Authentication failed');
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     try {
+    //         if (isLogin) {
+    //             await signInWithEmail(email, password);
+    //         } else {
+    //             if (!name) throw new Error('Name is required');
+    //             await signUpWithEmail(email, password, name);
+    //         }
+    //         onLoginSuccess();
+    //     } catch (err: any) {
+    //         setError(err.message || 'Authentication failed');
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
@@ -44,12 +44,12 @@ const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
                     <div className="inline-block p-3 bg-wood-dark rounded-full mb-2 border-2 border-wood">
                         <User className="w-8 h-8 text-parchment" />
                     </div>
-                    <h2 className="text-2xl font-pixel text-coffee">
+                    {/* <h2 className="text-2xl font-pixel text-coffee">
                         {isLogin ? 'GUILD LOGIN' : 'JOIN THE GUILD'}
-                    </h2>
+                    </h2> */}
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                {/* <form onSubmit={handleSubmit} className="space-y-4">
                     {!isLogin && (
                         <div>
                             <label className="block text-xs font-pixel text-wood-dark mb-1">TRADER NAME</label>
@@ -98,14 +98,14 @@ const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
                     >
                         {loading ? 'PROCESSING...' : (isLogin ? 'ENTER MARKET' : 'REGISTER')}
                     </button>
-                </form>
+                </form> */}
 
                 <div className="mt-4 text-center">
                     <button
                         onClick={() => setIsLogin(!isLogin)}
                         className="text-xs font-pixel text-wood-light hover:text-wood-dark underline"
                     >
-                        {isLogin ? "NEED A LICENSE? REGISTER" : "ALREADY LICENSED? LOGIN"}
+                        {/* {isLogin ? "NEED A LICENSE? REGISTER" : "ALREADY LICENSED? LOGIN"} */}
                     </button>
                 </div>
             </div>
