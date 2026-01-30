@@ -204,17 +204,15 @@ const Home: React.FC = () => {
             </div>
 
             {/* Bottom Section: Leaderboard */}
-            {userProfile && userId && (
-                <div className="max-w-4xl mx-auto w-full relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                    >
-                        <Leaderboard userId={userId} limit={5} />
-                    </motion.div>
-                </div>
-            )}
+            <div className="max-w-4xl mx-auto w-full relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                >
+                    <Leaderboard userId={userId || undefined} limit={5} />
+                </motion.div>
+            </div>
             {/* Rank Info Modal */}
             <RankInfoModal
                 isOpen={isRankModalOpen}
