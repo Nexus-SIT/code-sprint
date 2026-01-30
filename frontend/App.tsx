@@ -5,7 +5,7 @@ import Home from './components/Home';
 import LearningMode from './components/LearningMode';
 import GameMode from './components/GameMode';
 import api from './services/api';
-
+import Leaderboard from './components/Leaderboard';
 const App: React.FC = () => {
   const { theme, userId, setUserId, setUserProfile } = useStore();
 
@@ -45,6 +45,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/learn" element={<LearningMode />} />
           <Route path="/game" element={<GameMode />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </div>
     </BrowserRouter>
