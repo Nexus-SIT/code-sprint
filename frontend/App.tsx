@@ -142,7 +142,7 @@ const App: React.FC = () => {
           <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
           <Route path="/learn" element={<LearningMode />} />
           <Route path="/game" element={<GameMode />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
         </Routes>
       </div>
     </BrowserRouter >

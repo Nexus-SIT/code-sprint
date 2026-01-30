@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Trophy } from 'lucide-react';
+import { Trophy, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import RankIcon from '../utils/rankIcons';
 import { LeaderboardEntry } from '../types';
@@ -11,6 +12,7 @@ interface LeaderboardProps {
 }
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
+    const navigate = useNavigate();
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [userPosition, setUserPosition] = useState<number | null>(null);
@@ -55,6 +57,15 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
                 <Trophy className="w-5 h-5 text-yellow-500" />
             </div>
 
+            {/* Back Button */}
+            <button
+                onClick={() => navigate(-1)}
+                className="absolute top-2 left-2 bg-failure text-white border-2 border-red-900 rounded p-1 z-20 hover:bg-red-700 transition-colors shadow-sm"
+                title="Leave Leaderboard"
+            >
+                <ArrowLeft size={16} />
+            </button>
+
             <div className="bg-parchment/10 p-4 pt-8 rounded-lg space-y-3 h-full overflow-y-auto custom-scrollbar">
                 <AnimatePresence>
                     {leaderboard.length === 0 ? (
@@ -81,8 +92,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
                                             <div className="flex-shrink-0 relative">
                                                 <RankIcon tier={entry.rank} size={40} />
                                                 <div className={`absolute -top-1 -left-1 w-6 h-6 rounded-full flex items-center justify-center font-pixel text-[10px] border-2 shadow-sm ${entry.position <= 3
-                                                        ? 'bg-yellow-400 border-yellow-600 text-yellow-900'
-                                                        : 'bg-wood-dark border-wood text-parchment'
+                                                    ? 'bg-yellow-400 border-yellow-600 text-yellow-900'
+                                                    : 'bg-wood-dark border-wood text-parchment'
                                                     }`}>
                                                     {entry.position}
                                                 </div>
