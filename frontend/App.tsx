@@ -12,6 +12,7 @@ import Classroom from './components/Classroom';
 import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
 import Auth from './components/Auth'; // Import Auth
+import Footer from './components/Footer';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
@@ -120,7 +121,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <div
-        className={`min-h-screen font-sans selection:bg-indigo-500 selection:text-white transition-colors duration-300 ${theme === 'dark'
+        className={`min-h-screen font-sans flex flex-col selection:bg-indigo-500 selection:text-white transition-colors duration-300 ${theme === 'dark'
           ? 'bg-gray-900 text-gray-100'
           : 'bg-parchment text-coffee'
           }`}
@@ -140,10 +141,11 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/roadmap" element={<RoadmapPage />} />
           <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
-          <Route path="/learn" element={<LearningMode />} />
+          <Route path="/learn" element={<RoadmapPage />} />
           <Route path="/game" element={<GameMode />} />
           <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
         </Routes>
+        <Footer />
       </div>
     </BrowserRouter >
   );
