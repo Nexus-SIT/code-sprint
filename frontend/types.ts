@@ -136,6 +136,7 @@ export interface UserStats {
   totalModules: number;
   completedModules: number;
   averageScore: number;
+  updateBalance: (amount: number) => void;
 }
 
 // --- New Types for Learning System ---
