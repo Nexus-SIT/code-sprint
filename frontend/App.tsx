@@ -9,6 +9,7 @@ import Home from './components/Home';
 import LearningMode from './components/LearningMode'; // Legacy for now
 import RoadmapPage from './components/RoadmapPage';
 import Classroom from './components/Classroom';
+import TopicExplanationPage from './components/TopicExplanationPage';
 import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
 import Auth from './components/Auth'; // Import Auth
@@ -142,7 +143,8 @@ const AppContent: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/roadmap" element={<RoadmapPage />} />
-        <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
+        <Route path="/learn/:moduleId/:roomId" element={<TopicExplanationPage />} />
+        <Route path="/learn/:moduleId/:roomId/classroom" element={<Classroom />} />
         <Route path="/learn" element={<RoadmapPage />} />
         <Route path="/game" element={<GameMode />} />
         <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />

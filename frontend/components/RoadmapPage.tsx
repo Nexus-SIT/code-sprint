@@ -20,7 +20,7 @@ const RoadmapPage: React.FC = () => {
         const module = learningPath.modules[moduleIndex];
         if (module && module.rooms[roomIndex]) {
             const room = module.rooms[roomIndex];
-            navigate(`/learning/module/${module.id}/topic/${room.id}`);
+            navigate(`/learn/${module.id}/${room.id}`);
         }
     };
 

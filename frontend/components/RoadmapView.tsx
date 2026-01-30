@@ -69,17 +69,6 @@ const RoomNode: React.FC<{
               <span className="group-hover:-translate-y-2 transition-transform duration-500">
                 {icons[room.iconType as keyof typeof icons] || '📍'}
               </span>
-        {/* Pixel Art Node Wrapper */}
-        <div className="relative w-20 h-20 flex items-center justify-center">
-          {/* Base Block */}
-          <div className={`w-full h-full border-4 rounded-xl shadow-pixel transform transition-all
-                ${completed
-              ? 'bg-green-500 border-green-700'
-              : (theme === 'dark' ? 'bg-gray-700 border-gray-600 group-hover:bg-gray-600' : 'bg-wood border-wood-dark group-hover:bg-wood-light')
-            }
-            `}>
-            <div className="absolute inset-0 flex items-center justify-center text-3xl animate-bounce-slow">
-              {icons[room.iconType] || '📍'}
             </div>
           </div>
         </div>
