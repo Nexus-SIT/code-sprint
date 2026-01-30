@@ -4,5 +4,6 @@ export interface UserDoc {
   totalProfit: number;
   xp: number;
   rankScore: number;
+  completedRooms?: string[];
   createdAt: any; // Firestore Timestamp
 }

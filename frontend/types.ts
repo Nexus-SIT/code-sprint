@@ -45,6 +45,7 @@ export interface UserProfile {
   currentStreak: number;
   longestStreak: number;
   achievements: string[];
+  completedRooms: string[];
 }
 
 export interface TradeHistory {
@@ -76,6 +77,7 @@ export interface GameState {
   walletBalance: number;
   userRank: number;
   xp: number;
+  completedRooms: string[];
   toggleTheme: () => void;
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;

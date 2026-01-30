@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Monitor, Layout, GitBranch, ArrowLeft } from 'lucide-react';
 import { TRADER_PATH } from '../data/mockData';
 import RoadmapView from './RoadmapView';
-import DashboardView from './DashboardView';
 import { Path } from '../types';
 import { useStore } from '../store';
 
@@ -22,14 +21,6 @@ const RoadmapPage: React.FC = () => {
             const room = module.rooms[roomIndex];
             navigate(`/learn/${module.id}/${room.id}`);
         }
-    };
-
-    // Calculate stats for Dashboard
-    const stats = {
-        totalModules: learningPath.modules.length,
-        completedModules: 0,
-        averageScore: 94,
-        updateBalance: () => { }
     };
 
     return (

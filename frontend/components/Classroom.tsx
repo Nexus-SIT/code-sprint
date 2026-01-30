@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { TRADER_PATH } from '../data/mockData';
 import { Module, Room, Task, TaskType } from '../types';
-import { ArrowLeft, HelpCircle, ChevronRight } from 'lucide-react';
-import { QuizComponent, ChartSelectComponent } from './TaskComponents';
+import { ArrowLeft, HelpCircle, ChevronRight, AlertTriangle } from 'lucide-react';
+import { QuizComponent, ChartSelectComponent, WaitComponent } from './TaskComponents'; // Added WaitComponent
+import { useStore } from '../store';
+import { completeTask } from '../services/firebaseApi';
 
 const Classroom: React.FC = () => {
     const { moduleId, roomId } = useParams<{ moduleId: string; roomId: string }>();
     const navigate = useNavigate();
+    const { userId, userProfile, syncFromFirebase } = useStore();
 
     const [currentModule, setCurrentModule] = useState<Module | null>(null);
     const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
     const [activeTask, setActiveTask] = useState<Task | null>(null);
+    const [taskError, setTaskError] = useState<string | null>(null);
 
     useEffect(() => {
         if (moduleId && roomId) {
@@ -122,20 +126,22 @@ const Classroom: React.FC = () => {
                     {/* Conditional Rendering of Interaction Components */}
                     <div className="w-full h-full flex items-center justify-center p-2 md:p-4">
                         {activeTask.type === TaskType.MULTIPLE_CHOICE && (
-                            <QuizComponent task={activeTask} onComplete={handleNextTask} />
+                            <QuizComponent task={activeTask} onComplete={handleTaskComplete} />
                         )}
 
-                        {(activeTask.type === TaskType.CLICK_CANDLE || activeTask.type === TaskType.WAIT_TASK || activeTask.type === TaskType.ACTION || activeTask.type === TaskType.DRAW_LINE) && (
-                            // Mapping various types to ChartSelect for prototype, or specialized mocks if preferred
-                            // For now, ChartSelect handles standard chart interactions
-                            <ChartSelectComponent task={activeTask} onComplete={handleNextTask} />
+                        {(activeTask.type === TaskType.CLICK_CANDLE || activeTask.type === TaskType.ACTION || activeTask.type === TaskType.DRAW_LINE || activeTask.type === TaskType.CHART_SELECT) && (
+                            <ChartSelectComponent task={activeTask} onComplete={handleTaskComplete} />
+                        )}
+
+                        {activeTask.type === TaskType.WAIT_TASK && (
+                            <WaitComponent task={activeTask} onComplete={handleTaskComplete} />
                         )}
 
                         {activeTask.type === TaskType.INFO && (
                             <div className="bg-gray-800 p-8 rounded-xl max-w-sm text-center">
                                 <h3 className="text-xl font-bold mb-4">Information Only</h3>
                                 <p className="text-gray-400 mb-6">Read the theory and proceed.</p>
-                                <button onClick={handleNextTask} className="px-6 py-2 bg-indigo-600 rounded-lg text-white hover:bg-indigo-500">
+                                <button onClick={() => handleTaskComplete()} className="px-6 py-2 bg-indigo-600 rounded-lg text-white hover:bg-indigo-500">
                                     Continue
                                 </button>
                             </div>

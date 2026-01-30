@@ -64,6 +64,44 @@ export const createUserIfNotExists = async (
     return snap.data() as UserDoc;
 };
 
+// --- Task Completion ---
+
+export const completeTask = async (
+    userId: string,
+    roomId: string,
+    pnl: number,
+    isRoomComplete: boolean = false
+): Promise<void> => {
+    const userRef = doc(db, 'users', userId);
+
+    await runTransaction(db, async (tx) => {
+        const snap = await tx.get(userRef);
+        if (!snap.exists()) throw new Error('User not found');
+
+        const user = snap.data() as UserDoc;
+
+        const newBalance = user.balance + pnl;
+        // Prevent negative balance from tasks if desired, or allow debt
+        // let safeBalance = Math.max(0, newBalance); 
+
+        let newXp = user.xp;
+        if (pnl > 0) newXp += 10; // Simple XP for task completion
+
+        // Update completedRooms if room is done
+        let newCompletedRooms = user.completedRooms || [];
+        if (isRoomComplete && !newCompletedRooms.includes(roomId)) {
+            newCompletedRooms = [...newCompletedRooms, roomId];
+            newXp += 200; // Bonus for room completion
+        }
+
+        tx.update(userRef, {
+            balance: newBalance,
+            xp: newXp,
+            completedRooms: newCompletedRooms,
+        });
+    });
+};
+
 // --- Trading & Sessions ---
 
 export const settleTrade = async (
@@ -127,7 +165,7 @@ export const subscribeToLeaderboard = (
 ) => {
     const q = query(
         collection(db, 'users'),
-        orderBy('rankScore', 'desc'),
+        orderBy('totalProfit', 'desc'),
         limit(limitCount)
     );
 
@@ -137,13 +175,14 @@ export const subscribeToLeaderboard = (
 
         snapshot.forEach((doc) => {
             const data = doc.data() as UserDoc;
+            const tier = getRankTier(data.totalProfit);
             entries.push({
                 position: position++,
                 userId: doc.id,
                 username: data.name,
                 totalProfit: data.totalProfit,
-                rank: Math.floor(data.rankScore / 1000), // Example rank tier logic
-                rankName: getRankName(data.rankScore),
+                rank: tier,
+                rankName: getRankName(data.totalProfit),
                 winRate: '0%', // TODO: Calculate if needed
                 totalTrades: 0, // TODO: Store in UserDoc if needed
             });
@@ -157,9 +196,30 @@ export const subscribeToLeaderboard = (
 };
 
 // Helper
-const getRankName = (score: number) => {
-    if (score < 1000) return 'Novice';
-    if (score < 5000) return 'Apprentice';
-    if (score < 10000) return 'Expert';
-    return 'Master';
+const RANK_THRESHOLDS = [
+    { tier: 0, name: 'Novice Trader', minProfit: -Infinity },
+    { tier: 1, name: 'Apprentice Trader', minProfit: 0 },
+    { tier: 2, name: 'Skilled Trader', minProfit: 50000 },
+    { tier: 3, name: 'Expert Trader', minProfit: 150000 },
+    { tier: 4, name: 'Master Trader', minProfit: 300000 },
+    { tier: 5, name: 'Elite Trader', minProfit: 600000 },
+    { tier: 6, name: 'Legendary Trader', minProfit: 1000000 }
+];
+
+const getRankTier = (profit: number) => {
+    for (let i = RANK_THRESHOLDS.length - 1; i >= 0; i--) {
+        if (profit >= RANK_THRESHOLDS[i].minProfit) {
+            return RANK_THRESHOLDS[i].tier;
+        }
+    }
+    return 0;
+};
+
+const getRankName = (profit: number) => {
+    for (let i = RANK_THRESHOLDS.length - 1; i >= 0; i--) {
+        if (profit >= RANK_THRESHOLDS[i].minProfit) {
+            return RANK_THRESHOLDS[i].name;
+        }
+    }
+    return 'Novice Trader';
 };
