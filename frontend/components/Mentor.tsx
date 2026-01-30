@@ -8,13 +8,31 @@ interface MentorProps {
 }
 
 const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
+  const [isMouthOpen, setIsMouthOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    // Only animate mouth if text is present and emotion involves "talking" (thinking/neutral generally)
+    // We avoid animating for happy/sad/alert as they might have specific fixed expressions, 
+    // but user request implies general talking. Let's limit to neutral/thinking for now as requested.
+    if (text && (emotion === 'thinking' || emotion === 'neutral')) {
+      const interval = setInterval(() => {
+        setIsMouthOpen(prev => !prev);
+      }, 200); // Toggle every 200ms
+      return () => clearInterval(interval);
+    } else {
+      setIsMouthOpen(false);
+    }
+  }, [text, emotion]);
+
   const getImage = (emotion: MentorEmotion) => {
     switch (emotion) {
       case 'happy': return '/mentor/CatJoyFull.png';
       case 'alert': return '/mentor/CatShocked.png';
-      case 'thinking': return '/mentor/CatNormal.png';
       case 'sad': return '/mentor/CatSad.png';
-      default: return '/mentor/CatNormal.png';
+      case 'thinking':
+      default:
+        // Use CatNormalOpen.png when mouth should be open
+        return isMouthOpen ? '/mentor/CatNormalOpen.png' : '/mentor/CatNormal.png';
     }
   };
 
@@ -29,7 +47,11 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
       {/* Avatar Container */}
       <div className="flex-shrink-0 w-24 h-24 bg-wood/20 border-2 border-wood-dark rounded flex items-center justify-center relative overflow-hidden">
         <motion.img
-          key={emotion}
+          key={`${emotion}-${isMouthOpen}`} // Key change triggers re-render but we want smooth transition.
+          // Actually, standard img src change is fast enough. 
+          // Framer motion key might cause full unmount/remount flicker which is good for expression change but maybe not for talking.
+          // Let's keep key as just emotion for big changes, but for talking we rely on src update.
+          // Wait, if I change key to just 'emotion', motion.img will handle src swap.
           src={getImage(emotion)}
           alt={emotion}
           initial={{ scale: 0.8, opacity: 0 }}

@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { TRADER_PATH } from '../data/mockData';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { useStore } from '../store';
-import TradingChart from './TradingChart';
+import CandleChart from './CandleChart';
 
 const TopicExplanationPage: React.FC = () => {
     const { moduleId, roomId } = useParams<{ moduleId: string; roomId: string }>();
@@ -17,6 +17,7 @@ const TopicExplanationPage: React.FC = () => {
     const [currentLineIndex, setCurrentLineIndex] = useState(0);
     const [showContinue, setShowContinue] = useState(false);
     const [chartData, setChartData] = useState<any[]>([]);
+    const [isMouthOpen, setIsMouthOpen] = useState(false);
 
     // Load content
     useEffect(() => {
@@ -50,6 +51,16 @@ const TopicExplanationPage: React.FC = () => {
 
     const currentText = lines[currentLineIndex] || '';
     const { displayedText, isComplete } = useTypewriter(currentText, 30);
+
+    // Talking animation
+    useEffect(() => {
+        if (!isComplete) {
+            const interval = setInterval(() => setIsMouthOpen(prev => !prev), 200);
+            return () => clearInterval(interval);
+        } else {
+            setIsMouthOpen(false);
+        }
+    }, [isComplete]);
 
     // Auto-advance logic
     useEffect(() => {
@@ -111,18 +122,18 @@ const TopicExplanationPage: React.FC = () => {
                         ${theme === 'dark' ? 'bg-gray-700 border-gray-900' : 'bg-[#eec39a] border-[#8b4513]'}
                     `}
                 >
-                    <div className="w-full h-full bg-black/20 rounded-lg shadow-inner overflow-hidden relative">
+                    <div className="w-full h-full bg-black/20 rounded-lg shadow-inner overflow-hidden relative flex items-end justify-center">
                         <img
-                            src={(!isComplete && Math.floor(Date.now() / 200) % 2 === 0) ? "/mentor/CatJoyFull.png" : "/mentor/CatNormal.png"}
-                            alt="Cat Mentor"
-                            className="w-full h-full object-contain filter drop-shadow-2xl"
+                            src={isMouthOpen ? '/mentor/CatNormalOpen.png' : '/mentor/CatNormal.png'}
+                            alt="Mentor"
+                            className="h-[90%] object-contain filter drop-shadow-xl"
                         />
-                    </div>
-                    {/* Nameplate */}
-                    <div className={`absolute -bottom-6 left-1/2 transform -translate-x-1/2 px-6 py-2 rounded-lg border-4 shadow-pixel
+                        {/* Nameplate */}
+                        <div className={`absolute -bottom-6 left-1/2 transform -translate-x-1/2 px-6 py-2 rounded-lg border-4 shadow-pixel
                         ${theme === 'dark' ? 'bg-indigo-600 border-gray-900 text-white' : 'bg-wood-dark border-wood-light text-parchment'}
                     `}>
-                        <h3 className="font-pixel text-lg tracking-widest">MENTOR</h3>
+                            <h3 className="font-pixel text-lg tracking-widest">MENTOR</h3>
+                        </div>
                     </div>
                 </motion.div>
             </div>
@@ -144,17 +155,20 @@ const TopicExplanationPage: React.FC = () => {
                         </h1>
                     </div>
 
-                    {/* Chart Area */}
+                    {/* Chart Area - Styled like Game Mode */}
                     {chartData.length > 0 && (
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="mb-8 w-full"
                         >
-                            <TradingChart
-                                data={chartData}
-                                onCandleClick={() => { }} // No interaction needed for explanation phase usually, but required by props
-                            />
+                            <div className="bg-parchment rounded-lg border-4 border-wood-dark shadow-pixel relative flex flex-col p-1 overflow-hidden h-64 md:h-80">
+                                {/* Window Frame Inner Border */}
+                                <div className="absolute inset-0 border-2 border-wood opacity-30 pointer-events-none rounded sm:hidden"></div>
+                                <div className="flex-1 w-full h-full p-2">
+                                    <CandleChart data={chartData} height="100%" />
+                                </div>
+                            </div>
                         </motion.div>
                     )}
 
