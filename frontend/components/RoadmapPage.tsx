@@ -1,30 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Monitor } from 'lucide-react';
-import { CURRICULUM } from '../data/curriculum';
+import { Monitor, Layout, GitBranch } from 'lucide-react';
+import { TRADER_PATH } from '../data/mockData';
 import RoadmapView from './RoadmapView';
+import DashboardView from './DashboardView';
 import { Path } from '../types';
 
 const RoadmapPage: React.FC = () => {
     const navigate = useNavigate();
+    const [viewMode, setViewMode] = useState<'dashboard' | 'path'>('path');
+    const [completedRooms, setCompletedRooms] = useState<string[]>(['r1']); // Updated ID to match mockData
 
-    // Mock user data - normally would come from a context or store
-    const [completedRooms, setCompletedRooms] = useState<string[]>(['room-1-1']);
-
-    // Construct the Path object required by RoadmapView
-    const learningPath: Path = {
-        id: 'main-path',
-        title: 'Trading Valley InfoSec',
-        description: 'From Script Kiddie to Elite Operator',
-        modules: CURRICULUM
-    };
+    // Use the path from mockData
+    const learningPath = TRADER_PATH;
 
     const handleEnterRoom = (moduleIndex: number, roomIndex: number) => {
-        const module = CURRICULUM[moduleIndex];
+        const module = learningPath.modules[moduleIndex];
         if (module && module.rooms[roomIndex]) {
             const room = module.rooms[roomIndex];
             navigate(`/learning/module/${module.id}/topic/${room.id}`);
         }
+    };
+
+    // Calculate stats for Dashboard
+    const stats = {
+        totalModules: learningPath.modules.length,
+        completedModules: 0,
+        averageScore: 94,
+        updateBalance: () => { }
     };
 
     return (
@@ -41,15 +44,40 @@ const RoadmapPage: React.FC = () => {
                             <span className="hidden sm:inline">Trading Valley Path</span>
                         </h1>
                     </div>
+
+                    {/* View Toggle */}
+                    <div className="flex bg-gray-900/50 p-1 rounded-lg border border-gray-700 backdrop-blur-sm">
+                        <button
+                            onClick={() => setViewMode('dashboard')}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${viewMode === 'dashboard' ? 'bg-gray-700 text-white shadow-sm' : 'text-gray-400 hover:text-gray-200'}`}
+                        >
+                            <Layout size={14} /> Dashboard
+                        </button>
+                        <button
+                            onClick={() => setViewMode('path')}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${viewMode === 'path' ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-400 hover:text-gray-200'}`}
+                        >
+                            <GitBranch size={14} /> Path
+                        </button>
+                    </div>
                 </div>
             </header>
 
             <main className="flex-1 flex flex-col">
-                <RoadmapView
-                    path={learningPath}
-                    completedRooms={completedRooms}
-                    onSelectRoom={handleEnterRoom}
-                />
+                {viewMode === 'dashboard' ? (
+                    <DashboardView
+                        path={learningPath}
+                        stats={stats}
+                        completedRooms={completedRooms}
+                        onSelectRoom={handleEnterRoom}
+                    />
+                ) : (
+                    <RoadmapView
+                        path={learningPath}
+                        completedRooms={completedRooms}
+                        onSelectRoom={handleEnterRoom}
+                    />
+                )}
             </main>
         </div>
     );

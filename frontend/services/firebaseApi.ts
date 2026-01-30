@@ -149,6 +149,7 @@ export const subscribeToLeaderboard = (
             });
         });
 
+        console.log("Leaderboard entries fetched:", entries.length, entries);
         callback(entries);
     }, (error) => {
         console.error("Leaderboard subscription error:", error);

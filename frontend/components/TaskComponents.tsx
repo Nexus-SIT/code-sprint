@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Task } from '../data/curriculum';
+import { Task } from '../types';
 import { Check } from 'lucide-react';
 import TradingChart from './TradingChart';
 import { OHLCData } from '../types';
