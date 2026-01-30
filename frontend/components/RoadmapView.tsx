@@ -6,6 +6,7 @@ import { Play, CheckCircle } from 'lucide-react';
 interface RoadmapViewProps {
   path: Path;
   completedRooms: string[];
+  
   onSelectRoom: (moduleIndex: number, roomIndex: number) => void;
 }
 

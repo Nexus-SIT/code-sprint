@@ -12,6 +12,7 @@ import { settleTrade } from '../services/firebaseApi'; // Import settleTrade
 import RankDisplay from './RankDisplay';
 import ThemeToggle from './ThemeToggle';
 import AchievementNotifications from './AchievementNotifications';
+import { playButtonClick, playWinSound, playLossSound } from '../utils/audioPlayer';
 
 type GamePhase = 'BETTING' | 'SIMULATING' | 'RESULT';
 
@@ -65,6 +66,7 @@ const GameMode: React.FC = () => {
     if (isNaN(amount) || amount <= 0) return alert("Invalid amount");
     if (amount > walletBalance) return alert("Insufficient funds");
 
+    playButtonClick(); // Play sound on button click
     setPosition(type);
     setPhase('SIMULATING');
   };
@@ -137,6 +139,13 @@ const GameMode: React.FC = () => {
     }
 
     setPhase('RESULT');
+
+    // Play win/loss sound
+    if (pnl > 0) {
+      playWinSound();
+    } else if (pnl < 0) {
+      playLossSound();
+    }
   };
 
   const dismissAchievement = (id: string) => {
@@ -144,6 +153,7 @@ const GameMode: React.FC = () => {
   };
 
   const resetGame = () => {
+    playButtonClick(); // Play sound on reset
     const data = generateCandles(100, fullData[99].close); // Continue from last price
     setFullData(data);
     setVisibleData(data.slice(0, 50));

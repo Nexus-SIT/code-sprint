@@ -6,6 +6,7 @@ import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap } from 'l
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
+import { playButtonClick } from '../utils/audioPlayer';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Home: React.FC = () => {
             <div className="absolute top-6 right-6 z-20 flex gap-4">
                 <ThemeToggle />
                 <button
-                    onClick={() => auth.signOut()}
+                    onClick={() => { playButtonClick(); auth.signOut(); }}
                     className="bg-red-500 hover:bg-red-600 text-white font-pixel text-xs px-4 py-2 rounded shadow-pixel border-2 border-red-700"
                 >
                     LOGOUT
@@ -66,7 +67,7 @@ const Home: React.FC = () => {
                             Learn the basics.
                         </p>
                         <button
-                            onClick={() => navigate('/roadmap')}
+                            onClick={() => { playButtonClick(); navigate('/roadmap'); }}
                             className="w-full bg-success text-white border-b-4 border-green-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-green-600 transition-all shadow-lg"
                         >
                             START LEARNING
@@ -95,7 +96,7 @@ const Home: React.FC = () => {
                             Compete for glory.
                         </p>
                         <button
-                            onClick={() => navigate('/game')}
+                            onClick={() => { playButtonClick(); navigate('/game'); }}
                             className="w-full bg-blue-600 text-white border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-blue-500 transition-all shadow-lg"
                         >
                             FARM FUNDS
@@ -124,7 +125,7 @@ const Home: React.FC = () => {
                             Check top traders.
                         </p>
                         <button
-                            onClick={() => navigate('/leaderboard')}
+                            onClick={() => { playButtonClick(); navigate('/leaderboard'); }}
                             className="w-full bg-purple-600 text-white border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-purple-500 transition-all shadow-lg"
                         >
                             VIEW RANKINGS

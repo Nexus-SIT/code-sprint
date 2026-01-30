@@ -4,6 +4,7 @@ import { TRADER_PATH } from '../data/mockData';
 import { Module, Room, Task, TaskType } from '../types';
 import { ArrowLeft, HelpCircle, ChevronRight } from 'lucide-react';
 import { QuizComponent, ChartSelectComponent } from './TaskComponents';
+import { playButtonClick, playSuccessSound } from '../utils/audioPlayer';
 
 const Classroom: React.FC = () => {
     const { moduleId, roomId } = useParams<{ moduleId: string; roomId: string }>();
@@ -31,6 +32,7 @@ const Classroom: React.FC = () => {
     }
 
     const handleNextTask = () => {
+        playSuccessSound(); // Play sound on task completion
         const currentIdx = currentRoom.tasks.findIndex(t => t.id === activeTask.id);
         if (currentIdx < currentRoom.tasks.length - 1) {
             setActiveTask(currentRoom.tasks[currentIdx + 1]);

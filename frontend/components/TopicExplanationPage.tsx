@@ -7,6 +7,7 @@ import { TRADER_PATH } from '../data/mockData';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { useStore } from '../store';
 import TradingChart from './TradingChart';
+import { playButtonClick, playSuccessSound } from '../utils/audioPlayer';
 
 const TopicExplanationPage: React.FC = () => {
     const { moduleId, roomId } = useParams<{ moduleId: string; roomId: string }>();
@@ -66,6 +67,7 @@ const TopicExplanationPage: React.FC = () => {
     }, [isComplete, currentLineIndex, lines.length]);
 
     const handleContinue = () => {
+        playSuccessSound(); // Play sound on continue
         // Special redirect for implicit challenge room
         if (moduleId === 'module-1' && roomId === 'room-1-1') {
             navigate('/room-1-1');
@@ -76,6 +78,7 @@ const TopicExplanationPage: React.FC = () => {
     };
 
     const handleBack = () => {
+        playButtonClick(); // Play sound on back
         navigate('/learn');
     };
 
