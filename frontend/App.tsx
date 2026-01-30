@@ -74,28 +74,27 @@ const AppContent: React.FC = () => {
   // 🔥 Auth Listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setUserId(user.uid);
+      try {
+        if (user) {
+          setUserId(user.uid);
 
-        // Load user profile
-        try {
+          // Load user profile
           const doc = await createUserIfNotExists(user.uid, user.displayName || 'Trader');
           const userProfile = mapUserDocToProfile(doc, user.uid);
           console.log("Loaded Profile from Firestore:", userProfile);
           setUserProfile(userProfile);
           setShowAuth(false);
-        } catch (error: any) {
-          const errMsg = error.message || error;
-          logError('Error loading user profile: ' + errMsg);
-          // If it's a permission error, we still want to hide the auth modal 
-          // if the user is technically authed, but show the error banner.
-          setShowAuth(false);
+        } else {
+          setUserId(''); // Clear user
+          setShowAuth(true); // Show login screen
         }
-      } else {
-        setUserId(''); // Clear user
-        setShowAuth(true); // Show login screen
+      } catch (error: any) {
+        const errMsg = error.message || error;
+        logError('Error loading user profile: ' + errMsg);
+        setShowAuth(false);
+      } finally {
+        setInitializing(false);
       }
-      setInitializing(false);
     });
 
     return () => unsubscribe();

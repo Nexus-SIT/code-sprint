@@ -7,8 +7,8 @@ interface ProgressFeedbackProps {
   delay?: number;
 }
 
-const ProgressFeedback: React.FC<ProgressFeedbackProps> = ({ 
-  isCorrect, 
+const ProgressFeedback: React.FC<ProgressFeedbackProps> = ({
+  isCorrect,
   onComplete,
   delay = 0
 }) => {
@@ -25,7 +25,7 @@ const ProgressFeedback: React.FC<ProgressFeedbackProps> = ({
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay, type: 'spring', stiffness: 300, damping: 10 }}
-        className="fixed inset-0 flex items-center justify-center pointer-events-none z-50"
+        className="fixed inset-0 flex flex-col items-center justify-center pointer-events-none z-50 bg-black/20 backdrop-blur-sm"
       >
         {/* Success Glow */}
         <motion.div
@@ -37,22 +37,24 @@ const ProgressFeedback: React.FC<ProgressFeedbackProps> = ({
             duration: 1.5,
             delay,
           }}
-          className="absolute w-48 h-48 bg-green-400/30 rounded-full blur-3xl"
+          className="absolute w-64 h-64 bg-green-400/30 rounded-full blur-3xl z-0"
         />
 
-        {/* Check Icon */}
+        {/* Check Icon - Using Pixel Style Container */}
         <motion.div
           animate={{
-            y: [0, -20, 0],
+            y: [0, -10, 0],
             rotate: [0, 5, 0],
           }}
           transition={{
             duration: 0.8,
             delay: delay + 0.2,
           }}
-          className="relative z-10 text-8xl drop-shadow-2xl"
+          className="relative z-10 mb-6"
         >
-          ✅
+          <div className="bg-green-500 border-4 border-green-800 w-24 h-24 flex items-center justify-center rounded-xl shadow-[6px_6px_0_rgba(20,83,45,0.8)]">
+            <span className="text-6xl text-white drop-shadow-md">✓</span>
+          </div>
         </motion.div>
 
         {/* Success Text */}
@@ -60,10 +62,14 @@ const ProgressFeedback: React.FC<ProgressFeedbackProps> = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: delay + 0.3 }}
-          className="absolute text-center text-green-300 font-bold"
+          className="relative z-10 text-center"
         >
-          <div className="text-3xl">Correct! 🎉</div>
-          <div className="text-xl mt-2">+100 Points</div>
+          <div className="text-4xl text-[#4CAF50] font-pixel uppercase tracking-widest text-shadow-sm stroke-black bg-white/90 px-6 py-2 rounded-lg border-2 border-green-500 shadow-lg">
+            Correct!
+          </div>
+          <div className="text-xl mt-3 text-white font-bold font-pixel tracking-wider drop-shadow-md bg-orange-500/90 px-4 py-1 rounded-full border-2 border-orange-700 mx-auto inline-block">
+            +100 Points
+          </div>
         </motion.div>
 
         {/* Floating Confetti-like particles */}
@@ -77,8 +83,8 @@ const ProgressFeedback: React.FC<ProgressFeedbackProps> = ({
               scale: 1,
             }}
             animate={{
-              x: Math.cos((i / 8) * Math.PI * 2) * 100,
-              y: -150,
+              x: Math.cos((i / 8) * Math.PI * 2) * 150,
+              y: Math.sin((i / 8) * Math.PI * 2) * 150,
               opacity: 0,
               scale: 0,
             }}
@@ -87,7 +93,7 @@ const ProgressFeedback: React.FC<ProgressFeedbackProps> = ({
               delay: delay + 0.1 + i * 0.05,
               ease: 'easeOut',
             }}
-            className="absolute w-3 h-3 bg-yellow-300 rounded-full"
+            className="absolute w-4 h-4 bg-yellow-400 border border-yellow-600 shadow-sm"
           />
         ))}
       </motion.div>

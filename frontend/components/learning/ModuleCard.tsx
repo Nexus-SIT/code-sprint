@@ -259,32 +259,68 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
             </motion.div>
           )}
 
-          {/* RESULT STAGE */}
+          {/* RESULT STAGE - Refactored for Pixel Art Style */}
           {stage === 'result' && (
             <motion.div
               key="result"
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.6, type: 'spring', bounce: 0.4 }}
-              className="text-center"
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.5, type: 'spring', bounce: 0.4 }}
+              className="relative"
             >
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-6xl mb-4"
-              >
-                🎉
-              </motion.div>
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Congratulations!
-              </h3>
-              <p className="text-gray-300 mb-4">{catMessage}</p>
-              <div className="inline-block bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 font-bold px-6 py-3 rounded-lg">
-                +{module.points} XP
+              {/* Wooden Panel Container */}
+              <div className="bg-[#EFEBE9] border-4 border-[#5D4037] rounded-xl p-8 text-center relative shadow-[0_10px_0_rgba(62,39,35,0.4)] overflow-hidden">
+                {/* Nails */}
+                <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-[#BCAAA4] border border-[#5D4037] shadow-inner"></div>
+                <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-[#BCAAA4] border border-[#5D4037] shadow-inner"></div>
+                <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-[#BCAAA4] border border-[#5D4037] shadow-inner"></div>
+                <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-[#BCAAA4] border border-[#5D4037] shadow-inner"></div>
+
+                {/* Victory Animation */}
+                <motion.div
+                  animate={{ y: [0, -15, 0], scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="text-7xl mb-6 filter drop-shadow-md"
+                >
+                  🎉
+                </motion.div>
+
+                {/* Title */}
+                <h3 className="text-3xl font-bold text-[#3E2723] mb-2 font-pixel tracking-wide uppercase">
+                  Lesson Complete!
+                </h3>
+
+                {/* Separator */}
+                <div className="h-1 w-24 bg-[#8D6E63] mx-auto rounded-full mb-6 opacity-50"></div>
+
+                {/* Message Bubble */}
+                <div className="bg-[#FFF8E1] border-2 border-[#8D6E63] rounded-lg p-4 mb-8 shadow-inner italic text-[#5D4037]">
+                  "{catMessage}"
+                </div>
+
+                {/* Rewards */}
+                <div className="flex justify-center gap-4 mb-8">
+                  <div className="bg-[#FFF3E0] border-2 border-[#FFB74D] px-6 py-3 rounded-xl flex flex-col items-center min-w-[120px] shadow-sm transform hover:scale-105 transition-transform">
+                    <span className="text-xs font-bold text-[#F57C00] uppercase tracking-widest font-pixel">REWARD</span>
+                    <span className="text-2xl font-bold text-[#E65100] font-pixel">+{module.points} XP</span>
+                  </div>
+                </div>
+
+                {/* Done Button (Simulated Next) */}
+                <button
+                  className="w-full bg-[#4CAF50] text-white border-b-[6px] border-[#1B5E20] hover:bg-[#43A047] active:border-b-0 active:translate-y-[6px] rounded-xl py-4 font-bold text-xl font-pixel uppercase tracking-widest shadow-xl transition-all"
+                  disabled
+                >
+                  Completed ✅
+                </button>
+                <p className="mt-3 text-[#8D6E63] text-xs font-pixel animate-pulse">
+                  Redirecting to map...
+                </p>
               </div>
             </motion.div>
           )}
+
         </AnimatePresence>
       </motion.div>
     </motion.div>
