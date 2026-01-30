@@ -8,12 +8,13 @@ interface MentorProps {
 }
 
 const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
-  const getEmoji = (emotion: MentorEmotion) => {
+  const getImage = (emotion: MentorEmotion) => {
     switch (emotion) {
-      case 'happy': return '😸';
-      case 'alert': return '🙀';
-      case 'thinking': return '😼';
-      default: return '😺';
+      case 'happy': return '/mentor/CatJoyFull.png';
+      case 'alert': return '/mentor/CatShocked.png';
+      case 'thinking': return '/mentor/CatNormal.png';
+      case 'sad': return '/mentor/CatSad.png';
+      default: return '/mentor/CatNormal.png';
     }
   };
 
@@ -26,14 +27,20 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
       <div className="absolute bottom-1 right-1 w-2 h-2 bg-wood-dark rounded-full opacity-50"></div>
 
       {/* Avatar Container */}
-      <div className="flex-shrink-0 w-24 h-24 bg-wood/20 border-2 border-wood-dark rounded flex items-center justify-center relative">
-        <motion.div
-          animate={{ y: [0, -4, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="text-6xl filter drop-shadow-md cursor-pointer hover:scale-110 transition-transform"
-        >
-          {getEmoji(emotion)}
-        </motion.div>
+      <div className="flex-shrink-0 w-24 h-24 bg-wood/20 border-2 border-wood-dark rounded flex items-center justify-center relative overflow-hidden">
+        <motion.img
+          key={emotion}
+          src={getImage(emotion)}
+          alt={emotion}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1, y: [0, -2, 0] }}
+          transition={{
+            scale: { duration: 0.3 },
+            opacity: { duration: 0.3 },
+            y: { repeat: Infinity, duration: 2, ease: "easeInOut" }
+          }}
+          className="w-full h-full object-contain filter drop-shadow-md cursor-pointer hover:scale-110 transition-transform"
+        />
       </div>
 
       {/* Dialogue Text */}

@@ -158,7 +158,7 @@ const GameMode: React.FC = () => {
     if (phase === 'SIMULATING') return { emotion: 'alert', text: "Hold onto your hat! The market is moving!" };
     if (phase === 'RESULT') {
       if (resultPnL > 0) return { emotion: 'happy', text: `Bountiful harvest! You made $${resultPnL.toFixed(0)}!` };
-      if (resultPnL < 0) return { emotion: 'alert', text: `Oh dear... Looks like a drought. Lost $${Math.abs(resultPnL).toFixed(0)}.` };
+      if (resultPnL < 0) return { emotion: 'sad', text: `Oh dear... Looks like a drought. Lost $${Math.abs(resultPnL).toFixed(0)}.` };
       return { emotion: 'neutral', text: "Steady as a rock." };
     }
     return { emotion: 'neutral', text: '' };
