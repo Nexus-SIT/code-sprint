@@ -26,7 +26,7 @@ A **gamified, risk-free virtual stock trading platform** with RPG-inspired desig
 - First Steps, Hot Streak, Unstoppable
 - Rising Star, Six Figures, Market Master
 - Active Trader, Veteran Trader, Trading Legend
-- And many more!
+- And many more!!
 
 ## 🚀 Quick Start
 
