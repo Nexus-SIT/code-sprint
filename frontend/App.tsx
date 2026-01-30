@@ -12,6 +12,7 @@ import Classroom from './components/Classroom';
 import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
 import Auth from './components/Auth'; // Import Auth
+import TopicExplanationPage from './components/TopicExplanationPage';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
@@ -127,6 +128,7 @@ const App: React.FC = () => {
           <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
           <Route path="/learn" element={<LearningMode />} />
           <Route path="/game" element={<GameMode />} />
+          <Route path="/learning/module/:moduleId/topic/:roomId" element={<TopicExplanationPage />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </div>

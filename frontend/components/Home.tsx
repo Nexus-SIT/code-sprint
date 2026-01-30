@@ -68,7 +68,7 @@ const Home: React.FC = () => {
                             Learn the basics.
                         </p>
                         <button
-                            onClick={() => navigate('/learn')}
+                            onClick={() => navigate('/roadmap')}
                             className="w-full bg-success text-white border-b-4 border-green-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-green-600 transition-all shadow-lg"
                         >
                             START LEARNING
