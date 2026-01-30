@@ -105,3 +105,82 @@ export const ChartSelectComponent: React.FC<TaskComponentProps> = ({ task, onCom
         </div>
     );
 };
+
+export const WaitComponent: React.FC<TaskComponentProps> = ({ task, onComplete }) => {
+    const [timeLeft, setTimeLeft] = useState(5);
+    const [status, setStatus] = useState<'idle' | 'waiting' | 'failed' | 'success'>('idle');
+
+    const startWait = () => {
+        setStatus('waiting');
+        setTimeLeft(5);
+    };
+
+    React.useEffect(() => {
+        if (status === 'waiting') {
+            if (timeLeft > 0) {
+                const timer = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
+                return () => clearTimeout(timer);
+            } else {
+                setStatus('success');
+                setTimeout(onComplete, 1000);
+            }
+        }
+    }, [status, timeLeft, onComplete]);
+
+    // Fail if user clicks 'Action' during wait
+    const handleActionClick = () => {
+        if (status === 'waiting') {
+            setStatus('failed');
+        }
+    };
+
+    return (
+        <div className="flex flex-col items-center justify-center p-8 bg-gray-900 rounded-xl border border-gray-700 shadow-2xl max-w-md w-full text-center">
+            <h3 className="text-2xl font-bold mb-4 text-indigo-400">Psychology Test</h3>
+            <p className="text-gray-400 mb-8">{task.challengeText || "Do NOT take any action. Wait for the setup."}</p>
+
+            <div className="relative w-48 h-48 mb-8 flex items-center justify-center bg-black rounded-full border-4 border-gray-800">
+                {status === 'waiting' && (
+                    <div className="absolute inset-0 rounded-full border-4 border-indigo-500 animate-spin border-t-transparent opacity-50"></div>
+                )}
+
+                <div className="text-4xl font-mono font-bold text-white">
+                    {status === 'idle' && "READY"}
+                    {status === 'waiting' && timeLeft}
+                    {status === 'success' && <Check size={48} className="text-green-500" />}
+                    {status === 'failed' && "FAIL"}
+                </div>
+            </div>
+
+            {status === 'idle' && (
+                <button
+                    onClick={startWait}
+                    className="px-8 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold transition-all"
+                >
+                    Start Simulation
+                </button>
+            )}
+
+            {status === 'waiting' && (
+                <button
+                    onClick={handleActionClick}
+                    className="px-8 py-3 bg-red-600 hover:bg-red-500 text-white rounded-lg font-bold transition-all animate-pulse"
+                >
+                    BUY NOW!
+                </button>
+            )}
+
+            {status === 'failed' && (
+                <div className="text-red-400">
+                    <p className="mb-4">You acted too soon! Patience is key.</p>
+                    <button
+                        onClick={() => setStatus('idle')}
+                        className="text-sm underline hover:text-white"
+                    >
+                        Try Again
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+};

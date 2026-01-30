@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Path, Module, Room } from '../types';
-import Mascot from './Mascot';
 
 interface RoadmapViewProps {
   path: Path;
@@ -22,45 +21,44 @@ const RoomNode: React.FC<{
 
   return (
     <div
-      id={`room-node-${index}`}
-      className={`relative flex items-center w-full min-h-[180px] ${isRight ? 'justify-end' : 'justify-start'}`}
+      className={`relative flex items-center w-full min-h-[160px] ${isRight ? 'justify-end pr-12 lg:pr-32' : 'justify-start pl-12 lg:pl-32'}`}
     >
-      {/* Main Node Container */}
       <div
-        className={`relative z-20 flex items-center gap-8 group cursor-pointer transition-transform hover:scale-105 ${isRight ? 'flex-row' : 'flex-row-reverse'}`}
+        className={`relative z-20 flex items-center gap-10 group cursor-pointer transition-all duration-300 ${isRight ? 'flex-row' : 'flex-row-reverse'}`}
         onClick={onClick}
       >
         {/* Label Content */}
-        <div className={`flex flex-col ${isRight ? 'text-left' : 'text-right'}`}>
-          <h4 className="text-sm font-black dark:text-slate-200 group-hover:text-lime-400 transition-colors">
+        <div className={`flex flex-col ${isRight ? 'text-left' : 'text-right'} min-w-[150px]`}>
+          <h4 className="text-base font-black text-white group-hover:text-lime-400 transition-colors tracking-tight">
             {room.title}
           </h4>
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Intro</span>
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">INTRO</span>
           {completed && (
-            <span className="text-[9px] font-black text-lime-400 mt-1">✓ COMPLETED</span>
+            <div className={`flex items-center gap-1 mt-1 ${isRight ? 'justify-start' : 'justify-end'}`}>
+              <span className="text-[9px] font-black text-lime-400">✓ COMPLETED</span>
+            </div>
           )}
         </div>
 
-        {/* 3D Platform Wrapper */}
+        {/* Isometric 3D Platform */}
         <div className="relative w-32 h-24 flex items-center justify-center">
-          {/* Shadow/Base */}
-          <div className="absolute bottom-2 w-24 h-12 bg-black/20 rounded-[100%] blur-md" />
+          <div className="absolute bottom-2 w-24 h-8 bg-black/40 rounded-[100%] blur-lg opacity-50" />
 
-          {/* The Isometric Block */}
-          <div className="relative w-24 h-14">
+          <div className="relative w-24 h-12 transform-gpu" style={{ transform: 'rotateX(55deg) rotateZ(-25deg)' }}>
+            {/* Front Side */}
+            <div className={`absolute top-4 left-0 w-full h-full rounded-xl ${completed ? 'bg-lime-700' : 'bg-slate-800'} border-b-8 border-black/30`} />
+
             {/* Top Surface */}
-            <div className={`absolute top-0 w-full h-full rounded-xl transition-all duration-300 
-              ${completed ? 'bg-lime-500' : 'bg-[#2d4a3e] group-hover:bg-[#3d5a4e]'} 
-              border-b-8 border-black/20 shadow-lg`}
-              style={{ transform: 'rotateX(45deg) rotateZ(-10deg)' }}
+            <div className={`absolute top-0 left-0 w-full h-full rounded-xl transition-all duration-300 shadow-xl
+              ${completed ? 'bg-lime-500' : 'bg-[#2d3a35] group-hover:bg-[#3d4a45]'} 
+              border border-white/10`}
             >
-              {/* Inner highlight */}
-              <div className="absolute inset-1 border border-white/10 rounded-lg" />
+              <div className="absolute inset-2 border border-white/5 rounded-lg" />
             </div>
 
-            {/* The Icon (Floating above) */}
-            <div className="absolute inset-0 flex items-center justify-center text-3xl mb-8 filter drop-shadow-xl animate-float">
-              <span className="group-hover:-translate-y-2 transition-transform duration-500">
+            {/* Icon */}
+            <div className="absolute inset-0 flex items-center justify-center text-4xl -translate-y-12 -rotate-x-12 rotate-z-25 animate-float pointer-events-none">
+              <span className="drop-shadow-2xl group-hover:-translate-y-3 transition-transform duration-700 block" style={{ transform: 'rotateX(-55deg) rotateZ(25deg)' }}>
                 {icons[room.iconType] || '📍'}
               </span>
             </div>
@@ -71,173 +69,111 @@ const RoomNode: React.FC<{
   );
 };
 
+import Mascot from './Mascot';
+
 const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelectRoom }) => {
   return (
-    <div className="flex-1 bg-[#f8fafd] dark:bg-[#0d1117] overflow-y-auto overflow-x-hidden">
-      <div className="max-w-[1400px] mx-auto p-4 lg:p-10 flex flex-col lg:flex-row gap-10">
+    <div className="flex-1 bg-[#0d1117] overflow-y-auto overflow-x-hidden selection:bg-lime-500/30">
+      <div className="max-w-[1000px] mx-auto p-4 lg:p-12 space-y-12">
 
-        {/* Left Column: Learning Path */}
-        <div className="flex-1 space-y-16">
-
-          {/* Hero Banner */}
-          <div className="relative bg-gradient-to-r from-[#051c2c] to-[#0a2e45] rounded-3xl p-10 overflow-hidden text-white border border-slate-800 shadow-2xl">
-            <div className="relative z-10">
-              <h2 className="text-3xl font-black mb-4 tracking-tight">Ready to level up?</h2>
-              <p className="text-sm text-slate-300 mb-8 max-w-md leading-relaxed">
-                Take on interactive trading scenarios. Master price action through direct application and capture flags to level up.
+        {/* Header Section with Mascot */}
+        <div className="flex flex-col md:flex-row items-center justify-between bg-[#161b22] p-8 rounded-3xl border border-slate-800 shadow-2xl gap-6">
+          <div className="flex items-center gap-6">
+            <Mascot state="happy" message="Chart ready. Awaiting orders, Operator." />
+            <div>
+              <h1 className="text-3xl font-black text-white mb-2 tracking-tight">TradeHack Operations</h1>
+              <p className="text-slate-400 font-medium">
+                Current Mission: <span className="text-lime-400">Master Market Structure</span>
               </p>
-              <button className="bg-lime-500 hover:bg-lime-400 text-slate-900 font-black px-8 py-3 rounded-xl flex items-center gap-3 transition-all shadow-xl shadow-lime-500/20 active:scale-95">
-                <span className="text-lg">▶</span>
-                <span>Play now</span>
-              </button>
-            </div>
-            <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 0)', backgroundSize: '20px 20px' }} />
-          </div>
-
-          {/* User Section */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              <Mascot state="happy" message="Ready for your next mission, operator?" />
-              <div>
-                <h3 className="text-2xl font-black dark:text-white">Hey Anush!</h3>
-                <p className="text-xs text-slate-500 font-medium">Ready for your next mission, operator?</p>
-              </div>
             </div>
           </div>
 
-          {/* Modules Path */}
-          {path.modules.map((module, modIndex) => (
-            <div key={module.id} className="relative">
-              {/* Module Header */}
-              <div className="bg-[#1e293b] rounded-t-3xl border-t border-x border-slate-700 shadow-xl p-8 relative overflow-hidden">
-                <div className="z-10 relative">
-                  <span className="text-[10px] font-black text-lime-500 uppercase tracking-[0.3em] block mb-2">Module {modIndex + 1}</span>
-                  <h2 className="text-2xl font-black text-white leading-tight mb-2">{module.title}</h2>
-                  <p className="text-xs text-slate-400 max-w-lg">{module.description}</p>
-                </div>
-              </div>
-
-              {/* The Path Map View with Zigzag Lines */}
-              <div className="bg-[#161b22] p-12 lg:p-20 relative border border-slate-700 rounded-b-3xl">
-
-                {/* SVG Path Overlay */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-                  <defs>
-                    <linearGradient id="line-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#84cc16" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#84cc16" stopOpacity="0.1" />
-                    </linearGradient>
-                  </defs>
-                  {module.rooms.map((_, i) => {
-                    if (i === module.rooms.length - 1) return null;
-                    const isFromRight = i % 2 !== 0;
-
-                    // Logic to draw lines based on staggered nodes
-                    // Since nodes are in flex layout, we approximate the path
-                    const yStart = 100 + i * 180 + 90; // Approx center of room i
-                    const yEnd = 100 + (i + 1) * 180 + 90; // Approx center of room i+1
-
-                    const xStart = isFromRight ? 'calc(100% - 100px)' : '100px';
-                    const xEnd = isFromRight ? '100px' : 'calc(100% - 100px)';
-
-                    return (
-                      <path
-                        key={`path-${i}`}
-                        d={`M ${isFromRight ? '70%' : '30%'},${yStart} C ${isFromRight ? '30%' : '70%'},${yStart} ${isFromRight ? '70%' : '30%'},${yEnd} ${isFromRight ? '30%' : '70%'},${yEnd}`}
-                        fill="none"
-                        stroke="url(#line-grad)"
-                        strokeWidth="4"
-                        strokeLinecap="round"
-                        strokeDasharray="10, 10"
-                        className="animate-path-dash"
-                      />
-                    );
-                  })}
-                </svg>
-
-                <div className="max-w-2xl mx-auto flex flex-col relative">
-                  {module.rooms.map((room, roomIndex) => (
-                    /* Removed unused isLast prop from RoomNode */
-                    <RoomNode
-                      key={room.id}
-                      index={roomIndex}
-                      room={room}
-                      completed={completedRooms.includes(room.id)}
-                      onClick={() => onSelectRoom(modIndex, roomIndex)}
-                      isRight={roomIndex % 2 !== 0}
-                    />
-                  ))}
-                </div>
-
-                {/* Module Footer Actions */}
-                <div className="mt-20 pt-10 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-6">
-                  <div className="flex items-center gap-4">
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Active Recall Mode Enabled</span>
-                  </div>
-                  <div className="flex gap-4 w-full sm:w-auto">
-                    <button
-                      onClick={() => onSelectRoom(modIndex, 0)}
-                      className="flex-1 sm:flex-none bg-lime-500 hover:bg-lime-400 text-slate-900 font-black px-8 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-lime-500/10"
-                    >
-                      Resume learning
-                    </button>
-                  </div>
-                </div>
-              </div>
+          <div className="flex gap-4 text-center">
+            <div className="bg-[#0d1117] p-4 rounded-xl border border-slate-800">
+              <div className="text-2xl font-black text-white">{completedRooms.length}</div>
+              <div className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Flags</div>
             </div>
-          ))}
-        </div>
-
-        {/* Right Column: Widgets */}
-        <div className="w-full lg:w-[360px] space-y-8">
-          <div className="bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
-            <div className="flex justify-between items-center mb-6">
-              <h4 className="font-black dark:text-white text-sm">Teams & Workspaces</h4>
-            </div>
-            <p className="text-xs text-slate-500 leading-relaxed mb-8">
-              Collaborate with other traders and compete in group leaderboards.
-            </p>
-            <button className="w-full bg-[#1e293b] hover:bg-slate-700 text-white font-black py-4 rounded-2xl text-[11px] uppercase tracking-widest transition-all">
-              Browse Workspaces
-            </button>
-          </div>
-
-          <div className="bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <span className="text-lime-500 text-xl">🔥</span>
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">3 Day Streak</span>
-            </div>
-            <div className="space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800">
-              {[
-                { label: 'Flags Captured', val: completedRooms.length },
-                { label: 'Accuracy', val: '94%' },
-                { label: 'Status', val: 'SECURE' }
-              ].map((item, i) => (
-                <div key={i} className="flex justify-between items-center text-[10px] font-black text-slate-500 uppercase tracking-widest">
-                  <span>{item.label}</span>
-                  <span className="text-lime-500 font-mono">{item.val}</span>
-                </div>
-              ))}
+            <div className="bg-[#0d1117] p-4 rounded-xl border border-slate-800">
+              <div className="text-2xl font-black text-lime-500">94%</div>
+              <div className="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Accuracy</div>
             </div>
           </div>
         </div>
+
+        {path.modules.map((module, modIndex) => (
+          <div key={module.id} className="relative rounded-[40px] overflow-hidden border border-slate-800 shadow-2xl bg-[#11161d]">
+
+            {/* Module Header */}
+            <div className="bg-[#1c2431] p-10 lg:p-12 border-b border-slate-800">
+              <span className="text-[10px] font-black text-lime-500 uppercase tracking-[0.4em] block mb-3">Module {modIndex + 1}</span>
+              <h2 className="text-3xl lg:text-4xl font-black text-white leading-tight mb-3 tracking-tighter">
+                {module.title}
+              </h2>
+              <p className="text-sm text-slate-400 font-medium max-w-xl leading-relaxed">
+                {module.description}
+              </p>
+            </div>
+
+            {/* Path Content */}
+            <div className="relative p-12 lg:p-20 bg-[#0d1117]">
+
+              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-slate-800 to-transparent opacity-50 hidden lg:block" />
+
+              <div className="flex flex-col gap-4 relative">
+                {module.rooms.map((room, roomIndex) => (
+                  <RoomNode
+                    key={room.id}
+                    index={roomIndex}
+                    room={room}
+                    completed={completedRooms.includes(room.id)}
+                    onClick={() => onSelectRoom(modIndex, roomIndex)}
+                    isRight={roomIndex % 2 !== 0}
+                  />
+                ))}
+              </div>
+
+              {/* Module Action Footer */}
+              <div className="mt-20 pt-10 border-t border-slate-800/50 flex flex-col sm:flex-row items-center justify-between gap-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 rounded-full bg-lime-500 animate-pulse shadow-[0_0_10px_rgba(132,204,22,0.5)]" />
+                  <span className="text-[11px] font-black text-slate-500 uppercase tracking-[0.25em]">Active Recall Mode Enabled</span>
+                </div>
+
+                <button
+                  onClick={() => {
+                    const firstUncompleted = module.rooms.findIndex(r => !completedRooms.includes(r.id));
+                    onSelectRoom(modIndex, firstUncompleted === -1 ? 0 : firstUncompleted);
+                  }}
+                  className="w-full sm:w-auto bg-lime-500 hover:bg-lime-400 text-slate-900 font-black px-10 py-4 rounded-2xl text-sm transition-all shadow-xl shadow-lime-500/20 active:scale-95 hover:-translate-y-0.5"
+                >
+                  Resume learning
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       <style>{`
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-12px) rotate(2deg); }
         }
         .animate-float {
-          animation: float 4s ease-in-out infinite;
+          animation: float 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
-        @keyframes dash {
-          to {
-            stroke-dashoffset: -20;
-          }
+        ::-webkit-scrollbar {
+          width: 6px;
         }
-        .animate-path-dash {
-          animation: dash 2s linear infinite;
+        ::-webkit-scrollbar-track {
+          background: #0d1117;
+        }
+        ::-webkit-scrollbar-thumb {
+          background: #1c2431;
+          border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: #2d3a4d;
         }
       `}</style>
     </div>

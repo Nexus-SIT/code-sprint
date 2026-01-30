@@ -27,6 +27,7 @@ export const useStore = create<GameState>((set) => ({
   walletBalance: 0,
   userRank: 0,
   xp: 0,
+  completedRooms: [],
 
   toggleTheme: () =>
     set((state) => {
@@ -51,6 +52,7 @@ export const useStore = create<GameState>((set) => ({
       walletBalance: profile.walletBalance,
       xp: profile.xp,
       userRank: profile.rank ?? 0,
+      completedRooms: profile.completedRooms || [],
     }),
 
   // 🔥 Sync directly from Firebase doc
@@ -58,11 +60,13 @@ export const useStore = create<GameState>((set) => ({
     balance: number;
     xp: number;
     rank?: number;
+    completedRooms?: string[];
   }) =>
     set({
       walletBalance: data.balance,
       xp: data.xp,
       userRank: data.rank ?? 0,
+      completedRooms: data.completedRooms || [],
     }),
 
   // ❌ Local-only updates removed
