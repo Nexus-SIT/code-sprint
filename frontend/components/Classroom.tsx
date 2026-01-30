@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { TRADER_PATH } from '../data/mockData';
 import { Module, Room, Task, TaskType } from '../types';
 import { ArrowLeft, HelpCircle, ChevronRight, CheckCircle2, AlertTriangle, BookOpen } from 'lucide-react';
-import { QuizComponent, ChartSelectComponent, WaitComponent } from './TaskComponents';
+import { QuizComponent, ChartSelectComponent, WaitComponent, PredictComponent } from './TaskComponents'; // Added PredictComponent
 import { useStore } from '../store';
 import { completeTask } from '../services/firebaseApi';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -230,6 +230,10 @@ const Classroom: React.FC = () => {
                     <div className="w-full h-full flex items-center justify-center p-4 relative z-10">
                         {activeTask.type === TaskType.MULTIPLE_CHOICE && (
                             <QuizComponent task={activeTask} onComplete={handleTaskComplete} />
+                        )}
+
+                        {activeTask.type === TaskType.PREDICT_PRICE && (
+                            <PredictComponent task={activeTask} onComplete={handleTaskComplete} />
                         )}
 
                         {(activeTask.type === TaskType.CLICK_CANDLE || activeTask.type === TaskType.ACTION || activeTask.type === TaskType.DRAW_LINE || activeTask.type === TaskType.CHART_SELECT) && (
