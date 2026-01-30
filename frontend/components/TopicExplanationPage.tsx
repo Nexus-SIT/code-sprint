@@ -72,11 +72,11 @@ const TopicExplanationPage: React.FC = () => {
             return;
         }
         // Navigate to the actual classroom/quiz flow
-        navigate(`/learn/${moduleId}/${roomId}`);
+        navigate(`/learn/${moduleId}/${roomId}/classroom`);
     };
 
     const handleBack = () => {
-        navigate('/roadmap');
+        navigate('/learn');
     };
 
     return (

@@ -9,6 +9,73 @@ interface RoadmapViewProps {
   onSelectRoom: (moduleIndex: number, roomIndex: number) => void;
 }
 
+const RoomNode: React.FC<{
+  room: Room;
+  completed: boolean;
+  onClick: () => void;
+  isRight: boolean;
+  index: number;
+  theme: 'light' | 'dark';
+}> = ({ room, completed, onClick, isRight, index, theme }) => {
+  const icons: Record<string, string> = {
+    terminal: '💻', shield: '🛡️', chart: '📊', target: '🎯', sword: '⚔️', lock: '🔒', skull: '💀', heart: '❤️', cat: '🐱'
+  };
+
+  return (
+    <div
+      id={`room-node-${index}`}
+      className={`relative flex items-center w-full min-h-[160px] ${isRight ? 'justify-end' : 'justify-start'}`}
+    >
+      {/* Main Node Container */}
+      <div
+        className={`relative z-20 flex items-center gap-6 group cursor-pointer transition-transform hover:scale-105 ${isRight ? 'flex-row' : 'flex-row-reverse'}`}
+        onClick={onClick}
+      >
+        {/* Label Content */}
+        <div className={`flex flex-col ${isRight ? 'text-left' : 'text-right'}`}>
+          <h4 className={`text-sm font-bold font-pixel transition-colors
+            ${theme === 'dark' ? 'text-slate-200 group-hover:text-amber-400' : 'text-coffee group-hover:text-amber-600'}
+          `}>
+            {room.title}
+          </h4>
+          <span className={`text-[10px] font-bold uppercase tracking-widest
+            ${theme === 'dark' ? 'text-slate-500' : 'text-wood-light'}
+          `}>Click to Start</span>
+          {completed && (
+            <span className="text-[10px] font-black text-green-500 mt-1">✓ COMPLETED</span>
+          )}
+        </div>
+
+        {/* 3D Platform Wrapper */}
+        <div className="relative w-32 h-24 flex items-center justify-center">
+          {/* Shadow/Base */}
+          <div className="absolute bottom-2 w-24 h-12 bg-black/20 rounded-[100%] blur-md" />
+
+          {/* The Isometric Block */}
+          <div className="relative w-24 h-14">
+            {/* Top Surface */}
+            <div className={`absolute top-0 w-full h-full rounded-xl transition-all duration-300 
+              ${completed ? 'bg-lime-500' : 'bg-[#2d4a3e] group-hover:bg-[#3d5a4e]'} 
+              border-b-8 border-black/20 shadow-lg`}
+              style={{ transform: 'rotateX(45deg) rotateZ(-10deg)' }}
+            >
+              {/* Inner highlight */}
+              <div className="absolute inset-1 border border-white/10 rounded-lg" />
+            </div>
+
+            {/* The Icon (Floating above) */}
+            <div className="absolute inset-0 flex items-center justify-center text-3xl mb-8 filter drop-shadow-xl animate-float">
+              <span className="group-hover:-translate-y-2 transition-transform duration-500">
+                {icons[room.iconType as keyof typeof icons] || '📍'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelectRoom }) => {
   const { theme } = useStore();
 

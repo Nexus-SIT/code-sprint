@@ -37,7 +37,7 @@ const Classroom: React.FC = () => {
         } else {
             // Room Complete - Go back to map
             // Ideally should mark room as complete here
-            navigate('/roadmap');
+            navigate('/learn');
         }
     };
 
@@ -47,7 +47,7 @@ const Classroom: React.FC = () => {
             {/* Sidebar - Task List */}
             <aside className="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
                 <div className="p-4 border-b border-gray-700 flex items-center gap-2">
-                    <button onClick={() => navigate('/roadmap')} className="text-gray-400 hover:text-white">
+                    <button onClick={() => navigate('/learn')} className="text-gray-400 hover:text-white">
                         <ArrowLeft size={20} />
                     </button>
                     <div className="overflow-hidden">
