@@ -174,37 +174,37 @@ const GameMode: React.FC = () => {
         onDismiss={dismissAchievement}
       />
 
-      <div className={`flex flex-col h-screen relative p-4 max-w-7xl mx-auto font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'text-gray-100' : 'text-coffee'
+      <div className={`flex flex-col h-screen relative p-2 md:p-3 max-w-7xl mx-auto font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'text-gray-100' : 'text-coffee'
         }`}>
         {/* Theme Toggle - Top Right */}
         <div className="absolute top-4 right-4 z-30">
           <ThemeToggle />
         </div>
 
-        {/* Wooden Header Bar */}
-        <div className={`flex items-center justify-between mb-2 rounded-lg p-3 shadow-pixel z-10 relative border-4 ${theme === 'dark'
+        {/* Wooden Header Bar - COMPACTED */}
+        <div className={`flex items-center justify-between mb-2 rounded-lg p-1.5 md:p-2 shadow-pixel z-10 relative border-2 md:border-4 ${theme === 'dark'
           ? 'bg-gray-800 border-gray-700'
           : 'bg-wood border-wood-dark'
           }`}>
           <button
             onClick={() => navigate('/')}
-            className="bg-failure text-white border-b-4 border-red-900 active:border-b-0 active:translate-y-1 active:mt-1 rounded px-4 py-2 font-pixel text-xs flex items-center hover:bg-red-700 transition-colors"
+            className="bg-failure text-white border-b-2 md:border-b-4 border-red-900 active:border-b-0 active:translate-y-1 rounded px-2 md:px-4 py-1.5 font-pixel text-[10px] md:text-xs flex items-center hover:bg-red-700 transition-colors"
           >
-            <ArrowLeft className="mr-2 w-4 h-4" /> LEAVE
+            <ArrowLeft className="mr-1 md:mr-2 w-3 h-3 md:w-4 md:h-4" /> LEAVE
           </button>
 
           <div className="flex-1 flex justify-center">
             <img
               src="/CCLogo.png"
               alt="Candle Crush"
-              className="h-10 md:h-12 w-auto object-contain drop-shadow-sm"
+              className="h-6 md:h-8 w-auto object-contain drop-shadow-sm"
             />
           </div>
 
-          <div className="flex gap-4">
-            {/* Rank Display */}
+          <div className="flex gap-2 md:gap-4 items-center">
+            {/* Rank Display - Smaller */}
             {userProfile && (
-              <div className="mr-2">
+              <div className="mr-1 md:mr-2 scale-75 md:scale-90 origin-right">
                 <RankDisplay
                   rank={userProfile.rank}
                   rankName={userProfile.rankName}
@@ -213,36 +213,36 @@ const GameMode: React.FC = () => {
               </div>
             )}
 
-            <div className={`flex items-center px-4 py-2 rounded border-2 ${theme === 'dark'
+            <div className={`flex items-center px-2 md:px-4 py-1 md:py-1.5 rounded border-2 ${theme === 'dark'
               ? 'bg-gray-700 border-gray-600'
               : 'bg-wood-dark border-wood-light'
               }`}>
-              <Coins className="text-yellow-400 mr-2 w-5 h-5" />
-              <div className={`text-xl font-pixel ${walletBalance < 0 ? 'text-red-400' : theme === 'dark' ? 'text-gray-100' : 'text-parchment'
+              <Coins className="text-yellow-400 mr-1 md:mr-2 w-4 h-4 md:w-5 md:h-5" />
+              <div className={`text-sm md:text-lg font-pixel ${walletBalance < 0 ? 'text-red-400' : theme === 'dark' ? 'text-gray-100' : 'text-parchment'
                 }`}>
-                ${walletBalance.toLocaleString()}
+                ₹{walletBalance.toLocaleString()}
               </div>
             </div>
           </div>
         </div>
 
         {/* Main Game Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 md:gap-4 flex-1 min-h-0 overflow-hidden">
 
           {/* Chart Section (The Window) */}
-          <div className="lg:col-span-3 flex flex-col gap-4">
+          <div className="lg:col-span-3 flex flex-col gap-2 md:gap-3 min-h-0">
             {/* The Chart Window */}
-            <div className="bg-parchment rounded-lg border-4 border-wood-dark shadow-pixel relative flex flex-col flex-1 p-1 overflow-hidden">
+            <div className="bg-parchment rounded-lg border-4 border-wood-dark shadow-pixel relative flex flex-col flex-1 p-1 overflow-hidden min-h-0">
               {/* Window Frame Inner Border */}
               <div className="absolute inset-0 border-2 border-wood opacity-30 pointer-events-none rounded sm:hidden"></div>
 
-              <div className="flex-1 w-full h-full p-2">
+              <div className="flex-1 w-full h-full p-1 md:p-2">
                 <CandleChart data={visibleData} height="100%" />
               </div>
             </div>
 
-            {/* Mentor Dialogue Box */}
-            <div className="h-40 w-full">
+            {/* Mentor Dialogue Box - MORE COMPACT */}
+            <div className="h-28 md:h-32 w-full flex-shrink-0">
               <Mentor emotion={mentor.emotion} text={mentor.text} />
             </div>
           </div>

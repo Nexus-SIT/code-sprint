@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Path, Module, Room } from '../types';
 import Mascot from './Mascot';
@@ -61,7 +60,7 @@ const RoomNode: React.FC<{
             {/* The Icon (Floating above) */}
             <div className="absolute inset-0 flex items-center justify-center text-3xl mb-8 filter drop-shadow-xl animate-float">
               <span className="group-hover:-translate-y-2 transition-transform duration-500">
-                {icons[room.iconType] || '📍'}
+                {icons[room.iconType as keyof typeof icons] || '📍'}
               </span>
             </div>
           </div>

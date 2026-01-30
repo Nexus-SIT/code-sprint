@@ -81,35 +81,35 @@ const Classroom: React.FC = () => {
             </aside>
 
             {/* Main Content Split */}
-            <main className="flex-1 flex flex-col md:flex-row">
+            <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
 
                 {/* Left: Theory & Instructions */}
-                <div className="w-full md:w-1/3 bg-gray-800/50 p-8 border-r border-gray-700 overflow-y-auto">
+                <div className="w-full md:w-1/4 bg-gray-800/50 p-4 md:p-6 border-r border-gray-700 overflow-y-auto">
                     <div className="max-w-md mx-auto">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/50 text-indigo-300 text-xs font-mono mb-6 border border-indigo-500/30">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-900/50 text-indigo-300 text-[10px] font-mono mb-4 border border-indigo-500/30">
                             <HelpCircle size={12} />
                             THEORY
                         </div>
 
-                        <h1 className="text-3xl font-bold mb-4 text-white">{activeTask.title}</h1>
-                        <p className="text-gray-300 leading-relaxed mb-8 text-lg">
+                        <h1 className="text-xl md:text-2xl font-bold mb-3 text-white leading-tight">{activeTask.title}</h1>
+                        <p className="text-gray-400 leading-relaxed mb-6 text-sm md:text-base">
                             {activeTask.description}
                         </p>
 
-                        <div className="bg-gray-900/80 rounded-xl p-6 border border-indigo-500/30 relative overflow-hidden shadow-lg">
+                        <div className="bg-gray-900/80 rounded-lg p-4 border border-indigo-500/30 relative overflow-hidden shadow-lg">
                             <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
-                            <h3 className="text-indigo-400 font-bold mb-2 text-sm uppercase tracking-wider">Your Challenge</h3>
-                            <p className="text-xl text-white font-medium">
+                            <h3 className="text-indigo-400 font-bold mb-1 text-[10px] uppercase tracking-wider">Your Challenge</h3>
+                            <p className="text-base md:text-lg text-white font-medium">
                                 {activeTask.challengeText}
                             </p>
                         </div>
 
-                        <div className="mt-12">
+                        <div className="mt-8">
                             <button
                                 onClick={handleNextTask}
-                                className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors"
+                                className="flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-xs"
                             >
-                                Skip Task (Debug) <ChevronRight size={16} />
+                                Skip Task (Debug) <ChevronRight size={14} />
                             </button>
                         </div>
                     </div>
@@ -120,7 +120,7 @@ const Classroom: React.FC = () => {
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none"></div>
 
                     {/* Conditional Rendering of Interaction Components */}
-                    <div className="w-full h-full flex items-center justify-center p-8">
+                    <div className="w-full h-full flex items-center justify-center p-2 md:p-4">
                         {activeTask.type === TaskType.MULTIPLE_CHOICE && (
                             <QuizComponent task={activeTask} onComplete={handleNextTask} />
                         )}
