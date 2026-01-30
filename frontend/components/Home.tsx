@@ -19,8 +19,8 @@ const Home: React.FC = () => {
                 <ThemeToggle />
             </div>
 
-            {/* Background Texture */}
-            <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#7C492E 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
+            {/* Background Image */}
+            <div className="absolute inset-0 pointer-events-none opacity-30 z-0" style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
 
             <div className="text-center mb-8 z-10 relative">
                 <img
