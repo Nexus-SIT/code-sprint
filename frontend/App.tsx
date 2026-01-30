@@ -125,7 +125,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/roadmap" element={<RoadmapPage />} />
           <Route path="/learn/:moduleId/:roomId" element={<Classroom />} />
-          <Route path="/learn" element={<LearningMode />} />
+          <Route path="/learn" element={<RoadmapPage />} />
           <Route path="/game" element={<GameMode />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>

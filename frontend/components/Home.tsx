@@ -48,9 +48,7 @@ const Home: React.FC = () => {
                 {/* Tutorial Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
-                        ? 'bg-gray-800 border-gray-700 hover:border-green-500'
-                        : 'border-wood-dark hover:border-green-600'
+                    className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         }`}
                     style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
                 >
@@ -79,9 +77,7 @@ const Home: React.FC = () => {
                 {/* Ranked Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
-                        ? 'bg-gray-800 border-gray-700 hover:border-blue-500'
-                        : 'border-wood-dark hover:border-blue-600'
+                    className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         }`}
                     style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
                 >
@@ -110,9 +106,7 @@ const Home: React.FC = () => {
                 {/* Leaderboard Card - NEW */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
-                        ? 'bg-gray-800 border-gray-700 hover:border-purple-500'
-                        : 'border-wood-dark hover:border-purple-600'
+                    className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         }`}
                     style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
                 >
