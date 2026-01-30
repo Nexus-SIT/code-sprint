@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PredictionTask } from './modulesData';
 import ProgressFeedback from './ProgressFeedback';
@@ -18,6 +18,10 @@ const TaskPrediction: React.FC<TaskPredictionProps> = ({ prediction, onComplete 
       setSelected(direction);
     }
   };
+
+  useEffect(() => {
+    console.log("TaskPrediction Mounted", { prediction });
+  }, [prediction]);
 
   const handleSubmit = () => {
     if (!selected) return;

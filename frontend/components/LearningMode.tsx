@@ -17,8 +17,28 @@ const LearningMode: React.FC = () => {
 
   // 1. Module Management
   const initialIndex = modules.findIndex(m => m.id === moduleId);
+
+  // DEBUG LOGGING
+  useEffect(() => {
+    console.log("Debugging LearningMode:", {
+      moduleId,
+      initialIndex,
+      params: moduleId
+    });
+  }, [moduleId, initialIndex]);
+
   const [currentModuleIndex, setCurrentModuleIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
   const currentModule = modules[currentModuleIndex] || modules[0];
+
+  useEffect(() => {
+    console.log("Current Module State:", {
+      currentModuleIndex,
+      moduleTitle: currentModule?.title,
+      taskType: currentModule?.task?.type,
+      hasTask: !!currentModule?.task
+    });
+  }, [currentModule, currentModuleIndex]);
+
   const isLastModule = currentModuleIndex === modules.length - 1;
 
   // Sync index if URL changes
@@ -225,11 +245,9 @@ const LearningMode: React.FC = () => {
                       onAnswer={handleTaskComplete}
                     />
                   )}
-                  {currentModule.task.type === 'PREDICTION' && (
+                  {currentModule.task.type === 'PREDICTION' && currentModule.task.prediction && (
                     <TaskPrediction
-                      scenario={currentModule.task.prediction!.scenario}
-                      correctAnswer={currentModule.task.prediction!.correctAnswer}
-                      emoji={currentModule.task.prediction!.emoji}
+                      prediction={currentModule.task.prediction}
                       onComplete={handleTaskComplete}
                     />
                   )}

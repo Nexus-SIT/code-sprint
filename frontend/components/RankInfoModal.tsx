@@ -10,7 +10,7 @@ interface RankInfoModalProps {
 
 const RANK_TIERS = [
     { tier: 0, name: 'Novice Trader', minProfit: -1000000, maxProfit: 0, icon: 'novice', description: 'Just starting your journey.' },
-    { tier: 1, name: 'Apprentice Trader', minProfit: 0, maxProfit: 50000, icon: 'apprentice', description: 'Learning the ropes of the market.' },
+    { tier: 1, name: 'Apprentice Trader', minProfit: 1000, maxProfit: 50000, icon: 'apprentice', description: 'Learning the ropes of the market.' },
     { tier: 2, name: 'Skilled Trader', minProfit: 50000, maxProfit: 150000, icon: 'skilled', description: 'Maintaining consistent execution.' },
     { tier: 3, name: 'Expert Trader', minProfit: 150000, maxProfit: 300000, icon: 'expert', description: 'Advanced market understanding.' },
     { tier: 4, name: 'Master Trader', minProfit: 300000, maxProfit: 600000, icon: 'master', description: 'Dominating large volume moves.' },

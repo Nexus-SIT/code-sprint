@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { getRankName } from './utils/rankIcons';
 import { GameState, Theme, UserProfile } from './types';
 
 // Load theme from localStorage
@@ -85,6 +86,7 @@ export const useStore = create<GameState>((set) => ({
           walletBalance: data.balance,
           xp: data.xp,
           rank: data.rank ?? 0,
+          rankName: getRankName(data.rank ?? 0),
         }
         : null,
     })),

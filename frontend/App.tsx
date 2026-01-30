@@ -19,6 +19,7 @@ import Footer from './components/Footer';
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
 import { UserProfile } from './types';
+import { getRankName } from './utils/rankIcons';
 
 // Global error tracker for debugging
 let globalError = "";
@@ -26,6 +27,10 @@ const logError = (msg: string) => {
   console.error(msg);
   globalError = msg;
 };
+
+
+
+// ...
 
 const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
   return {
@@ -36,7 +41,7 @@ const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
     xp: doc.xp,
     level: 1, // Default
     rank: doc.rankScore,
-    rankName: 'Novice', // Default
+    rankName: getRankName(doc.rankScore),
     totalTrades: 0,
     winningTrades: 0,
     losingTrades: 0,
