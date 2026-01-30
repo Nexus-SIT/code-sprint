@@ -91,9 +91,60 @@ export const useStore = create<GameState>((set) => ({
         : null,
     })),
 
-  // ❌ Local-only updates removed
-  updateBalance: () => { },
-  addXp: () => { },
+  // ❌ Local-only updates enabled for immediate feedback
+  updateBalance: (amount: number) =>
+    set((state) => {
+      const newBalance = state.walletBalance + amount;
+      const currentProfit = state.userProfile?.totalProfit || 0;
+      const newTotalProfit = currentProfit + amount;
+
+      // Calculate Rank locally
+      let newRank = 0;
+      let newRankName = 'Novice Trader';
+
+      const thresholds = [
+        { tier: 0, name: 'Novice Trader', minProfit: -Infinity },
+        { tier: 1, name: 'Apprentice Trader', minProfit: 1000 },
+        { tier: 2, name: 'Skilled Trader', minProfit: 50000 },
+        { tier: 3, name: 'Expert Trader', minProfit: 150000 },
+        { tier: 4, name: 'Master Trader', minProfit: 300000 },
+        { tier: 5, name: 'Elite Trader', minProfit: 600000 },
+        { tier: 6, name: 'Legendary Trader', minProfit: 1000000 }
+      ];
+
+      for (let i = thresholds.length - 1; i >= 0; i--) {
+        if (newTotalProfit >= thresholds[i].minProfit) {
+          newRank = thresholds[i].tier;
+          newRankName = thresholds[i].name;
+          break;
+        }
+      }
+
+      return {
+        walletBalance: newBalance,
+        userRank: newRank,
+        userProfile: state.userProfile
+          ? {
+            ...state.userProfile,
+            walletBalance: newBalance,
+            totalProfit: newTotalProfit,
+            rank: newRank,
+            rankName: newRankName,
+          }
+          : state.userProfile,
+      };
+    }),
+
+  addXp: (amount: number) =>
+    set((state) => ({
+      xp: state.xp + amount,
+      userProfile: state.userProfile
+        ? {
+          ...state.userProfile,
+          xp: state.userProfile.xp + amount,
+        }
+        : state.userProfile,
+    })),
 
   // New persistent module tracking
   completedModules: getInitialCompletedModules(),

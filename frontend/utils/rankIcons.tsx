@@ -161,6 +161,25 @@ export const getRankName = (tier: number): string => {
     return names[tier] || 'Unknown';
 };
 
+export const RANK_THRESHOLDS = [
+    { tier: 0, name: 'Novice Trader', minProfit: -Infinity },
+    { tier: 1, name: 'Apprentice Trader', minProfit: 1000 },
+    { tier: 2, name: 'Skilled Trader', minProfit: 50000 },
+    { tier: 3, name: 'Expert Trader', minProfit: 150000 },
+    { tier: 4, name: 'Master Trader', minProfit: 300000 },
+    { tier: 5, name: 'Elite Trader', minProfit: 600000 },
+    { tier: 6, name: 'Legendary Trader', minProfit: 1000000 }
+];
+
+export const getRankTier = (profit: number): number => {
+    for (let i = RANK_THRESHOLDS.length - 1; i >= 0; i--) {
+        if (profit >= RANK_THRESHOLDS[i].minProfit) {
+            return RANK_THRESHOLDS[i].tier;
+        }
+    }
+    return 0; // Default to Novice
+};
+
 // Helper function to get rank color
 export const getRankColor = (tier: number): string => {
     const colors = [
