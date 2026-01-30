@@ -164,4 +164,15 @@ export const useStore = create<GameState>((set) => ({
       }
       return {};
     }),
+
+  // 🔊 Audio State
+  isMuted: typeof window !== 'undefined' ? localStorage.getItem('isMuted') === 'true' : false,
+  toggleMute: () =>
+    set((state) => {
+      const newMuted = !state.isMuted;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('isMuted', String(newMuted));
+      }
+      return { isMuted: newMuted };
+    }),
 }));

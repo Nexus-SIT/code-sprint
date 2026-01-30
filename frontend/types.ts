@@ -86,6 +86,8 @@ export interface GameState {
   syncFromFirebase: (data: { balance: number; xp: number; totalProfit: number; rank?: number }) => void;
   updateBalance: (amount: number) => void;
   markModuleComplete: (moduleId: string) => void;
+  isMuted: boolean;
+  toggleMute: () => void;
 }
 
 // --- Learning System Types ---

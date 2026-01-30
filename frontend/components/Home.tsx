@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import { auth } from '../firebase';
-import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap, Users } from 'lucide-react';
+import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap, Users, Volume2, VolumeX } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
@@ -11,7 +11,7 @@ import { Info } from 'lucide-react';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
-    const { walletBalance, xp, userProfile, theme, userId } = useStore();
+    const { walletBalance, xp, userProfile, theme, userId, isMuted, toggleMute } = useStore();
     const [isRankModalOpen, setIsRankModalOpen] = React.useState(false);
 
     return (
@@ -19,6 +19,13 @@ const Home: React.FC = () => {
 
             {/* Theme Toggle - Top Right */}
             <div className="absolute top-6 right-6 z-20 flex gap-4 items-center">
+                <button
+                    onClick={toggleMute}
+                    className={`bg-wood hover:bg-wood-light text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-wood-dark flex items-center gap-2 ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600 border-gray-900' : ''}`}
+                    title={isMuted ? "Unmute" : "Mute"}
+                >
+                    {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                </button>
                 <button
                     onClick={() => setIsRankModalOpen(true)}
                     className="bg-amber-500 hover:bg-amber-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-amber-700 flex items-center gap-2"
