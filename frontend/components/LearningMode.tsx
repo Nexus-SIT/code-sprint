@@ -4,19 +4,19 @@ import { generateCandles } from '../utils/dataGenerator';
 import CandleChart from './CandleChart';
 import Mentor from './Mentor';
 import { Candle, MentorEmotion } from '../types';
-import { ArrowLeft, Play, Pause, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Play, Coins } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const LearningMode: React.FC = () => {
   const setMode = useStore((state) => state.setMode);
-  
+
   // Full dataset
   const [fullData] = useState<Candle[]>(() => generateCandles(50, 150));
   // Visible dataset
   const [visibleData, setVisibleData] = useState<Candle[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  
+
   // Mentor State
   const [mentorState, setMentorState] = useState<{ emotion: MentorEmotion; text: string }>({
     emotion: 'happy',
@@ -29,7 +29,7 @@ const LearningMode: React.FC = () => {
     // Initial load
     setVisibleData([fullData[0]]);
     startSimulation();
-    
+
     return () => stopSimulation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -64,7 +64,7 @@ const LearningMode: React.FC = () => {
     } else if (currentIndex === 40) {
       pauseAndMentor('happy', "Chart Pattern detected! 70% chance of upside movement here.");
     } else if (currentIndex > 0 && currentIndex < 15) {
-        setMentorState({ emotion: 'neutral', text: "Watching price action..." });
+      setMentorState({ emotion: 'neutral', text: "Watching price action..." });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,53 +82,70 @@ const LearningMode: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full relative p-4 max-w-5xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <button 
+    <div className="flex flex-col h-screen relative p-4 max-w-6xl mx-auto font-body text-coffee selection:bg-wood-light selection:text-parchment">
+      {/* Wooden Header Bar */}
+      <div className="flex items-center justify-between mb-4 bg-wood border-4 border-wood-dark rounded-lg p-3 shadow-pixel z-10">
+        <button
           onClick={() => setMode('HOME')}
-          className="flex items-center text-gray-400 hover:text-white transition-colors"
+          className="bg-failure text-white border-b-4 border-red-900 active:border-b-0 active:translate-y-1 active:mt-1 rounded px-4 py-2 font-pixel text-xs flex items-center hover:bg-red-700 transition-colors"
         >
-          <ArrowLeft className="mr-2" size={20} /> Exit
+          <ArrowLeft className="mr-2 w-4 h-4" /> EXIT CLASS
         </button>
-        <h1 className="text-2xl font-bold text-green-400">Learning Mode</h1>
-        <div className="w-20" /> {/* Spacer */}
+
+        <h1 className="text-xl md:text-2xl text-parchment font-pixel tracking-tighter drop-shadow-md text-center flex-1">
+          TRADING 101
+        </h1>
+
+        <div className="w-20"></div> {/* Spacer balance */}
       </div>
 
-      {/* Main Content */}
-      <div className="relative flex-1 bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-2xl flex flex-col">
-        <Mentor emotion={mentorState.emotion} text={mentorState.text} />
-        
-        <div className="flex-1 min-h-[400px] relative">
-           <CandleChart data={visibleData} activeIndex={isPaused ? currentIndex : undefined} />
-           
-           {/* Overlays */}
-           {currentIndex === 40 && isPaused && (
-             <motion.div 
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500/20 border-2 border-green-500 text-green-400 px-6 py-3 rounded-full font-bold backdrop-blur-sm z-10"
-             >
-                🚀 70% Upside Chance
-             </motion.div>
-           )}
+      {/* Main Content Wood Panel */}
+      <div className="flex-1 bg-wood rounded-lg border-4 border-wood-dark shadow-pixel p-4 flex flex-col gap-4 min-h-0">
+
+        {/* Chart Window */}
+        <div className="bg-parchment rounded border-4 border-wood-dark shadow-inner relative flex-1 min-h-[300px] overflow-hidden flex flex-col">
+          <div className="flex-1 w-full h-full p-2">
+            <CandleChart data={visibleData} activeIndex={isPaused ? currentIndex : undefined} height="100%" />
+          </div>
+
+          {/* Overlays */}
+          {currentIndex === 40 && isPaused && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-parchment border-4 border-success text-success px-6 py-4 rounded font-pixel shadow-pixel-sm z-10 text-center"
+            >
+              <div className="text-2xl mb-1">🚀</div>
+              <div>70% UPSIDE CHANCE</div>
+            </motion.div>
+          )}
         </div>
 
-        {/* Controls */}
-        <div className="mt-6 flex justify-center">
+        {/* Bottom Section: Mentor & Controls */}
+        <div className="h-48 flex gap-4">
+          {/* Mentor Box */}
+          <div className="flex-1 h-full">
+            <Mentor emotion={mentorState.emotion} text={mentorState.text} />
+          </div>
+
+          {/* Controls Box */}
+          <div className="w-1/3 bg-wood-dark rounded border-4 border-wood-light p-4 flex items-center justify-center">
             {isPaused ? (
-                <button 
-                  onClick={handleContinue}
-                  className="bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-8 rounded-full flex items-center shadow-lg hover:shadow-green-500/50 transition-all transform hover:scale-105"
-                >
-                  <Play className="mr-2" fill="currentColor" /> Continue Lesson
-                </button>
+              <button
+                onClick={handleContinue}
+                className="w-full bg-success text-white border-b-[6px] border-green-900 active:border-b-0 active:translate-y-[6px] rounded-lg py-4 font-pixel text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg"
+              >
+                <Play className="w-5 h-5" fill="currentColor" /> CONTINUE
+              </button>
             ) : (
-                <div className="text-gray-500 flex items-center gap-2">
-                    <div className="animate-pulse w-3 h-3 bg-green-500 rounded-full"></div>
-                    Live Simulation
+              <div className="text-parchment flex flex-col items-center gap-2 font-pixel text-xs opacity-80">
+                <div className="animate-spin text-yellow-400">
+                  <Coins size={32} />
                 </div>
+                SIMULATION LIVE
+              </div>
             )}
+          </div>
         </div>
       </div>
     </div>

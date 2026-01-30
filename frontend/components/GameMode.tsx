@@ -4,20 +4,20 @@ import { generateCandles } from '../utils/dataGenerator';
 import CandleChart from './CandleChart';
 import Mentor from './Mentor';
 import { Candle, MentorEmotion } from '../types';
-import { ArrowLeft, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { ArrowLeft, TrendingUp, TrendingDown, Minus, Coins, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type GamePhase = 'BETTING' | 'SIMULATING' | 'RESULT';
 
 const GameMode: React.FC = () => {
   const { setMode, walletBalance, updateBalance, addXp } = useStore();
-  
+
   const [fullData, setFullData] = useState<Candle[]>([]);
   const [visibleData, setVisibleData] = useState<Candle[]>([]);
   const [phase, setPhase] = useState<GamePhase>('BETTING');
   const [betAmount, setBetAmount] = useState<string>('1000');
   const [position, setPosition] = useState<'BUY' | 'SELL' | 'HOLD' | null>(null);
-  
+
   const [resultPnL, setResultPnL] = useState(0);
 
   // Initialize Data
@@ -44,7 +44,7 @@ const GameMode: React.FC = () => {
     if (phase === 'SIMULATING') {
       simulationInterval.current = setInterval(() => {
         simulationIndex.current += 1;
-        
+
         // Update Chart
         setVisibleData(fullData.slice(0, simulationIndex.current));
 
@@ -61,7 +61,7 @@ const GameMode: React.FC = () => {
 
   const endGame = () => {
     if (simulationInterval.current) clearInterval(simulationInterval.current);
-    
+
     const entryPrice = fullData[49].close;
     const exitPrice = fullData[99].close;
     const amount = parseInt(betAmount);
@@ -95,12 +95,12 @@ const GameMode: React.FC = () => {
 
   // Helpers for UI
   const getMentorProps = (): { emotion: MentorEmotion; text: string } => {
-    if (phase === 'BETTING') return { emotion: 'thinking', text: "Analyze the trend. What's your move?" };
-    if (phase === 'SIMULATING') return { emotion: 'alert', text: "Here we go! Market is moving fast!" };
+    if (phase === 'BETTING') return { emotion: 'thinking', text: "The crops depend on this trade. Which way will it go?" };
+    if (phase === 'SIMULATING') return { emotion: 'alert', text: "Hold onto your hat! The market is moving!" };
     if (phase === 'RESULT') {
-      if (resultPnL > 0) return { emotion: 'happy', text: `Nice trade! You made $${resultPnL.toFixed(0)}.` };
-      if (resultPnL < 0) return { emotion: 'alert', text: `Ouch. Loss of $${Math.abs(resultPnL).toFixed(0)}.` };
-      return { emotion: 'neutral', text: "Played it safe." };
+      if (resultPnL > 0) return { emotion: 'happy', text: `Bountiful harvest! You made $${resultPnL.toFixed(0)}!` };
+      if (resultPnL < 0) return { emotion: 'alert', text: `Oh dear... Looks like a drought. Lost $${Math.abs(resultPnL).toFixed(0)}.` };
+      return { emotion: 'neutral', text: "Steady as a rock." };
     }
     return { emotion: 'neutral', text: '' };
   };
@@ -108,107 +108,129 @@ const GameMode: React.FC = () => {
   const mentor = getMentorProps();
 
   return (
-    <div className="flex flex-col h-full relative p-4 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-         <button onClick={() => setMode('HOME')} className="text-gray-400 hover:text-white flex items-center">
-            <ArrowLeft className="mr-2" size={20}/> Quit
-         </button>
-         <div className="flex gap-6">
-            <div className="text-right">
-                <div className="text-xs text-gray-400">WALLET</div>
-                <div className={`text-xl font-mono font-bold ${walletBalance < 0 ? 'text-red-500' : 'text-blue-400'}`}>
-                    ${walletBalance.toLocaleString()}
-                </div>
+    <div className="flex flex-col h-screen relative p-4 max-w-7xl mx-auto font-body text-coffee selection:bg-wood-light selection:text-parchment">
+      {/* Wooden Header Bar */}
+      <div className="flex items-center justify-between mb-2 bg-wood border-4 border-wood-dark rounded-lg p-3 shadow-pixel z-10 relative">
+        <button
+          onClick={() => setMode('HOME')}
+          className="bg-failure text-white border-b-4 border-red-900 active:border-b-0 active:translate-y-1 active:mt-1 rounded px-4 py-2 font-pixel text-xs flex items-center hover:bg-red-700 transition-colors"
+        >
+          <ArrowLeft className="mr-2 w-4 h-4" /> LEAVE
+        </button>
+
+        <h1 className="text-2xl text-parchment font-pixel tracking-tighter drop-shadow-md text-center flex-1">
+          CANDLE CRUSH
+        </h1>
+
+        <div className="flex gap-4">
+          <div className="flex items-center bg-wood-dark px-4 py-2 rounded border-2 border-wood-light">
+            <Coins className="text-yellow-400 mr-2 w-5 h-5" />
+            <div className={`text-xl font-pixel ${walletBalance < 0 ? 'text-red-400' : 'text-parchment'}`}>
+              ${walletBalance.toLocaleString()}
             </div>
-         </div>
+          </div>
+        </div>
       </div>
 
       {/* Main Game Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1">
-        
-        {/* Chart Section */}
-        <div className="lg:col-span-3 bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-2xl relative flex flex-col">
-            <Mentor emotion={mentor.emotion} text={mentor.text} />
-            <div className="flex-1 min-h-[400px]">
-                <CandleChart data={visibleData} height={500} />
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
+
+        {/* Chart Section (The Window) */}
+        <div className="lg:col-span-3 flex flex-col gap-4">
+          {/* The Chart Window */}
+          <div className="bg-parchment rounded-lg border-4 border-wood-dark shadow-pixel relative flex flex-col flex-1 p-1 overflow-hidden">
+            {/* Window Frame Inner Border */}
+            <div className="absolute inset-0 border-2 border-wood opacity-30 pointer-events-none rounded sm:hidden"></div>
+
+            <div className="flex-1 w-full h-full p-2">
+              <CandleChart data={visibleData} height="100%" />
             </div>
+          </div>
+
+          {/* Mentor Dialogue Box */}
+          <div className="h-40 w-full">
+            <Mentor emotion={mentor.emotion} text={mentor.text} />
+          </div>
         </div>
 
-        {/* Controls Section */}
-        <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-xl flex flex-col justify-center gap-6 relative overflow-hidden">
-            {phase === 'BETTING' && (
-                <motion.div 
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="flex flex-col gap-6"
-                >
-                    <div>
-                        <label className="text-gray-400 text-sm font-bold mb-2 block">BET AMOUNT</label>
-                        <input 
-                            type="number" 
-                            value={betAmount}
-                            onChange={(e) => setBetAmount(e.target.value)}
-                            className="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 text-white font-mono text-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-                        />
-                         <div className="flex justify-between text-xs text-gray-500 mt-1">
-                            <span>Min: 100</span>
-                            <span>Max: {walletBalance}</span>
-                         </div>
-                    </div>
+        {/* Controls Section (Wood Panel) */}
+        <div className="bg-wood rounded-lg border-4 border-wood-dark shadow-pixel p-4 flex flex-col justify-between gap-4 relative">
+          {/* Wood Grain Texture Overlay (CSS handled) */}
 
-                    <div className="flex flex-col gap-3">
-                        <button 
-                            onClick={() => handleBet('BUY')}
-                            className="w-full bg-green-500/10 hover:bg-green-500 text-green-500 hover:text-black border border-green-500 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 group"
-                        >
-                            <TrendingUp className="group-hover:scale-110 transition-transform" /> BUY (LONG)
-                        </button>
-                        <button 
-                            onClick={() => handleBet('SELL')}
-                            className="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-black border border-red-500 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 group"
-                        >
-                            <TrendingDown className="group-hover:scale-110 transition-transform" /> SELL (SHORT)
-                        </button>
-                        <button 
-                            onClick={() => handleBet('HOLD')}
-                            className="w-full bg-gray-700 hover:bg-gray-600 text-gray-300 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2"
-                        >
-                            <Minus /> HOLD
-                        </button>
-                    </div>
-                </motion.div>
-            )}
-
-            {phase === 'SIMULATING' && (
-                <div className="flex flex-col items-center justify-center h-full text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-500 mb-4"></div>
-                    <h3 className="text-xl font-bold animate-pulse text-indigo-400">MARKET OPEN</h3>
-                    <p className="text-gray-400 mt-2">Executing strategy...</p>
+          {phase === 'BETTING' && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex flex-col gap-6 h-full"
+            >
+              <div className="bg-parchment/10 p-4 rounded border-2 border-wood-dark/50">
+                <label className="text-parchment text-sm font-pixel mb-2 block text-center">WAGER AMOUNT</label>
+                <input
+                  type="number"
+                  value={betAmount}
+                  onChange={(e) => setBetAmount(e.target.value)}
+                  className="w-full bg-parchment border-4 border-wood-dark rounded p-3 text-coffee font-pixel text-lg focus:ring-4 focus:ring-wood-light outline-none text-center shadow-inner"
+                />
+                <div className="flex justify-between text-xs text-parchment/70 mt-2 font-pixel">
+                  <span>MIN: 100</span>
+                  <span>MAX: {walletBalance}</span>
                 </div>
-            )}
+              </div>
 
-            {phase === 'RESULT' && (
-                <motion.div 
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="flex flex-col items-center justify-center h-full text-center"
+              <div className="flex flex-col gap-3 flex-1 justify-center">
+                <button
+                  onClick={() => handleBet('BUY')}
+                  className="w-full bg-success text-white border-b-[6px] border-green-900 active:border-b-0 active:translate-y-[6px] rounded-lg py-5 font-pixel text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
                 >
-                    <div className={`text-4xl font-black mb-2 ${resultPnL >= 0 ? 'text-green-400' : 'text-red-500'}`}>
-                        {resultPnL >= 0 ? '+' : ''}{resultPnL.toFixed(2)}
-                    </div>
-                    <div className="text-gray-400 mb-8 uppercase tracking-widest text-sm font-bold">
-                        Profit / Loss
-                    </div>
+                  <TrendingUp size={24} /> BUY (LONG)
+                </button>
+                <button
+                  onClick={() => handleBet('SELL')}
+                  className="w-full bg-failure text-white border-b-[6px] border-red-900 active:border-b-0 active:translate-y-[6px] rounded-lg py-5 font-pixel text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+                >
+                  <TrendingDown size={24} /> SELL (SHORT)
+                </button>
+                <button
+                  onClick={() => handleBet('HOLD')}
+                  className="w-full bg-wood-light text-parchment border-b-[6px] border-wood-dark active:border-b-0 active:translate-y-[6px] rounded-lg py-5 font-pixel text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+                >
+                  <Minus size={24} /> SKIP DAY
+                </button>
+              </div>
+            </motion.div>
+          )}
 
-                    <button 
-                        onClick={resetGame}
-                        className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform hover:-translate-y-1"
-                    >
-                        NEXT TRADE
-                    </button>
-                </motion.div>
-            )}
+          {phase === 'SIMULATING' && (
+            <div className="flex flex-col items-center justify-center h-full text-center bg-wood-dark/20 rounded-lg border-2 border-wood-dark border-dashed p-4">
+              <div className="animate-spin text-parchment mb-4">
+                <Coins size={48} />
+              </div>
+              <h3 className="text-xl font-pixel text-parchment animate-pulse">MARKET OPEN</h3>
+              <p className="text-wood-light mt-2 font-pixel text-xs">Growing profits...</p>
+            </div>
+          )}
+
+          {phase === 'RESULT' && (
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="flex flex-col items-center justify-center h-full text-center"
+            >
+              <div className="bg-parchment w-full p-4 rounded border-4 border-wood-dark shadow-pixel mb-6">
+                <div className="text-coffee font-pixel text-xs mb-2">HARVEST REPORT</div>
+                <div className={`text-3xl font-pixel ${resultPnL >= 0 ? 'text-success' : 'text-failure'}`}>
+                  {resultPnL >= 0 ? '+' : ''}{resultPnL.toFixed(0)}
+                </div>
+              </div>
+
+              <button
+                onClick={resetGame}
+                className="w-full bg-blue-600 text-white border-b-[6px] border-blue-900 active:border-b-0 active:translate-y-[6px] rounded-lg py-6 font-pixel text-sm shadow-xl hover:bg-blue-500 transition-all"
+              >
+                NEXT SEASON
+              </button>
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

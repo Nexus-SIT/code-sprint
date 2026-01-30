@@ -1,86 +1,104 @@
 import React from 'react';
 import { useStore } from '../store';
-import { BookOpen, Trophy, TrendingUp } from 'lucide-react';
+import { BookOpen, Trophy, TrendingUp, Coins, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Home: React.FC = () => {
-  const setMode = useStore((state) => state.setMode);
-  const { walletBalance, xp } = useStore();
+    const setMode = useStore((state) => state.setMode);
+    const { walletBalance, xp } = useStore();
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-20 pointer-events-none">
-            <div className="absolute top-10 left-10 w-64 h-64 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-            <div className="absolute top-10 right-10 w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
-            <div className="absolute -bottom-8 left-20 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
+    return (
+        <div className="min-h-screen flex flex-col items-center justify-center p-6 relative bg-parchment font-body text-coffee selection:bg-wood-light selection:text-parchment">
+            {/* Background Texture Hint */}
+            <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#7C492E 1px, transparent 1px)', backgroundSize: '16px 16px' }}></div>
+
+            <div className="text-center mb-12 z-10 relative">
+                <h1 className="text-5xl md:text-7xl font-pixel text-wood-dark mb-4 tracking-tighter drop-shadow-pixel">
+                    CANDLE CRUSH
+                </h1>
+                <div className="flex items-center justify-center gap-2">
+                    <div className="h-1 w-12 bg-wood-dark"></div>
+                    <p className="text-wood text-xl font-bold uppercase tracking-widest">
+                        Trading Valley
+                    </p>
+                    <div className="h-1 w-12 bg-wood-dark"></div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full z-10">
+                {/* Learning Mode Sign */}
+                <motion.div
+                    whileHover={{ scale: 1.05, rotate: -1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setMode('LEARNING')}
+                    className="cursor-pointer bg-wood border-4 border-wood-dark shadow-pixel rounded-lg relative group"
+                >
+                    {/* Nails */}
+                    <div className="absolute top-2 left-2 w-3 h-3 bg-wood-dark rounded-full shadow-inner"></div>
+                    <div className="absolute top-2 right-2 w-3 h-3 bg-wood-dark rounded-full shadow-inner"></div>
+
+                    <div className="border-2 border-wood-light/50 border-dashed m-2 p-8 flex flex-col items-center text-center h-full justify-center">
+                        <div className="bg-wood-dark/20 p-6 rounded-full mb-6 border-2 border-wood-light">
+                            <BookOpen size={48} className="text-parchment drop-shadow-md" />
+                        </div>
+                        <h2 className="text-2xl font-pixel text-parchment mb-4 drop-shadow-sm">TUTORIAL</h2>
+                        <p className="text-wood-light text-lg leading-tight opacity-90">
+                            Plant your first seeds. Learn the basics of the market without any risk.
+                        </p>
+                    </div>
+                </motion.div>
+
+                {/* Game Mode Sign */}
+                <motion.div
+                    whileHover={{ scale: 1.05, rotate: 1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setMode('GAME')}
+                    className="cursor-pointer bg-wood border-4 border-wood-dark shadow-pixel rounded-lg relative group"
+                >
+                    {/* Nails */}
+                    <div className="absolute top-2 left-2 w-3 h-3 bg-wood-dark rounded-full shadow-inner"></div>
+                    <div className="absolute top-2 right-2 w-3 h-3 bg-wood-dark rounded-full shadow-inner"></div>
+
+                    <div className="border-2 border-wood-light/50 border-dashed m-2 p-8 flex flex-col items-center text-center h-full justify-center">
+                        <div className="bg-wood-dark/20 p-6 rounded-full mb-6 border-2 border-wood-light">
+                            <Trophy size={48} className="text-yellow-400 drop-shadow-md" />
+                        </div>
+                        <h2 className="text-2xl font-pixel text-parchment mb-4 drop-shadow-sm">RANKED</h2>
+                        <p className="text-wood-light text-lg leading-tight opacity-90">
+                            Face the storm. Compete in the grand market fair for glory and profit.
+                        </p>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* User Stats Footer */}
+            <div className="mt-16 w-full max-w-2xl bg-wood-dark text-parchment p-1 rounded-t-lg border-t-4 border-wood mx-auto shadow-2xl z-10">
+                <div className="border-2 border-wood-light/30 border-dashed rounded p-4 flex justify-around items-center">
+                    <div className="flex items-center gap-4">
+                        <div className="p-2 bg-wood rounded border border-wood-light shadow-inner">
+                            <Coins size={24} className="text-yellow-400" />
+                        </div>
+                        <div>
+                            <div className="text-xs text-wood-light font-pixel uppercase mb-1">FARM FUNDS</div>
+                            <div className="font-pixel text-xl">${walletBalance.toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    <div className="h-12 w-1 bg-wood rounded-full opacity-30"></div>
+
+                    <div className="flex items-center gap-4">
+                        <div className="p-2 bg-wood rounded border border-wood-light shadow-inner">
+                            <Star size={24} className="text-yellow-400" />
+                        </div>
+                        <div>
+                            <div className="text-xs text-wood-light font-pixel uppercase mb-1">Experience</div>
+                            <div className="font-pixel text-xl">{xp} XP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div className="text-center mb-12">
-            <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 mb-4 tracking-tight">
-                TRADE LEAGUE
-            </h1>
-            <p className="text-gray-400 text-xl max-w-2xl mx-auto">
-                Master the markets. Compete for the top rank. 
-            </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full">
-            <motion.div 
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setMode('LEARNING')}
-                className="group cursor-pointer bg-gray-800/80 backdrop-blur-lg border-2 border-green-500/30 hover:border-green-400 rounded-3xl p-8 flex flex-col items-center text-center transition-all shadow-xl hover:shadow-green-500/20"
-            >
-                <div className="bg-green-500/20 p-6 rounded-full mb-6 group-hover:bg-green-500/30 transition-colors">
-                    <BookOpen size={48} className="text-green-400" />
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-2">Learning Mode</h2>
-                <p className="text-gray-400">
-                    Interactive tutorials. Learn candlestick patterns, support/resistance, and risk management with zero risk.
-                </p>
-            </motion.div>
-
-            <motion.div 
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setMode('GAME')}
-                className="group cursor-pointer bg-gray-800/80 backdrop-blur-lg border-2 border-red-500/30 hover:border-red-400 rounded-3xl p-8 flex flex-col items-center text-center transition-all shadow-xl hover:shadow-red-500/20"
-            >
-                 <div className="bg-red-500/20 p-6 rounded-full mb-6 group-hover:bg-red-500/30 transition-colors">
-                    <Trophy size={48} className="text-red-400" />
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-2">Game Mode</h2>
-                <p className="text-gray-400">
-                    Ranked competitive trading. Test your strategy against real market volatility simulation.
-                </p>
-            </motion.div>
-        </div>
-
-        {/* User Stats Footer */}
-        <div className="mt-16 flex gap-8 bg-gray-900/50 px-8 py-4 rounded-2xl border border-gray-800">
-             <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-500/20 rounded-lg">
-                    <TrendingUp size={20} className="text-blue-400" />
-                </div>
-                <div>
-                    <div className="text-xs text-gray-500 font-bold uppercase">Balance</div>
-                    <div className="font-mono font-bold">${walletBalance.toLocaleString()}</div>
-                </div>
-             </div>
-             <div className="w-px bg-gray-700"></div>
-             <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-500/20 rounded-lg">
-                    <Trophy size={20} className="text-purple-400" />
-                </div>
-                <div>
-                    <div className="text-xs text-gray-500 font-bold uppercase">XP Earned</div>
-                    <div className="font-mono font-bold">{xp} XP</div>
-                </div>
-             </div>
-        </div>
-    </div>
-  );
+    );
 };
 
 export default Home;
