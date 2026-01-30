@@ -16,7 +16,7 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({ emotion, onBack }) => {
             case 'sad': return '/mentor/CatSad.png';
             case 'alert': return '/mentor/CatShocked.png';
             case 'neutral':
-            default: return '/mentor/CatNormal.png';
+            default: return '/mentor/cat-normal-closed.png';
         }
     };
 
