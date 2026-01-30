@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Path, Room } from '../types';
 import Mascot from './Mascot';
 import { useStore } from '../store';
@@ -79,31 +80,47 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
         <div className="flex-1 space-y-16">
 
           {/* Hero Banner (Quest Board Style) */}
-          <div className={`relative rounded-xl p-8 overflow-hidden shadow-pixel border-4
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            whileHover={{ scale: 1.02 }}
+            className={`relative rounded-xl p-8 overflow-hidden shadow-pixel border-4
              ${theme === 'dark'
-              ? 'bg-gray-800 border-gray-700 text-gray-100'
-              : 'bg-parchment border-wood text-coffee'
-            }
+                ? 'bg-gray-800 border-gray-700 text-gray-100'
+                : 'bg-parchment border-wood text-coffee'
+              }
           `}>
             <div className="relative z-10">
-              <h2 className={`text-2xl md:text-3xl font-bold font-pixel mb-4 tracking-tight
+              <motion.h2
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className={`text-2xl md:text-3xl font-bold font-pixel mb-4 tracking-tight
                 ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'}
-              `}>Quest Board: Trading Mastery</h2>
-              <p className={`text-sm mb-6 max-w-md leading-relaxed font-medium
+              `}>Quest Board: Trading Mastery</motion.h2>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+                className={`text-sm mb-6 max-w-md leading-relaxed font-medium
                 ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/80'}
               `}>
                 Take on interactive trading scenarios. Master price action through direct application and capture flags to level up.
-              </p>
-              <button className={`font-bold px-6 py-3 rounded-lg flex items-center gap-3 transition-all shadow-pixel active:scale-95 border-b-4 active:border-b-0 active:translate-y-1
+              </motion.p>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`font-bold px-6 py-3 rounded-lg flex items-center gap-3 transition-all shadow-pixel active:scale-95 border-b-4 active:border-b-0 active:translate-y-1
                  ${theme === 'dark' ? 'bg-indigo-600 border-indigo-800 hover:bg-indigo-500 text-white' : 'bg-success text-white border-green-800 hover:bg-green-600'}
               `}>
                 <span className="text-lg">▶</span>
                 <span className="font-pixel text-xs">PLAY NOW</span>
-              </button>
+              </motion.button>
             </div>
             {/* Decorative pattern */}
             {theme !== 'dark' && <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#8b4513 1px, transparent 0)', backgroundSize: '20px 20px' }} />}
-          </div>
+          </motion.div>
 
           {/* User Section - Mascot */}
           <div className="flex items-center justify-between">

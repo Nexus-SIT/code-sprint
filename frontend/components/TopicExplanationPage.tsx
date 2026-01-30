@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { CURRICULUM } from '../data/curriculum';
+import { TRADER_PATH } from '../data/mockData';
 import { useTypewriter } from '../hooks/useTypewriter';
 import { useStore } from '../store';
+import TradingChart from './TradingChart';
 
 const TopicExplanationPage: React.FC = () => {
     const { moduleId, roomId } = useParams<{ moduleId: string; roomId: string }>();
@@ -14,16 +16,35 @@ const TopicExplanationPage: React.FC = () => {
     const [lines, setLines] = useState<string[]>([]);
     const [currentLineIndex, setCurrentLineIndex] = useState(0);
     const [showContinue, setShowContinue] = useState(false);
+    const [chartData, setChartData] = useState<any[]>([]);
 
     // Load content
     useEffect(() => {
-        const module = CURRICULUM.find(m => m.id === moduleId);
+        // Find module in TRADER_PATH
+        const module = TRADER_PATH.modules.find(m => m.id === moduleId);
         const room = module?.rooms.find(r => r.id === roomId);
 
-        if (room && room.tasks.length > 0) {
+        if (room) {
             // Aggregate descriptions from tasks to form the "lesson"
-            const descriptionLines = room.tasks.map(t => t.description);
+            // If tasks contain 'theory', use that as it's more detailed
+            let descriptionLines: string[] = [];
+
+            if (room.tasks && room.tasks.length > 0) {
+                // Prefer theory from the first task if available, effectively making the room about the first task's concept
+                if (room.tasks[0].theory) {
+                    descriptionLines = room.tasks[0].theory;
+                } else {
+                    descriptionLines = room.tasks.map(t => t.description || '');
+                }
+            } else {
+                descriptionLines = [room.description || ''];
+            }
+
             setLines(descriptionLines);
+
+            if (room.chartData && room.chartData.length > 0) {
+                setChartData(room.chartData);
+            }
         }
     }, [moduleId, roomId]);
 
@@ -107,7 +128,7 @@ const TopicExplanationPage: React.FC = () => {
             </div>
 
             {/* RIGHT: Content */}
-            <div className={`w-full md:w-7/12 flex flex-col justify-center p-8 md:p-16 relative
+            <div className={`w-full md:w-7/12 flex flex-col justify-center p-8 md:p-16 relative overflow-y-auto
                 ${theme === 'dark' ? 'bg-gray-900' : 'bg-parchment'}
             `}>
                 <div className="max-w-2xl mx-auto w-full">
@@ -119,9 +140,23 @@ const TopicExplanationPage: React.FC = () => {
                         <h1 className={`text-2xl md:text-4xl font-black font-pixel mb-6
                             ${theme === 'dark' ? 'text-white' : 'text-wood-dark'}
                         `}>
-                            {CURRICULUM.find(m => m.id === moduleId)?.rooms.find(r => r.id === roomId)?.title}
+                            {TRADER_PATH.modules.find(m => m.id === moduleId)?.rooms.find(r => r.id === roomId)?.title}
                         </h1>
                     </div>
+
+                    {/* Chart Area */}
+                    {chartData.length > 0 && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mb-8 w-full"
+                        >
+                            <TradingChart
+                                data={chartData}
+                                onCandleClick={() => { }} // No interaction needed for explanation phase usually, but required by props
+                            />
+                        </motion.div>
+                    )}
 
                     {/* Dialogue Box */}
                     <div className={`min-h-[250px] p-6 md:p-8 rounded-xl border-4 shadow-pixel relative
