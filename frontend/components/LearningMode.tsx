@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import { generateCandles } from '../utils/dataGenerator';
 import CandleChart from './CandleChart';
@@ -8,7 +9,7 @@ import { ArrowLeft, Play, Coins } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const LearningMode: React.FC = () => {
-  const setMode = useStore((state) => state.setMode);
+  const navigate = useNavigate();
 
   // Full dataset
   const [fullData] = useState<Candle[]>(() => generateCandles(50, 150));
@@ -86,7 +87,7 @@ const LearningMode: React.FC = () => {
       {/* Wooden Header Bar */}
       <div className="flex items-center justify-between mb-4 bg-wood border-4 border-wood-dark rounded-lg p-3 shadow-pixel z-10">
         <button
-          onClick={() => setMode('HOME')}
+          onClick={() => navigate('/')}
           className="bg-failure text-white border-b-4 border-red-900 active:border-b-0 active:translate-y-1 active:mt-1 rounded px-4 py-2 font-pixel text-xs flex items-center hover:bg-red-700 transition-colors"
         >
           <ArrowLeft className="mr-2 w-4 h-4" /> EXIT CLASS
