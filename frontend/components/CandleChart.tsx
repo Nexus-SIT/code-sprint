@@ -7,6 +7,7 @@ interface CandleChartProps {
   activeIndex?: number;
   highlightIndices?: number[];
   height?: number | string;
+  onCandleClick?: (index: number) => void;
 }
 
 const CustomCandleShape = (props: any) => {
@@ -77,7 +78,7 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-const CandleChart: React.FC<CandleChartProps> = ({ data, activeIndex, height = 400 }) => {
+const CandleChart: React.FC<CandleChartProps> = ({ data, activeIndex, height = 400, onCandleClick }) => {
   if (!data || data.length === 0) return <div className="h-full flex items-center justify-center text-wood-light font-pixel">Waiting for Market Data...</div>;
 
   const processedData = data.map(d => ({
@@ -109,9 +110,17 @@ const CandleChart: React.FC<CandleChartProps> = ({ data, activeIndex, height = 4
             dataKey="candleRange"
             shape={<CustomCandleShape />}
             isAnimationActive={false}
+            onClick={(data, index) => {
+              if (onCandleClick) {
+                onCandleClick(index);
+              }
+            }}
           >
             {processedData.map((entry, index) => (
-              <Cell key={`cell-${index}`} />
+              <Cell
+                key={`cell-${index}`}
+                cursor="pointer"
+              />
             ))}
           </Bar>
           {activeIndex !== undefined && (

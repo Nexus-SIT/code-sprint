@@ -10,9 +10,9 @@ interface TradingChartProps {
   showError?: number | null;
 }
 
-const TradingChart: React.FC<TradingChartProps> = ({ 
-  data, 
-  onCandleClick, 
+const TradingChart: React.FC<TradingChartProps> = ({
+  data,
+  onCandleClick,
   correctIndex,
   showSuccess,
   showError
@@ -20,7 +20,7 @@ const TradingChart: React.FC<TradingChartProps> = ({
   const [visibleCount, setVisibleCount] = useState(data.length);
   const [isPlaying, setIsPlaying] = useState(false);
   const [livePrice, setLivePrice] = useState<number | null>(null);
-  
+
   const width = 800;
   const height = 400;
   const padding = 40;
@@ -59,18 +59,18 @@ const TradingChart: React.FC<TradingChartProps> = ({
       {/* Simulation Controls */}
       <div className="flex justify-between items-center mb-2">
         <div className="flex gap-4 items-center">
-           <button 
-             onClick={() => { setVisibleCount(Math.max(1, Math.floor(data.length * 0.2))); setIsPlaying(true); }}
-             className="bg-lime-500 hover:bg-lime-400 text-slate-900 px-6 py-2 rounded-full text-[11px] font-black uppercase transition-all flex items-center gap-2 shadow-lg shadow-lime-500/20"
-           >
-             {isPlaying ? '⏸ SIMULATING...' : '▶ START REPLAY'}
-           </button>
-           <button 
-             onClick={() => { setVisibleCount(data.length); setIsPlaying(false); }}
-             className="text-slate-500 hover:text-white text-[10px] font-black uppercase transition-colors"
-           >
-             Jump to End
-           </button>
+          <button
+            onClick={() => { setVisibleCount(Math.max(1, Math.floor(data.length * 0.2))); setIsPlaying(true); }}
+            className="bg-lime-500 hover:bg-lime-400 text-slate-900 px-6 py-2 rounded-full text-[11px] font-black uppercase transition-all flex items-center gap-2 shadow-lg shadow-lime-500/20"
+          >
+            {isPlaying ? '⏸ SIMULATING...' : '▶ START REPLAY'}
+          </button>
+          <button
+            onClick={() => { setVisibleCount(data.length); setIsPlaying(false); }}
+            className="text-slate-500 hover:text-white text-[10px] font-black uppercase transition-colors"
+          >
+            Jump to End
+          </button>
         </div>
         <div className="flex items-center gap-4 text-[10px] mono text-slate-500 uppercase font-black">
           {livePrice && (
@@ -101,7 +101,7 @@ const TradingChart: React.FC<TradingChartProps> = ({
 
           {/* Price Line (Crosshair) */}
           {livePrice && (
-            <line 
+            <line
               x1={padding} y1={getY(livePrice)} x2={width - padding} y2={getY(livePrice)}
               stroke="#84cc16" strokeWidth="0.5" opacity="0.5" strokeDasharray="2"
             />
@@ -115,23 +115,23 @@ const TradingChart: React.FC<TradingChartProps> = ({
             const yClose = getY(d.close);
             const yHigh = getY(d.high);
             const yLow = getY(d.low);
-            
+
             const bodyY = Math.min(yOpen, yClose);
             const bodyHeight = Math.max(Math.abs(yOpen - yClose), 1);
-            
+
             const isTargeted = i === showSuccess || i === showError;
             const candleColor = isBullish ? '#10b981' : '#ef4444';
             const statusColor = i === showSuccess ? '#ffffff' : i === showError ? '#ef4444' : candleColor;
 
             return (
-              <g 
-                key={i} 
+              <g
+                key={i}
                 className="transition-all duration-300"
                 onClick={() => onCandleClick(i)}
               >
-                <line 
-                  x1={x} y1={yHigh} x2={x} y2={yLow} 
-                  stroke={statusColor} strokeWidth="1.2" 
+                <line
+                  x1={x} y1={yHigh} x2={x} y2={yLow}
+                  stroke={statusColor} strokeWidth="1.2"
                   opacity={isTargeted ? 1 : 0.6}
                 />
                 <rect

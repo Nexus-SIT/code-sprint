@@ -18,6 +18,18 @@ const getInitialUserId = (): string | null => {
   return null;
 };
 
+const getInitialCompletedModules = (): string[] => {
+  if (typeof window !== 'undefined') {
+    try {
+      const saved = localStorage.getItem('completedModules');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
 export const useStore = create<GameState>((set) => ({
   theme: getInitialTheme(),
   userId: getInitialUserId(),
@@ -80,4 +92,23 @@ export const useStore = create<GameState>((set) => ({
   // ❌ Local-only updates removed
   updateBalance: () => { },
   addXp: () => { },
+
+  // New persistent module tracking
+  completedModules: getInitialCompletedModules(),
+  markModuleComplete: (moduleId: string) =>
+    set((state) => {
+      if (!state.completedModules.includes(moduleId)) {
+        const newCompleted = [...state.completedModules, moduleId];
+        if (typeof window !== 'undefined') {
+          // Simple local persistence for guests
+          try {
+            localStorage.setItem('completedModules', JSON.stringify(newCompleted));
+          } catch (e) {
+            console.error('Failed to save progress', e);
+          }
+        }
+        return { completedModules: newCompleted };
+      }
+      return {};
+    }),
 }));

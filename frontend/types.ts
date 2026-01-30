@@ -78,12 +78,14 @@ export interface GameState {
   userRank: number;
   xp: number;
   completedRooms: string[];
+  completedModules: string[];
   toggleTheme: () => void;
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;
   addXp: (amount: number) => void;
   syncFromFirebase: (data: { balance: number; xp: number; totalProfit: number; rank?: number }) => void;
   updateBalance: (amount: number) => void;
+  markModuleComplete: (moduleId: string) => void;
 }
 
 // --- Learning System Types ---

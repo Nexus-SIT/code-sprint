@@ -1,203 +1,247 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../store';
-import { MentorEmotion, Candle } from '../types';
-import { generateCandles } from '../utils/dataGenerator';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ModuleCard, modules } from './learning';
+import { modules } from './learning';
+import MentorSidebar from './learning/MentorSidebar';
+import TaskMCQ from './learning/TaskMCQ';
+import TaskMatch from './learning/TaskMatch';
+import TaskPrediction from './learning/TaskPrediction';
+import TaskChart from './learning/TaskChart';
 
 const LearningMode: React.FC = () => {
+  const { moduleId } = useParams<{ moduleId: string }>();
   const navigate = useNavigate();
-  const { addXp } = useStore();
+  const { addXp, completedModules, markModuleComplete } = useStore();
 
-  const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
-  const [completedModules, setCompletedModules] = useState<string[]>([]);
-  const [totalPoints, setTotalPoints] = useState(0);
+  // 1. Module Management
+  const initialIndex = modules.findIndex(m => m.id === moduleId);
+  const [currentModuleIndex, setCurrentModuleIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
+  const currentModule = modules[currentModuleIndex] || modules[0];
 
-  // Full dataset
-  const [fullData] = useState<Candle[]>(() => generateCandles(50, 150));
-  // Visible dataset
-  const [visibleData, setVisibleData] = useState<Candle[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  // Sync index if URL changes
+  useEffect(() => {
+    const idx = modules.findIndex(m => m.id === moduleId);
+    if (idx >= 0) setCurrentModuleIndex(idx);
+  }, [moduleId]);
 
-  // Mentor State
-  const [mentorState, setMentorState] = useState<{ emotion: MentorEmotion; text: string }>({
-    emotion: 'happy',
-    text: "Welcome to Trading 101! Let's watch the market move.",
-  });
+  // 2. Lesson Flow State (Lifted from ModuleCard)
+  const [currentExplanationIndex, setCurrentExplanationIndex] = useState(0);
+  const [stage, setStage] = useState<'explanation' | 'task' | 'result'>('explanation');
+  const [isTyping, setIsTyping] = useState(true);
+
+  // Initialize with first explanation (safe check)
+  const initialExp = currentModule?.explanations?.[0];
+  const [displayedText, setDisplayedText] = useState(initialExp?.catMessage || '');
+  const [mentorEmotion, setMentorEmotion] = useState<'happy' | 'neutral' | 'sad' | 'alert' | 'thinking'>('happy');
+
+  // Reset state when module changes
+  useEffect(() => {
+    if (currentModule) {
+      const firstExp = currentModule.explanations[0];
+      setCurrentExplanationIndex(0);
+      setStage('explanation');
+      setIsTyping(true);
+      setDisplayedText(firstExp?.catMessage || '');
+      setMentorEmotion('happy');
+    }
+  }, [currentModuleIndex]);
 
 
+  const currentExplanation = stage === 'explanation' ? currentModule.explanations[currentExplanationIndex] : null;
+  const isLastExplanation = currentExplanationIndex === (currentModule.explanations?.length || 0) - 1;
 
-  const isComplete = currentModuleIndex >= modules.length;
-
-  const handleModuleComplete = (isCorrect: boolean, points: number) => {
-    if (isCorrect) {
-      const currentModule = modules[currentModuleIndex];
-      const newCompleted = [...completedModules, currentModule.id];
-      setCompletedModules(newCompleted);
-      setTotalPoints(prev => prev + points);
-      addXp(points);
-
-      // Move to next module
-      if (currentModuleIndex + 1 < modules.length) {
-        setTimeout(() => {
-          setCurrentModuleIndex(prev => prev + 1);
-        }, 2500);
-      }
+  // 3. Handlers
+  const handleNext = () => {
+    if (isLastExplanation) {
+      setStage('task');
+      setDisplayedText(currentModule.task.question || "Let's test what you've learned!");
+      setMentorEmotion('thinking');
+      setIsTyping(false); // Task text is instant or short
+    } else {
+      const nextIdx = currentExplanationIndex + 1;
+      const nextExp = currentModule.explanations[nextIdx];
+      setCurrentExplanationIndex(nextIdx);
+      setDisplayedText(nextExp.catMessage);
+      setIsTyping(true);
+      // Randomize emotion slightly for liveliness
+      setMentorEmotion(Math.random() > 0.5 ? 'happy' : 'neutral');
     }
   };
 
-  const isModuleLocked = (index: number) => {
-    return index > completedModules.length;
+  const handleTaskComplete = (isCorrect: boolean) => {
+    if (stage === 'result') return;
+
+    if (isCorrect) {
+      setDisplayedText(currentModule.taskCompleteMessage);
+      setMentorEmotion('happy');
+      setStage('result');
+
+      // Trigger completion logic after short delay
+      setTimeout(() => {
+        markModuleComplete(currentModule.id);
+        addXp(currentModule.points);
+      }, 1000);
+
+    } else {
+      setDisplayedText(currentModule.taskIncorrectMessage);
+      setMentorEmotion('sad');
+      // Retry logic usually handled by task component internally or just stay in task stage
+    }
   };
 
+  const handleNextModule = () => {
+    if (currentModuleIndex + 1 < modules.length) {
+      navigate(`/module/${modules[currentModuleIndex + 1].id}`);
+    } else {
+      navigate('/learn'); // Back to map if finished all
+    }
+  };
+
+
+  // 4. Render Helpers
+  const renderTypingText = (text: string) => {
+    // Simple typing effect or just render
+    return (
+      <motion.p
+        key={text}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-xl leading-relaxed font-medium text-[#4E342E]"
+      >
+        {text}
+      </motion.p>
+    );
+  };
+
+  if (!currentModule) return <div>Loading...</div>;
+
   return (
-    <div className="flex flex-col h-screen relative p-4 max-w-6xl mx-auto font-body text-coffee selection:bg-wood-light selection:text-parchment">
-      {/* Wooden Header Bar */}
-      <div className="flex items-center justify-between mb-4 bg-wood border-4 border-wood-dark rounded-lg p-3 shadow-pixel z-10">
-        <button
-          onClick={() => navigate('/')}
-          className="bg-failure text-white border-b-4 border-red-900 active:border-b-0 active:translate-y-1 active:mt-1 rounded px-4 py-2 font-pixel text-xs flex items-center hover:bg-red-700 transition-colors"
-        >
-          <ArrowLeft className="mr-2 w-4 h-4" /> EXIT CLASS
-        </button>
-        <h1 className="text-3xl font-bold text-indigo-400">📚 Stock Market Academy</h1>
-        <div className="text-right">
-          <div className="text-sm text-gray-400">Progress</div>
-          <div className="text-xl font-bold text-green-400">{completedModules.length}/{modules.length}</div>
+    <div className="flex flex-col md:flex-row h-screen font-body overflow-hidden">
+      {/* LEFT: MENTOR SIDEBAR */}
+      <MentorSidebar
+        emotion={mentorEmotion}
+        onBack={() => navigate('/learn')}
+      />
+
+      {/* RIGHT: CONTENT AREA */}
+      <div className="flex-1 bg-[#F5F5DC] p-8 md:p-12 overflow-y-auto relative selection:bg-[#8D6E63] selection:text-white">
+        {/* Parchment Texture Overlay */}
+        <div className="absolute inset-0 pointer-events-none opacity-30"
+          style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/cream-paper.png')" }}>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="relative flex-1 bg-gray-800/30 rounded-2xl p-6 border border-gray-700 shadow-2xl flex flex-col overflow-auto">
-        {/* Progress Bar */}
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          className="mb-6 bg-gray-700/50 rounded-full h-3 overflow-hidden origin-left"
-        >
+        <div className="max-w-3xl mx-auto relative z-10 h-full flex flex-col justify-center">
+
+          {/* Header: MENTOR EXPLANATION */}
+          <div className="mb-4">
+            <h3 className="font-pixel text-[#8D6E63] uppercase tracking-widest text-xs font-bold mb-2">
+              {stage === 'result' ? 'MISSION ACCOMPLISHED' : (stage === 'task' ? 'TASK' : 'MENTOR EXPLANATION')}
+            </h3>
+          </div>
+
+          {/* Dialog Box */}
           <motion.div
-            animate={{ width: `${(completedModules.length / modules.length) * 100}%` }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="h-full bg-gradient-to-r from-green-500 to-emerald-500"
-          />
-        </motion.div>
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="bg-[#D7CCC8] border-4 border-[#8D6E63] rounded-2xl p-8 mb-8 shadow-[8px_8px_0_#5D4037] relative min-h-[200px] flex items-center"
+          >
+            {/* Text Content */}
+            <div className="w-full">
+              {renderTypingText(displayedText)}
 
-        {/* Modules Container */}
-        <div className="flex-1 overflow-y-auto scrollbar-hide">
-          {!isComplete ? (
+              {/* Next Arrow Indicator */}
+              {stage === 'explanation' && (
+                <motion.div
+                  animate={{ y: [0, 5, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                  className="absolute bottom-4 right-4 text-[#8D6E63] cursor-pointer"
+                  onClick={handleNext}
+                >
+                  ▼
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+
+          {/* INTERACTIVE CONTENT ZONE */}
+          <div className="flex-1">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={modules[currentModuleIndex].id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-              >
-                <ModuleCard
-                  module={modules[currentModuleIndex]}
-                  onComplete={handleModuleComplete}
-                  isActive={true}
-                  isLocked={isModuleLocked(currentModuleIndex)}
-                />
-              </motion.div>
-            </AnimatePresence>
-          ) : (
-            // Completion Screen
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex flex-col items-center justify-center py-12 text-center"
-            >
-              <motion.div
-                animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="text-8xl mb-6"
-              >
-                🏆
-              </motion.div>
-
-              <h2 className="text-4xl font-bold text-green-400 mb-4">Congratulations!</h2>
-              <p className="text-xl text-gray-300 mb-6">
-                You've completed all 8 modules and mastered Stock Market fundamentals!
-              </p>
-
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 mb-8 w-full">
+              {stage === 'explanation' && currentExplanation?.showLearningCards && (
                 <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-indigo-900/40 border border-indigo-500/40 rounded-xl p-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
                 >
-                  <div className="text-3xl font-bold text-indigo-300">{completedModules.length}</div>
-                  <div className="text-sm text-gray-400">Modules</div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="bg-green-900/40 border border-green-500/40 rounded-xl p-4"
-                >
-                  <div className="text-3xl font-bold text-green-300">+{totalPoints}</div>
-                  <div className="text-sm text-gray-400">XP Earned</div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                  className="bg-yellow-900/40 border border-yellow-500/40 rounded-xl p-4"
-                >
-                  <div className="text-3xl font-bold text-yellow-300">100%</div>
-                  <div className="text-sm text-gray-400">Completion</div>
-                </motion.div>
-              </div>
-
-              {/* Modules Summary */}
-              <div className="w-full bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 mb-8 text-left">
-                <h3 className="text-lg font-bold text-indigo-300 mb-3">📚 Modules Mastered</h3>
-                <div className="space-y-2 text-sm">
-                  {modules.map((mod, idx) => (
-                    <motion.div
-                      key={mod.id}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.8 + idx * 0.05 }}
-                      className="flex items-center gap-2 text-gray-300"
-                    >
-                      <CheckCircle2 size={16} className="text-green-400" />
-                      {mod.icon} {mod.title}
-                    </motion.div>
+                  {currentExplanation.learningCards?.map((card, idx) => (
+                    <div key={idx} className="bg-white/50 border-2 border-[#8D6E63] border-dashed rounded-xl p-4 text-center text-[#5D4037] font-bold shadow-sm">
+                      {card}
+                    </div>
                   ))}
-                </div>
-              </div>
+                </motion.div>
+              )}
 
-              {/* Action Buttons */}
-              <div className="flex gap-4 w-full">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate('/game')}
-                  className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all"
+              {stage === 'task' && (
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.95, opacity: 0 }}
+                  className="bg-white border-4 border-[#5D4037] rounded-xl p-6 shadow-lg"
                 >
-                  Start Trading Game 🎮
-                </motion.button>
+                  {currentModule.task.type === 'MCQ' && (
+                    <TaskMCQ
+                      question={''} // Text is already in the main bubble
+                      options={currentModule.task.options || []}
+                      onAnswer={handleTaskComplete}
+                    />
+                  )}
+                  {currentModule.task.type === 'MATCH' && (
+                    <TaskMatch
+                      matches={currentModule.task.matches || []}
+                      onComplete={handleTaskComplete}
+                    />
+                  )}
+                  {currentModule.task.type === 'CHART' && (
+                    <TaskChart
+                      data={currentModule.task.chart!.data}
+                      correctIndices={currentModule.task.chart!.correctIndices}
+                      instruction={currentModule.task.chart!.instruction}
+                      onAnswer={handleTaskComplete}
+                    />
+                  )}
+                  {currentModule.task.type === 'PREDICTION' && (
+                    <TaskPrediction
+                      scenario={currentModule.task.prediction!.scenario}
+                      correctAnswer={currentModule.task.prediction!.correctAnswer}
+                      emoji={currentModule.task.prediction!.emoji}
+                      onAnswer={handleTaskComplete}
+                    />
+                  )}
+                </motion.div>
+              )}
 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate('/')}
-                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all"
+              {stage === 'result' && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-8"
                 >
-                  Back to Home 🏠
-                </motion.button>
-              </div>
-            </motion.div>
-          )}
+                  <div className="text-6xl mb-4">🎉</div>
+                  <h2 className="text-3xl font-bold text-[#3E2723] mb-6 font-pixel">LESSON COMPLETE!</h2>
+
+                  <button
+                    onClick={handleNextModule}
+                    className="bg-[#4CAF50] text-white px-8 py-4 rounded-xl border-b-4 border-[#1B5E20] font-bold text-xl active:border-b-0 active:translate-y-1 shadow-xl hover:bg-[#43A047] transition-all font-pixel"
+                  >
+                    CONTINUE ➡
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
         </div>
       </div>
     </div>

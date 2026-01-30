@@ -9,6 +9,7 @@ import Home from './components/Home';
 
 import RoadmapPage from './components/RoadmapPage';
 import Classroom from './components/Classroom';
+import LearningMode from './components/LearningMode';
 import TopicExplanationPage from './components/TopicExplanationPage';
 import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
@@ -145,6 +146,7 @@ const AppContent: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/roadmap" element={<RoadmapPage />} />
+        <Route path="/module/:moduleId" element={<LearningMode />} />
         <Route path="/learn/:moduleId/:roomId" element={<TopicExplanationPage />} />
         <Route path="/learn/:moduleId/:roomId/classroom" element={<Classroom />} />
         <Route path="/learn" element={<RoadmapPage />} />

@@ -30,6 +30,10 @@ const TaskPrediction: React.FC<TaskPredictionProps> = ({ prediction, onComplete 
 
   const handleFeedbackComplete = () => {
     onComplete(isCorrect);
+    if (!isCorrect) {
+      setSubmitted(false);
+      setSelected(null);
+    }
   };
 
   return (
@@ -77,11 +81,10 @@ const TaskPrediction: React.FC<TaskPredictionProps> = ({ prediction, onComplete 
             disabled={submitted}
             whileHover={!submitted ? { scale: 1.05 } : {}}
             whileTap={!submitted ? { scale: 0.95 } : {}}
-            className={`p-6 rounded-2xl border-3 transition-all transform relative overflow-hidden ${
-              selected === 'UP'
+            className={`p-6 rounded-2xl border-3 transition-all transform relative overflow-hidden ${selected === 'UP'
                 ? 'bg-green-600/40 border-green-400 shadow-lg shadow-green-500/30'
                 : 'bg-gray-700/30 border-gray-600/40 hover:border-green-500/50'
-            } ${submitted ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              } ${submitted ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
             <motion.div
               animate={{
@@ -128,11 +131,10 @@ const TaskPrediction: React.FC<TaskPredictionProps> = ({ prediction, onComplete 
             disabled={submitted}
             whileHover={!submitted ? { scale: 1.05 } : {}}
             whileTap={!submitted ? { scale: 0.95 } : {}}
-            className={`p-6 rounded-2xl border-3 transition-all transform relative overflow-hidden ${
-              selected === 'DOWN'
+            className={`p-6 rounded-2xl border-3 transition-all transform relative overflow-hidden ${selected === 'DOWN'
                 ? 'bg-red-600/40 border-red-400 shadow-lg shadow-red-500/30'
                 : 'bg-gray-700/30 border-gray-600/40 hover:border-red-500/50'
-            } ${submitted ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+              } ${submitted ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
             <motion.div
               animate={{
@@ -181,11 +183,10 @@ const TaskPrediction: React.FC<TaskPredictionProps> = ({ prediction, onComplete 
             disabled={!selected}
             whileHover={selected ? { scale: 1.05 } : {}}
             whileTap={selected ? { scale: 0.95 } : {}}
-            className={`w-full py-3 rounded-xl font-bold text-lg transition-all ${
-              selected
+            className={`w-full py-3 rounded-xl font-bold text-lg transition-all ${selected
                 ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:shadow-lg hover:shadow-indigo-500/50 cursor-pointer'
                 : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
-            }`}
+              }`}
           >
             Make Your Prediction 🎯
           </motion.button>
@@ -197,14 +198,13 @@ const TaskPrediction: React.FC<TaskPredictionProps> = ({ prediction, onComplete 
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 }}
-            className={`mt-4 p-4 rounded-xl text-center font-bold text-lg ${
-              isCorrect
+            className={`mt-4 p-4 rounded-xl text-center font-bold text-lg ${isCorrect
                 ? 'bg-green-600/30 text-green-300 border border-green-500'
                 : 'bg-red-600/30 text-red-300 border border-red-500'
-            }`}
+              }`}
           >
-            {isCorrect 
-              ? `🎉 Correct! Price goes ${prediction.correctAnswer}!` 
+            {isCorrect
+              ? `🎉 Correct! Price goes ${prediction.correctAnswer}!`
               : `💡 Not quite! Price goes ${prediction.correctAnswer}. Market moves can be tricky!`
             }
           </motion.div>
@@ -214,8 +214,8 @@ const TaskPrediction: React.FC<TaskPredictionProps> = ({ prediction, onComplete 
       {/* Feedback Animation */}
       <AnimatePresence>
         {submitted && (
-          <ProgressFeedback 
-            isCorrect={isCorrect} 
+          <ProgressFeedback
+            isCorrect={isCorrect}
             onComplete={handleFeedbackComplete}
             delay={0.2}
           />

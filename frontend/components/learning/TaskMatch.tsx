@@ -48,6 +48,10 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
 
   const handleFeedbackComplete = () => {
     onComplete(isCorrect);
+    if (!isCorrect) {
+      setSubmitted(false);
+      setConnections({});
+    }
   };
 
   return (
@@ -83,8 +87,8 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
                 <motion.button
                   onClick={() => {
                     // Show available right items
-                    const unmatched = rightItems.filter(r => 
-                      !Object.values(connections).includes(r.id) || 
+                    const unmatched = rightItems.filter(r =>
+                      !Object.values(connections).includes(r.id) ||
                       connections[match.id] === r.id
                     );
                     // Auto-highlight first unmatched
@@ -94,11 +98,10 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
                   }}
                   whileHover={!submitted ? { scale: 1.05 } : {}}
                   whileTap={!submitted ? { scale: 0.95 } : {}}
-                  className={`w-full p-3 rounded-lg text-left transition-all border-2 ${
-                    connections[match.id]
+                  className={`w-full p-3 rounded-lg text-left transition-all border-2 ${connections[match.id]
                       ? 'bg-indigo-600/40 border-indigo-400'
                       : 'bg-gray-700/30 border-gray-600/40 hover:border-indigo-500/50'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{match.emoji || '📌'}</span>
@@ -133,11 +136,10 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
                     whileHover={!submitted && isConnected ? { scale: 1.05 } : {}}
                     whileTap={!submitted && isConnected ? { scale: 0.95 } : {}}
                     disabled={!isConnected && submitted}
-                    className={`w-full p-3 rounded-lg text-left transition-all border-2 ${
-                      isConnected
+                    className={`w-full p-3 rounded-lg text-left transition-all border-2 ${isConnected
                         ? 'bg-emerald-600/40 border-emerald-400 cursor-pointer'
                         : 'bg-gray-700/20 border-gray-600/30 opacity-50'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       <span className="text-xl">{item.emoji || '📌'}</span>
@@ -192,11 +194,10 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
             disabled={Object.keys(connections).length < matches.length}
             whileHover={Object.keys(connections).length === matches.length ? { scale: 1.05 } : {}}
             whileTap={Object.keys(connections).length === matches.length ? { scale: 0.95 } : {}}
-            className={`w-full py-3 rounded-xl font-bold text-lg transition-all ${
-              Object.keys(connections).length === matches.length
+            className={`w-full py-3 rounded-xl font-bold text-lg transition-all ${Object.keys(connections).length === matches.length
                 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-black hover:shadow-lg hover:shadow-green-500/50 cursor-pointer'
                 : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
-            }`}
+              }`}
           >
             Check Matches 🎯
           </motion.button>
@@ -208,11 +209,10 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 }}
-            className={`mt-4 p-4 rounded-xl text-center font-bold text-lg ${
-              isCorrect
+            className={`mt-4 p-4 rounded-xl text-center font-bold text-lg ${isCorrect
                 ? 'bg-green-600/30 text-green-300 border border-green-500'
                 : 'bg-red-600/30 text-red-300 border border-red-500'
-            }`}
+              }`}
           >
             {isCorrect ? '🎉 Perfect matches!' : '💡 Not quite right. Try again!'}
           </motion.div>
@@ -222,8 +222,8 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
       {/* Feedback Animation */}
       <AnimatePresence>
         {submitted && (
-          <ProgressFeedback 
-            isCorrect={isCorrect} 
+          <ProgressFeedback
+            isCorrect={isCorrect}
             onComplete={handleFeedbackComplete}
             delay={0.2}
           />
