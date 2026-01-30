@@ -5,10 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CandleCrush</title>
+  <link rel="icon" type="image/png" href="/CCLogo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -29,6 +31,9 @@
           boxShadow: {
             'pixel': '3px 3px 0px 0px rgba(62, 39, 35, 1)', // Hard dark shadow
             'pixel-sm': '1px 1px 0px 0px rgba(62, 39, 35, 1)',
+          },
+          animation: {
+            'spin-slow': 'spin 3s linear infinite',
           }
         }
       }
