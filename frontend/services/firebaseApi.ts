@@ -10,7 +10,8 @@ import {
     limit,
     onSnapshot,
     where,
-    addDoc
+    addDoc,
+    updateDoc
 } from 'firebase/firestore';
 import {
     createUserWithEmailAndPassword,
@@ -61,7 +62,14 @@ export const createUserIfNotExists = async (
         return newUser;
     }
 
-    return snap.data() as UserDoc;
+    const existingUser = snap.data() as UserDoc;
+    // If the existing user has the default name 'Trader' but we have a better name now, update it
+    if (existingUser.name === 'Trader' && userName !== 'Trader') {
+        await updateDoc(ref, { name: userName });
+        existingUser.name = userName;
+    }
+
+    return existingUser;
 };
 
 // --- Task Completion ---

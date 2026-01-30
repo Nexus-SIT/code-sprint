@@ -9,9 +9,10 @@ import { subscribeToLeaderboard } from '../services/firebaseApi';
 interface LeaderboardProps {
     userId?: string;
     limit?: number;
+    showBack?: boolean;
 }
 
-const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
+const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10, showBack = true }) => {
     const navigate = useNavigate();
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
@@ -53,18 +54,29 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
             {/* Header Sign */}
             <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-wood border-4 border-wood-dark px-6 py-2 rounded-lg shadow-xl z-10 flex items-center gap-2 transform hover:scale-105 transition-transform cursor-default">
                 <Trophy className="w-5 h-5 text-yellow-500" />
-                <h2 className="text-lg font-pixel text-parchment uppercase tracking-wider text-shadow-sm">LEADERBOARD</h2>
+                <div className="flex flex-col items-center">
+                    <h2 className="text-sm md:text-base font-pixel text-parchment uppercase tracking-wider text-shadow-sm leading-none mb-1">
+                        {limit === 5 ? 'GLOBAL RANK' : 'LEADERBOARD'}
+                    </h2>
+                    {limit === 5 && (
+                        <div className="text-[7px] md:text-[8px] font-pixel text-amber-200 uppercase tracking-tight whitespace-nowrap">
+                            TOP 5 GLOBAL PLAYERS
+                        </div>
+                    )}
+                </div>
                 <Trophy className="w-5 h-5 text-yellow-500" />
             </div>
 
             {/* Back Button */}
-            <button
-                onClick={() => navigate(-1)}
-                className="absolute top-2 left-2 bg-failure text-white border-2 border-red-900 rounded p-1 z-20 hover:bg-red-700 transition-colors shadow-sm"
-                title="Leave Leaderboard"
-            >
-                <ArrowLeft size={16} />
-            </button>
+            {showBack && (
+                <button
+                    onClick={() => navigate(-1)}
+                    className="absolute top-2 left-2 bg-failure text-white border-2 border-red-900 rounded p-1 z-20 hover:bg-red-700 transition-colors shadow-sm"
+                    title="Leave Leaderboard"
+                >
+                    <ArrowLeft size={16} />
+                </button>
+            )}
 
             <div className="bg-parchment/10 p-4 pt-8 rounded-lg space-y-3 h-full overflow-y-auto custom-scrollbar">
                 <AnimatePresence>

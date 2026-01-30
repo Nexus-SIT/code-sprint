@@ -239,7 +239,7 @@ const Home: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
                 >
-                    <Leaderboard userId={userId || undefined} limit={5} />
+                    <Leaderboard userId={userId || undefined} limit={5} showBack={false} />
                 </motion.div>
             </div>
             {/* Rank Info Modal */}
