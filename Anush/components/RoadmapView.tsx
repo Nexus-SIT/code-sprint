@@ -5,15 +5,13 @@ import { Path, Module, Room } from '../types';
 interface RoadmapViewProps {
   path: Path;
   completedRooms: string[];
-  onSelectRoom: (moduleIndex: number, roomIndex: number) => void;
-}
+} 
 
 const RoomNode: React.FC<{ 
   room: Room; 
   completed: boolean; 
-  onClick: () => void;
   isLastInModule: boolean;
-}> = ({ room, completed, onClick, isLastInModule }) => {
+}> = ({ room, completed, isLastInModule }) => {
   const getIcon = (type: Room['iconType']) => {
     switch (type) {
       case 'terminal': return '💻';
@@ -32,18 +30,17 @@ const RoomNode: React.FC<{
       )}
       
       <div 
-        onClick={onClick}
-        className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl cursor-pointer transition-all duration-300 border-2 shadow-sm
+        className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl cursor-default transition-all duration-300 border-2 shadow-sm
           ${completed 
             ? 'bg-emerald-500 border-emerald-400 text-white scale-110' 
-            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-emerald-500 group-hover:scale-105'}
+            : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700'}
         `}
       >
         {getIcon(room.iconType)}
       </div>
       
       <div className="mt-2 text-center max-w-[120px]">
-        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block leading-tight group-hover:text-emerald-500 transition-colors">
+        <span className="text-xs font-bold text-slate-700 dark:text-slate-300 block leading-tight transition-colors">
           {room.title}
         </span>
         {completed && <span className="text-[10px] text-emerald-500 font-bold uppercase">Captured 🚩</span>}
@@ -52,7 +49,7 @@ const RoomNode: React.FC<{
   );
 };
 
-const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelectRoom }) => {
+const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms }) => {
   return (
     <div className="flex-1 bg-[#f8fafd] dark:bg-[#0d1117] overflow-y-auto">
       <div className="max-w-[1400px] mx-auto p-4 lg:p-8 flex flex-col lg:flex-row gap-8">
@@ -67,9 +64,9 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
               <p className="text-sm text-slate-300 mb-6">
                 Over 400 challenges are ready for you to take on. Earn badges and level up while you test your skills!
               </p>
-              <button className="bg-[#10b981] hover:bg-[#059669] text-slate-900 font-bold px-6 py-2 rounded-lg flex items-center gap-2 transition-all">
+              <div className="bg-[#10b981] text-slate-900 font-bold px-6 py-2 rounded-lg flex items-center gap-2">
                 <span>▶</span> Play now
-              </button>
+              </div>
             </div>
             <div className="hidden md:flex gap-4 relative z-10">
                <div className="w-20 h-20 bg-slate-800/50 rounded-full border border-slate-700 flex items-center justify-center text-3xl">🛡️</div>
@@ -124,7 +121,6 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
                         key={room.id}
                         room={room}
                         completed={completedRooms.includes(room.id)}
-                        onClick={() => onSelectRoom(modIndex, roomIndex)}
                         isLastInModule={roomIndex === module.rooms.length - 1}
                       />
                     ))}
@@ -132,11 +128,11 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
 
                   <div className="mt-20 pt-12 border-t border-slate-100 dark:border-slate-800 w-full flex justify-between items-center">
                      <div className="flex gap-2">
-                        <button className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-emerald-500 transition-colors">Classic View</button>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Classic View</span>
                      </div>
                      <div className="flex gap-4">
-                        <button className="text-xs font-bold text-slate-500 hover:text-white px-4 py-2">View path</button>
-                        <button className="bg-emerald-500 text-slate-900 font-bold px-6 py-2 rounded-lg text-xs hover:bg-emerald-400 transition-all">Resume learning</button>
+                        <span className="text-xs font-bold text-slate-500 px-4 py-2">View path</span>
+                        <div className="bg-emerald-500 text-slate-900 font-bold px-6 py-2 rounded-lg text-xs">Resume learning</div>
                      </div>
                   </div>
                </div>
@@ -150,14 +146,14 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
           <div className="bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
              <div className="flex justify-between items-center mb-6">
                <h4 className="font-black text-slate-700 dark:text-slate-300 text-sm">Check Out Workspaces!</h4>
-               <button className="text-slate-400">×</button>
+               <span className="text-slate-400">×</span>
              </div>
              <p className="text-xs text-slate-500 leading-relaxed mb-6">
                Join workspaces to collaboratively hack with your team and access features like team leader boards and more.
              </p>
-             <button className="w-full bg-[#1e293b] hover:bg-slate-700 text-white font-bold py-3 rounded-lg text-xs transition-colors">
+             <div className="w-full bg-[#1e293b] text-white font-bold py-3 rounded-lg text-xs text-center">
                Join Workspaces
-             </button>
+             </div>
           </div>
 
           <div className="bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
@@ -211,7 +207,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
                   </div>
                 ))}
              </div>
-             <button className="w-full mt-6 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-white">View League</button>
+             <span className="w-full mt-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">View League</span>
           </div>
 
           <div className="bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
