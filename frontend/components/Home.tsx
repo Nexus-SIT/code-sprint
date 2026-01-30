@@ -38,11 +38,11 @@ const Home: React.FC = () => {
             </div>
 
             {/* Game Mode Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8">
                 {/* Tutorial Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl border-4 p-8 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
+                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         ? 'bg-gray-800 border-gray-700 hover:border-green-500'
                         : 'bg-wood border-wood-dark hover:border-green-600'
                         }`}
@@ -50,19 +50,19 @@ const Home: React.FC = () => {
                     <div className="flex flex-col items-center text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-green-900/30' : 'bg-green-600/20'
                             }`}>
-                            <BookOpen size={48} className="text-green-500" />
+                            <BookOpen size={40} className="text-green-500" />
                         </div>
-                        <h3 className={`text-2xl font-pixel mb-3 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
                             }`}>
                             TUTORIAL
                         </h3>
-                        <p className={`text-sm mb-6 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
                             }`}>
-                            Learn the basics. Master the market.
+                            Learn the basics.
                         </p>
                         <button
                             onClick={() => navigate('/learn')}
-                            className="w-full bg-success text-white border-b-4 border-green-900 active:border-b-0 active:translate-y-1 rounded-lg py-4 font-pixel text-sm hover:bg-green-600 transition-all shadow-lg"
+                            className="w-full bg-success text-white border-b-4 border-green-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-green-600 transition-all shadow-lg"
                         >
                             START LEARNING
                         </button>
@@ -72,7 +72,7 @@ const Home: React.FC = () => {
                 {/* Ranked Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl border-4 p-8 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
+                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
                         ? 'bg-gray-800 border-gray-700 hover:border-blue-500'
                         : 'bg-wood border-wood-dark hover:border-blue-600'
                         }`}
@@ -80,21 +80,51 @@ const Home: React.FC = () => {
                     <div className="flex flex-col items-center text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-600/20'
                             }`}>
-                            <Trophy size={48} className="text-yellow-500" />
+                            <Trophy size={40} className="text-yellow-500" />
                         </div>
-                        <h3 className={`text-2xl font-pixel mb-3 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
                             }`}>
                             RANKED
                         </h3>
-                        <p className={`text-sm mb-6 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
                             }`}>
-                            Compete for glory. Earn rewards.
+                            Compete for glory.
                         </p>
                         <button
                             onClick={() => navigate('/game')}
-                            className="w-full bg-blue-600 text-white border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded-lg py-4 font-pixel text-sm hover:bg-blue-500 transition-all shadow-lg"
+                            className="w-full bg-blue-600 text-white border-b-4 border-blue-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-blue-500 transition-all shadow-lg"
                         >
                             FARM FUNDS
+                        </button>
+                    </div>
+                </motion.div>
+
+                {/* Leaderboard Card - NEW */}
+                <motion.div
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    className={`rounded-xl border-4 p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
+                        ? 'bg-gray-800 border-gray-700 hover:border-purple-500'
+                        : 'bg-wood border-wood-dark hover:border-purple-600'
+                        }`}
+                >
+                    <div className="flex flex-col items-center text-center">
+                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-600/20'
+                            }`}>
+                            <Award size={40} className="text-purple-400" />
+                        </div>
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                            }`}>
+                            LEADERBOARD
+                        </h3>
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                            }`}>
+                            Check top traders.
+                        </p>
+                        <button
+                            onClick={() => navigate('/leaderboard')}
+                            className="w-full bg-purple-600 text-white border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-purple-500 transition-all shadow-lg"
+                        >
+                            VIEW RANKINGS
                         </button>
                     </div>
                 </motion.div>
