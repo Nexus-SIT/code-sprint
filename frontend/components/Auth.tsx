@@ -28,7 +28,17 @@ const Auth: React.FC<AuthProps> = ({ onLoginSuccess }) => {
             }
             onLoginSuccess();
         } catch (err: any) {
-            setError(err.message || 'Authentication failed');
+            let msg = 'Authentication failed';
+            if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+                msg = 'Invalid email or password.';
+            } else if (err.code === 'auth/email-already-in-use') {
+                msg = 'Email is already registered.';
+            } else if (err.code === 'auth/weak-password') {
+                msg = 'Password should be at least 6 characters.';
+            } else if (err.message) {
+                msg = err.message;
+            }
+            setError(msg);
         } finally {
             setLoading(false);
         }

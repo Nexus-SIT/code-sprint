@@ -81,6 +81,7 @@ export interface GameState {
   setUserProfile: (profile: UserProfile) => void;
   addXp: (amount: number) => void;
   syncFromFirebase: (data: { balance: number; xp: number; rank?: number }) => void;
+  updateBalance: (amount: number) => void;
 }
 
 // --- Learning System Types ---
