@@ -1,8 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Path, Room } from '../types';
-import Mascot from './Mascot';
 import { useStore } from '../store';
+import { Play, CheckCircle } from 'lucide-react';
 
 interface RoadmapViewProps {
   path: Path;
@@ -81,238 +80,96 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
   const { theme } = useStore();
 
   return (
-    <div className={`flex-1 overflow-y-auto overflow-x-hidden p-4 lg:p-10
-        ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}
+    <div className={`flex-1 overflow-y-auto p-6 md:p-12
+      ${theme === 'dark' ? 'bg-transparent text-gray-100' : 'bg-transparent text-coffee'}
     `}>
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-10">
-
-        {/* Left Column: Learning Path */}
-        <div className="flex-1 space-y-16">
-
-          {/* Hero Banner (Quest Board Style) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            whileHover={{ scale: 1.02 }}
-            className={`relative rounded-xl p-8 overflow-hidden shadow-pixel border-4
-             ${theme === 'dark'
-                ? 'bg-gray-800 border-gray-700 text-gray-100'
-                : 'bg-parchment border-wood text-coffee'
-              }
+      <div className="max-w-4xl mx-auto space-y-12">
+        <header className="space-y-4">
+          <h1 className={`text-3xl md:text-4xl font-bold font-pixel
+            ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'}
           `}>
-            <div className="relative z-10">
-              <motion.h2
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className={`text-2xl md:text-3xl font-bold font-pixel mb-4 tracking-tight
-                ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'}
-              `}>Quest Board: Trading Mastery</motion.h2>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className={`text-sm mb-6 max-w-md leading-relaxed font-medium
-                ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/80'}
-              `}>
-                Take on interactive trading scenarios. Master price action through direct application and capture flags to level up.
-              </motion.p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`font-bold px-6 py-3 rounded-lg flex items-center gap-3 transition-all shadow-pixel active:scale-95 border-b-4 active:border-b-0 active:translate-y-1
-                 ${theme === 'dark' ? 'bg-indigo-600 border-indigo-800 hover:bg-indigo-500 text-white' : 'bg-success text-white border-green-800 hover:bg-green-600'}
-              `}>
-                <span className="text-lg">▶</span>
-                <span className="font-pixel text-xs">PLAY NOW</span>
-              </motion.button>
-            </div>
-            {/* Decorative pattern */}
-            {theme !== 'dark' && <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#8b4513 1px, transparent 0)', backgroundSize: '20px 20px' }} />}
-          </motion.div>
+            Trading Valley Path
+          </h1>
+          <p className={`max-w-2xl font-medium opacity-80
+            ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/80'}
+          `}>
+            Embark on a journey to master the financial markets. Follow the sections below to unlock new levels of knowledge and test your skills.
+          </p>
+        </header>
 
-          {/* User Section - Mascot */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              <Mascot state="happy" message="Ready for your next mission, farmer?" />
-              <div>
-                <h3 className={`text-2xl font-bold font-pixel
-                    ${theme === 'dark' ? 'text-white' : 'text-wood-dark'}
-                `}>Hello Trader!</h3>
-                <p className={`text-xs font-bold font-pixel uppercase
-                    ${theme === 'dark' ? 'text-gray-500' : 'text-wood-light'}
-                `}>Let's harvest some profits today!</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Modules Path */}
-          {path.modules.map((module, modIndex) => (
-            <div key={module.id} className="relative">
+        <div className="space-y-10">
+          {path.modules.map((module, modIdx) => (
+            <div key={module.id} className={`rounded-2xl border-4 overflow-hidden shadow-pixel
+              ${theme === 'dark'
+                ? 'bg-gray-800 border-gray-700'
+                : 'bg-parchment border-wood'
+              }
+            `}>
               {/* Module Header */}
-              <div className={`rounded-t-2xl border-4 border-b-0 shadow-sm p-8 relative overflow-hidden
-                 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-wood border-wood-dark'}
+              <div className={`p-6 border-b-4
+                ${theme === 'dark'
+                  ? 'bg-gray-900/50 border-gray-700'
+                  : 'bg-wood-light/20 border-wood-light/50 text-wood-dark'}
               `}>
-                <div className="z-10 relative">
-                  <span className={`text-[10px] font-black uppercase tracking-[0.3em] block mb-2
-                     ${theme === 'dark' ? 'text-indigo-400' : 'text-parchment/70'}
-                  `}>Module {modIndex + 1}</span>
-                  <h2 className={`text-2xl font-bold font-pixel leading-tight mb-2
-                     ${theme === 'dark' ? 'text-white' : 'text-parchment'}
-                  `}>{module.title}</h2>
-                  <p className={`text-xs max-w-lg
-                     ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'}
-                  `}>{module.description}</p>
+                <div className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-60">
+                  Module {modIdx + 1}
                 </div>
+                <h2 className="text-xl font-bold font-pixel">{module.title}</h2>
+                <p className="text-sm mt-2 opacity-80">{module.description}</p>
               </div>
 
-              {/* The Path Map View */}
-              <div className={`p-12 lg:p-20 relative border-4 border-t-0 rounded-b-2xl
-                 ${theme === 'dark' ? 'bg-gray-900 border-gray-700' : 'bg-parchment border-wood-dark'}
-              `}>
-
-                {/* SVG Path Overlay */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-                  {module.rooms.map((_, i) => {
-                    if (i === module.rooms.length - 1) return null;
-                    const isFromRight = i % 2 !== 0;
-
-                    // Logic to draw lines based on staggered nodes
-                    // Since nodes are in flex layout, we approximate the path
-                    const yStart = 100 + i * 160 + 80; // Approx center of room i (based on min-h-160)
-                    const yEnd = 100 + (i + 1) * 160 + 80; // Approx center of room i+1
-
-                    const xStart = isFromRight ? 'calc(100% - 100px)' : '100px';
-                    const xEnd = isFromRight ? '100px' : 'calc(100% - 100px)';
-
-                    return (
-                      <path
-                        key={`path-${i}`}
-                        d={`M ${isFromRight ? '70%' : '30%'},${yStart} C ${isFromRight ? '30%' : '70%'},${yStart} ${isFromRight ? '70%' : '30%'},${yEnd} ${isFromRight ? '30%' : '70%'},${yEnd}`}
-                        fill="none"
-                        stroke={theme === 'dark' ? '#374151' : '#8b4513'}
-                        strokeOpacity={theme === 'dark' ? '0.5' : '0.2'}
-                        strokeWidth="4"
-                        strokeLinecap="round"
-                        strokeDasharray="12, 12"
-                        className="animate-path-dash"
-                      />
-                    );
-                  })}
-                </svg>
-
-                <div className="max-w-2xl mx-auto flex flex-col relative z-20">
-                  {module.rooms.map((room, roomIndex) => (
-                    <RoomNode
-                      key={room.id}
-                      index={roomIndex}
-                      room={room}
-                      completed={completedRooms.includes(room.id)}
-                      onClick={() => onSelectRoom(modIndex, roomIndex)}
-                      isRight={roomIndex % 2 !== 0}
-                      theme={theme}
-                    />
-                  ))}
-                </div>
-
-                {/* Module Footer Actions */}
-                <div className={`mt-20 pt-10 border-t-2 flex flex-col sm:flex-row items-center justify-between gap-6
-                    ${theme === 'dark' ? 'border-gray-800' : 'border-wood/20'}
-                `}>
-                  <div className="flex items-center gap-4">
-                    <span className={`text-[10px] font-black uppercase tracking-widest
-                        ${theme === 'dark' ? 'text-gray-500' : 'text-wood-light'}
-                    `}>Active Recall Mode Enabled</span>
-                  </div>
-                  <div className="flex gap-4 w-full sm:w-auto">
+              {/* Rooms List */}
+              <div className="divide-y-2 divide-black/5 dark:divide-white/5">
+                {module.rooms.map((room, roomIdx) => {
+                  const isCompleted = completedRooms.includes(room.id);
+                  return (
                     <button
-                      onClick={() => onSelectRoom(modIndex, 0)}
-                      className={`flex-1 sm:flex-none font-bold px-8 py-2.5 rounded-xl text-xs transition-all shadow-lg active:scale-95
-                        ${theme === 'dark' ? 'bg-indigo-600 text-white hover:bg-indigo-500' : 'bg-wood text-parchment hover:bg-wood-dark'}
-                      `}
+                      key={room.id}
+                      onClick={() => onSelectRoom(modIdx, roomIdx)}
+                      className={`w-full flex items-center justify-between p-5 transition-all hover:bg-black/5 dark:hover:bg-white/5 active:scale-[0.99] group text-left`}
                     >
-                      RESUME LEARNING
+                      <div className="flex items-center gap-5">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 shrink-0 transition-transform group-hover:scale-110
+                          ${isCompleted
+                            ? 'bg-green-500 border-green-600 text-white'
+                            : (theme === 'dark'
+                              ? 'bg-gray-700 border-gray-600 text-gray-400'
+                              : 'bg-wood-light border-wood text-wood-dark')
+                          }
+                        `}>
+                          {isCompleted ? <CheckCircle size={24} /> : <Play size={22} fill="currentColor" />}
+                        </div>
+                        <div>
+                          <h3 className={`font-bold font-pixel text-lg
+                            ${theme === 'dark' ? 'text-gray-200' : 'text-coffee'}
+                          `}>
+                            {room.title}
+                          </h3>
+                          <p className="text-sm opacity-60 line-clamp-1">{room.description || 'Master this topic'}</p>
+                        </div>
+                      </div>
+
+                      <div className="hidden sm:block">
+                        {isCompleted ? (
+                          <span className="text-[10px] font-black text-green-500 px-3 py-1.5 bg-green-500/10 rounded-full uppercase tracking-tighter">
+                            Completed
+                          </span>
+                        ) : (
+                          <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-tighter
+                            ${theme === 'dark' ? 'bg-indigo-500/10 text-indigo-400' : 'bg-wood/10 text-wood-dark'}
+                          `}>
+                            Start Quest
+                          </span>
+                        )}
+                      </div>
                     </button>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
           ))}
         </div>
-
-        {/* Right Column: Widgets */}
-        <div className="w-full lg:w-[360px] space-y-8">
-          <div className={`border-4 rounded-xl p-8 shadow-pixel
-             ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-parchment border-wood'}
-          `}>
-            <div className="flex justify-between items-center mb-6">
-              <h4 className={`font-bold font-pixel text-sm
-                 ${theme === 'dark' ? 'text-white' : 'text-coffee'}
-              `}>Teams & Workspaces</h4>
-            </div>
-            <p className={`text-xs leading-relaxed mb-8
-                 ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/70'}
-            `}>
-              Collaborate with other farmers and compete in group leaderboards.
-            </p>
-            <button className={`w-full font-bold py-4 rounded-xl text-[11px] uppercase tracking-widest transition-all border-b-4 active:border-b-0 active:translate-y-1
-                ${theme === 'dark'
-                ? 'bg-gray-700 hover:bg-gray-600 text-white border-gray-900'
-                : 'bg-wood hover:bg-wood-dark text-parchment border-wood-dark'}
-            `}>
-              Browse Workspaces
-            </button>
-          </div>
-
-          <div className={`border-4 rounded-xl p-8 shadow-pixel
-             ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-parchment border-wood'}
-          `}>
-            <div className="flex items-center gap-3 mb-8">
-              <span className="text-xl">🔥</span>
-              <span className={`text-[10px] font-black uppercase tracking-widest
-                 ${theme === 'dark' ? 'text-gray-500' : 'text-wood-light'}
-              `}>3 Day Streak</span>
-            </div>
-            <div className={`space-y-4 pt-6 border-t-2
-                 ${theme === 'dark' ? 'border-gray-700' : 'border-wood/20'}
-            `}>
-              {[
-                { label: 'Flags Captured', val: completedRooms.length },
-                { label: 'Accuracy', val: '94%' },
-                { label: 'Status', val: 'SECURE' }
-              ].map((item, i) => (
-                <div key={i} className={`flex justify-between items-center text-[10px] font-black uppercase tracking-widest
-                     ${theme === 'dark' ? 'text-gray-500' : 'text-wood-light'}
-                `}>
-                  <span>{item.label}</span>
-                  <span className={`font-pixel font-bold
-                     ${theme === 'dark' ? 'text-indigo-400' : 'text-coffee'}
-                  `}>{item.val}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
-
-      <style>{`
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-3px); }
-        }
-        .animate-bounce-slow {
-          animation: bounce-slow 2s infinite ease-in-out;
-        }
-        @keyframes dash {
-          to {
-            stroke-dashoffset: -24;
-          }
-        }
-        .animate-path-dash {
-          animation: dash 3s linear infinite;
-        }
-      `}</style>
     </div>
   );
 };
