@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
+import { auth } from '../firebase';
 import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
@@ -14,8 +15,14 @@ const Home: React.FC = () => {
         <div className={`min-h-screen flex flex-col items-center p-6 relative font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'}`}>
 
             {/* Theme Toggle - Top Right */}
-            <div className="absolute top-6 right-6 z-20">
+            <div className="absolute top-6 right-6 z-20 flex gap-4">
                 <ThemeToggle />
+                <button
+                    onClick={() => auth.signOut()}
+                    className="bg-red-500 hover:bg-red-600 text-white font-pixel text-xs px-4 py-2 rounded shadow-pixel border-2 border-red-700"
+                >
+                    LOGOUT
+                </button>
             </div>
 
             {/* Background Image */}

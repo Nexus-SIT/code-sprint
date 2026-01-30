@@ -162,6 +162,7 @@ export interface Task {
   description: string;
   type: TaskType;
   challengeText: string;
+  options?: string[];
   correctAnswer?: string;
   correctRegion?: { startIdx: number; endIdx: number; };
 }

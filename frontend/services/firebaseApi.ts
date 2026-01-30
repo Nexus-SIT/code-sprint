@@ -150,6 +150,8 @@ export const subscribeToLeaderboard = (
         });
 
         callback(entries);
+    }, (error) => {
+        console.error("Leaderboard subscription error:", error);
     });
 };
 
