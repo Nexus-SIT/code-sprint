@@ -43,6 +43,11 @@ const TopicExplanationPage: React.FC = () => {
     }, [isComplete, currentLineIndex, lines.length]);
 
     const handleContinue = () => {
+        // Special redirect for implicit challenge room
+        if (moduleId === 'module-1' && roomId === 'room-1-1') {
+            navigate('/room-1-1');
+            return;
+        }
         // Navigate to the actual classroom/quiz flow
         navigate(`/learn/${moduleId}/${roomId}`);
     };
