@@ -1,3 +1,4 @@
+
 export type Theme = 'light' | 'dark';
 
 export interface Candle {
@@ -82,69 +83,12 @@ export interface GameState {
   syncFromFirebase: (data: { balance: number; xp: number; rank?: number }) => void;
 }
 
-// --- New Types for Learning System ---
-
-// export type MascotState = 'happy' | 'neutral' | 'dizzy' | 'thinking' | 'surprised';
-
-// export interface OHLCData {
-//   time: number;
-//   open: number;
-//   high: number;
-//   low: number;
-//   close: number;
-//   volume: number;
-// }
-
-
-
-// export type TaskType = 'INFO' | 'QUIZ' | 'CHART_SELECT' | 'DRAW_LINE' | 'ACTION' | 'WAIT';
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string;
-  type: TaskType;
-  challengeText: string;
-  correctAnswer?: string;
-  correctRegion?: { startIdx: number; endIdx: number; };
-}
-
-export interface Room {
-  id: string;
-  title: string;
-  description?: string;
-  tasks: Task[];
-  iconType: 'terminal' | 'shield' | 'chart' | 'target' | 'sword' | 'lock' | 'skull' | 'heart' | 'cat'; // For the RoadmapView icons
-}
-
-export interface Module {
-  id: string;
-  title: string;
-  description?: string; // RoadmapView uses this
-  goal: string;
-  rooms: Room[];
-}
-
-export interface Path {
-  id: string;
-  title: string;
-  description: string;
-  modules: Module[];
-}
-
-export interface UserStats {
-  totalModules: number;
-  completedModules: number;
-  averageScore: number;
-  updateBalance: (amount: number) => void;
-}
-
-// --- New Types for Learning System ---
+// --- Learning System Types ---
 
 export type MascotState = 'happy' | 'neutral' | 'dizzy' | 'thinking' | 'surprised';
 
 export interface OHLCData {
-  time: number;
+  time: number | string;
   open: number;
   high: number;
   low: number;
@@ -152,19 +96,36 @@ export interface OHLCData {
   volume: number;
 }
 
-
-
-export type TaskType = 'INFO' | 'QUIZ' | 'CHART_SELECT' | 'DRAW_LINE' | 'ACTION' | 'WAIT';
+export enum TaskType {
+  INFO = 'INFO',
+  MULTIPLE_CHOICE = 'QUIZ',
+  CLICK_CANDLE = 'CHART_SELECT',
+  DRAW_LINE = 'DRAW_LINE',
+  ACTION = 'ACTION',
+  WAIT_TASK = 'WAIT'
+}
 
 export interface Task {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   type: TaskType;
-  challengeText: string;
+  challengeText?: string;
+
+  // Content fields
+  theory?: string[];
+  question?: string;
+
+  // Quiz/Interaction fields
   options?: string[];
+  correctIndex?: number;
   correctAnswer?: string;
   correctRegion?: { startIdx: number; endIdx: number; };
+
+  // Game mechanics
+  hint?: string;
+  reward?: number;
+  penalty?: number;
 }
 
 export interface Room {
@@ -172,14 +133,18 @@ export interface Room {
   title: string;
   description?: string;
   tasks: Task[];
-  iconType: 'terminal' | 'shield' | 'chart' | 'target' | 'sword' | 'lock' | 'skull' | 'heart' | 'cat'; // For the RoadmapView icons
+  iconType: 'terminal' | 'shield' | 'chart' | 'target' | 'sword' | 'lock' | 'skull' | 'heart' | 'cat';
+
+  // Added fields to match mockData
+  chartData?: OHLCData[];
+  thumbnail?: string;
 }
 
 export interface Module {
   id: string;
   title: string;
-  description?: string; // RoadmapView uses this
-  goal: string;
+  description?: string;
+  goal?: string;
   rooms: Room[];
 }
 
@@ -194,4 +159,5 @@ export interface UserStats {
   totalModules: number;
   completedModules: number;
   averageScore: number;
+  updateBalance?: (amount: number) => void;
 }

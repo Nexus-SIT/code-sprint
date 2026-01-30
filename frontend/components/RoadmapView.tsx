@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Path, Module, Room } from '../types';
+import Mascot from './Mascot';
 
 interface RoadmapViewProps {
   path: Path;
@@ -85,7 +86,10 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
               <p className="text-sm text-slate-300 mb-8 max-w-md leading-relaxed">
                 Take on interactive trading scenarios. Master price action through direct application and capture flags to level up.
               </p>
-
+              <button className="bg-lime-500 hover:bg-lime-400 text-slate-900 font-black px-8 py-3 rounded-xl flex items-center gap-3 transition-all shadow-xl shadow-lime-500/20 active:scale-95">
+                <span className="text-lg">▶</span>
+                <span>Play now</span>
+              </button>
             </div>
             <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 0)', backgroundSize: '20px 20px' }} />
           </div>
@@ -93,7 +97,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
           {/* User Section */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-5">
-              <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center text-4xl shadow-xl border border-slate-700">🐱</div>
+              <Mascot state="happy" message="Ready for your next mission, operator?" />
               <div>
                 <h3 className="text-2xl font-black dark:text-white">Hey Anush!</h3>
                 <p className="text-xs text-slate-500 font-medium">Ready for your next mission, operator?</p>
@@ -186,7 +190,17 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
 
         {/* Right Column: Widgets */}
         <div className="w-full lg:w-[360px] space-y-8">
-
+          <div className="bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
+            <div className="flex justify-between items-center mb-6">
+              <h4 className="font-black dark:text-white text-sm">Teams & Workspaces</h4>
+            </div>
+            <p className="text-xs text-slate-500 leading-relaxed mb-8">
+              Collaborate with other traders and compete in group leaderboards.
+            </p>
+            <button className="w-full bg-[#1e293b] hover:bg-slate-700 text-white font-black py-4 rounded-2xl text-[11px] uppercase tracking-widest transition-all">
+              Browse Workspaces
+            </button>
+          </div>
 
           <div className="bg-white dark:bg-[#161b22] border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-sm">
             <div className="flex items-center gap-3 mb-8">

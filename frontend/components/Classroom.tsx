@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CURRICULUM, Module, Room, Task } from '../data/curriculum';
+import { TRADER_PATH } from '../data/mockData';
+import { Module, Room, Task, TaskType } from '../types';
 import { ArrowLeft, HelpCircle, ChevronRight } from 'lucide-react';
 import { QuizComponent, ChartSelectComponent } from './TaskComponents';
 
@@ -14,7 +15,7 @@ const Classroom: React.FC = () => {
 
     useEffect(() => {
         if (moduleId && roomId) {
-            const moduleFound = CURRICULUM.find(m => m.id === moduleId);
+            const moduleFound = TRADER_PATH.modules.find(m => m.id === moduleId);
             const roomFound = moduleFound?.rooms.find(r => r.id === roomId);
 
             if (moduleFound && roomFound) {
@@ -120,17 +121,17 @@ const Classroom: React.FC = () => {
 
                     {/* Conditional Rendering of Interaction Components */}
                     <div className="w-full h-full flex items-center justify-center p-8">
-                        {activeTask.type === 'QUIZ' && (
+                        {activeTask.type === TaskType.MULTIPLE_CHOICE && (
                             <QuizComponent task={activeTask} onComplete={handleNextTask} />
                         )}
 
-                        {(activeTask.type === 'CHART_SELECT' || activeTask.type === 'WAIT' || activeTask.type === 'ACTION' || activeTask.type === 'DRAW_LINE') && (
+                        {(activeTask.type === TaskType.CLICK_CANDLE || activeTask.type === TaskType.WAIT_TASK || activeTask.type === TaskType.ACTION || activeTask.type === TaskType.DRAW_LINE) && (
                             // Mapping various types to ChartSelect for prototype, or specialized mocks if preferred
                             // For now, ChartSelect handles standard chart interactions
                             <ChartSelectComponent task={activeTask} onComplete={handleNextTask} />
                         )}
 
-                        {activeTask.type === 'INFO' && (
+                        {activeTask.type === TaskType.INFO && (
                             <div className="bg-gray-800 p-8 rounded-xl max-w-sm text-center">
                                 <h3 className="text-xl font-bold mb-4">Information Only</h3>
                                 <p className="text-gray-400 mb-6">Read the theory and proceed.</p>
