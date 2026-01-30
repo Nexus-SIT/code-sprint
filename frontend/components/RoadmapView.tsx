@@ -1,94 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Path, Room } from '../types';
-import Mascot from './Mascot';
 import { useStore } from '../store';
-
-const RoomNode: React.FC<{
-  room: Room;
-  completed: boolean;
-  onClick: () => void;
-  isRight: boolean;
-  index: number;
-  theme: 'light' | 'dark';
-}> = ({ room, completed, onClick, isRight, index, theme }) => {
-  const icons: Record<string, string> = {
-    terminal: '💻',
-    shield: '🛡️',
-    chart: '📊',
-    target: '🎯',
-    sword: '⚔️',
-    lock: '🔒',
-    skull: '💀',
-    heart: '❤️',
-    cat: '🐱'
-  };
-
-  return (
-    <div
-      id={`room-node-${index}`}
-      className={`relative flex items-center w-full min-h-[160px] ${isRight ? 'justify-end' : 'justify-start'
-        }`}
-    >
-      <div
-        onClick={onClick}
-        className={`relative z-20 flex items-center gap-6 cursor-pointer group transition-transform hover:scale-105 ${isRight ? 'flex-row' : 'flex-row-reverse'
-          }`}
-      >
-        {/* Label */}
-        <div className={`flex flex-col ${isRight ? 'text-left' : 'text-right'}`}>
-          <h4
-            className={`text-sm font-bold font-pixel transition-colors ${theme === 'dark'
-              ? 'text-slate-200 group-hover:text-amber-400'
-              : 'text-coffee group-hover:text-amber-600'
-              }`}
-          >
-            {room.title}
-          </h4>
-
-          <span
-            className={`text-[10px] font-bold uppercase tracking-widest ${theme === 'dark' ? 'text-slate-500' : 'text-wood-light'
-              }`}
-          >
-            Click to Start
-          </span>
-
-          {completed && (
-            <span className="text-[10px] font-black text-green-500 mt-1">
-              ✓ COMPLETED
-            </span>
-          )}
-        </div>
-
-        {/* Isometric Platform */}
-        <div className="relative w-32 h-24 flex items-center justify-center">
-          {/* Shadow */}
-          <div className="absolute bottom-2 w-24 h-12 bg-black/20 rounded-[100%] blur-md" />
-
-          {/* Platform */}
-          <div className="relative w-24 h-14">
-            <div
-              className={`absolute top-0 w-full h-full rounded-xl transition-all duration-300
-                ${completed
-                  ? 'bg-lime-500'
-                  : 'bg-[#2d4a3e] group-hover:bg-[#3d5a4e]'
-                }
-                border-b-8 border-black/20 shadow-lg`}
-              style={{ transform: 'rotateX(45deg) rotateZ(-10deg)' }}
-            >
-              <div className="absolute inset-1 border border-white/10 rounded-lg" />
-            </div>
-
-            {/* Floating Icon */}
-            <div className="absolute inset-0 flex items-center justify-center text-3xl -mt-6 drop-shadow-xl animate-bounce-slow">
-              {icons[room.iconType] || '📍'}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { Play, CheckCircle } from 'lucide-react';
 
 interface RoadmapViewProps {
   path: Path;
@@ -100,75 +13,98 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
   const { theme } = useStore();
 
   return (
-    <div className={`flex-1 overflow-y-auto overflow-x-hidden p-4 lg:p-10
-        ${theme === 'dark' ? 'bg-transparent' : 'bg-transparent'}
+    <div className={`flex-1 overflow-y-auto p-6 md:p-12
+      ${theme === 'dark' ? 'bg-transparent text-gray-100' : 'bg-transparent text-coffee'}
     `}>
-      <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-10">
-
-        {/* Left Column: Learning Path */}
-        <div className="flex-1 space-y-16">
-
-          {/* Hero Banner (Quest Board Style) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            whileHover={{ scale: 1.02 }}
-            className={`relative rounded-xl p-8 overflow-hidden shadow-pixel border-4
-             ${theme === 'dark'
-                ? 'bg-gray-800 border-gray-700 text-gray-100'
-                : 'bg-parchment border-wood text-coffee'
-              }
+      <div className="max-w-4xl mx-auto space-y-12">
+        <header className="space-y-4">
+          <h1 className={`text-3xl md:text-4xl font-bold font-pixel
+            ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'}
           `}>
-            <div className="relative z-10">
-              <motion.h2
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className={`text-2xl md:text-3xl font-bold font-pixel mb-4 tracking-tight
-                ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'}
-              `}>Quest Board: Trading Mastery</motion.h2>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className={`text-sm mb-6 max-w-md leading-relaxed font-medium
-                ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/80'}
-              `}>
-                Take on interactive trading scenarios. Master price action through direct application and capture flags to level up.
-              </motion.p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className={`font-bold px-6 py-3 rounded-lg flex items-center gap-3 transition-all shadow-pixel active:scale-95 border-b-4 active:border-b-0 active:translate-y-1
-                 ${theme === 'dark' ? 'bg-indigo-600 border-indigo-800 hover:bg-indigo-500 text-white' : 'bg-success text-white border-green-800 hover:bg-green-600'}
-              `}>
-                <span className="text-lg">▶</span>
-                <span className="font-pixel text-xs">PLAY NOW</span>
-              </motion.button>
-            </div>
-            {/* Decorative pattern */}
-            {theme !== 'dark' && <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#8b4513 1px, transparent 0)', backgroundSize: '20px 20px' }} />}
-          </motion.div>
+            Trading Valley Path
+          </h1>
+          <p className={`max-w-2xl font-medium opacity-80
+            ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/80'}
+          `}>
+            Embark on a journey to master the financial markets. Follow the sections below to unlock new levels of knowledge and test your skills.
+          </p>
+        </header>
 
-          {/* Snake Path Layout */}
-          <div className="relative flex flex-col gap-4">
-            {module.rooms.map((room, rIdx) => (
-              <RoomNode
-                key={room.id}
-                room={room}
-                completed={completedRooms.includes(room.id)}
-                onClick={() => onSelectRoom(mIdx, rIdx)}
-                isRight={rIdx % 2 !== 0}
-                index={rIdx}
-                theme={theme}
-              />
-            ))}
-          </div>
+        <div className="space-y-10">
+          {path.modules.map((module, modIdx) => (
+            <div key={module.id} className={`rounded-2xl border-4 overflow-hidden shadow-pixel
+              ${theme === 'dark'
+                ? 'bg-gray-800 border-gray-700'
+                : 'bg-parchment border-wood'
+              }
+            `}>
+              {/* Module Header */}
+              <div className={`p-6 border-b-4
+                ${theme === 'dark'
+                  ? 'bg-gray-900/50 border-gray-700'
+                  : 'bg-wood-light/20 border-wood-light/50 text-wood-dark'}
+              `}>
+                <div className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-60">
+                  Module {modIdx + 1}
+                </div>
+                <h2 className="text-xl font-bold font-pixel">{module.title}</h2>
+                <p className="text-sm mt-2 opacity-80">{module.description}</p>
+              </div>
+
+              {/* Rooms List */}
+              <div className="divide-y-2 divide-black/5 dark:divide-white/5">
+                {module.rooms.map((room, roomIdx) => {
+                  const isCompleted = completedRooms.includes(room.id);
+                  return (
+                    <button
+                      key={room.id}
+                      onClick={() => onSelectRoom(modIdx, roomIdx)}
+                      className={`w-full flex items-center justify-between p-5 transition-all hover:bg-black/5 dark:hover:bg-white/5 active:scale-[0.99] group text-left`}
+                    >
+                      <div className="flex items-center gap-5">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 shrink-0 transition-transform group-hover:scale-110
+                          ${isCompleted
+                            ? 'bg-green-500 border-green-600 text-white'
+                            : (theme === 'dark'
+                              ? 'bg-gray-700 border-gray-600 text-gray-400'
+                              : 'bg-wood-light border-wood text-wood-dark')
+                          }
+                        `}>
+                          {isCompleted ? <CheckCircle size={24} /> : <Play size={22} fill="currentColor" />}
+                        </div>
+                        <div>
+                          <h3 className={`font-bold font-pixel text-lg
+                            ${theme === 'dark' ? 'text-gray-200' : 'text-coffee'}
+                          `}>
+                            {room.title}
+                          </h3>
+                          <p className="text-sm opacity-60 line-clamp-1">{room.description || 'Master this topic'}</p>
+                        </div>
+                      </div>
+
+                      <div className="hidden sm:block">
+                        {isCompleted ? (
+                          <span className="text-[10px] font-black text-green-500 px-3 py-1.5 bg-green-500/10 rounded-full uppercase tracking-tighter">
+                            Completed
+                          </span>
+                        ) : (
+                          <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-tighter
+                            ${theme === 'dark' ? 'bg-indigo-500/10 text-indigo-400' : 'bg-wood/10 text-wood-dark'}
+                          `}>
+                            Start Quest
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
       </div>
-      );
+    </div>
+  );
 };
 
-      export default RoadmapView;
+export default RoadmapView;
