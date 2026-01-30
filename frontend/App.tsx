@@ -17,11 +17,12 @@ import Auth from './components/Auth'; // Import Auth
 import Footer from './components/Footer';
 import ContestLobby from './components/ContestLobby';
 import ContestGame from './components/ContestGame';
+import About from './components/About';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
 import { UserProfile } from './types';
-import { getRankName } from './utils/rankIcons';
+import { getRankName, getRankTier } from './utils/rankIcons';
 
 // Global error tracker for debugging
 let globalError = "";
@@ -35,6 +36,7 @@ const logError = (msg: string) => {
 // ...
 
 const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
+  const rankTier = getRankTier(doc.totalProfit);
   return {
     userId,
     username: doc.name,
@@ -42,8 +44,8 @@ const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
     totalProfit: doc.totalProfit,
     xp: doc.xp,
     level: 1, // Default
-    rank: doc.rankScore,
-    rankName: getRankName(doc.rankScore),
+    rank: rankTier,
+    rankName: getRankName(rankTier),
     totalTrades: 0,
     winningTrades: 0,
     losingTrades: 0,
@@ -113,7 +115,7 @@ const AppContent: React.FC = () => {
         balance: data.balance,
         xp: data.xp,
         totalProfit: data.totalProfit || 0,
-        rank: data.rankScore, // Corrected from data.rank
+        rank: getRankTier(data.totalProfit || 0), // Use Tier based on Profit
         completedRooms: data.completedRooms,
       });
     });
@@ -151,6 +153,7 @@ const AppContent: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/roadmap" element={<RoadmapPage />} />
         <Route path="/module/:moduleId" element={<LearningMode />} />
         <Route path="/learn/:moduleId/:roomId" element={<TopicExplanationPage />} />

@@ -220,7 +220,7 @@ const Classroom: React.FC = () => {
                 {/* Right: Interactive Area (Chart/Quiz - Terminal Style) */}
                 <div className={`flex-1 relative flex items-center justify-center overflow-hidden
                     ${isDark ? 'bg-black/50' : 'bg-[#2a2a2a]'}
-                `}>
+                 `}>
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
 
                     {/* CRT Scanline effect */}
