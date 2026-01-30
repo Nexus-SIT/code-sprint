@@ -58,62 +58,55 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10 }) => {
             <div className="bg-parchment/10 p-4 pt-8 rounded-lg space-y-3 h-full overflow-y-auto custom-scrollbar">
                 <AnimatePresence>
                     {leaderboard.length === 0 ? (
-                        <div className="text-center text-wood-light font-pixel py-8 opacity-70">
-                            NO TRADERS FOUND
+                        <div className="text-center py-8">
+                            <div className="text-wood-light font-pixel text-lg opacity-70 mb-2">NO TRADERS FOUND</div>
+                            <div className="text-xs text-wood-light/50 font-pixel">Be the first to trade!</div>
                         </div>
                     ) : (
-                        leaderboard.map((entry, index) => {
-                            const isCurrentUser = userId && entry.userId === userId;
-
-                            return (
-                                <motion.div
-                                    key={entry.userId}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 20 }}
-                                    transition={{ delay: index * 0.05 }}
-                                    className={`relative group ${isCurrentUser ? 'z-10 scale-[1.02]' : ''}`}
-                                >
-                                    {/* Wooden Slat Background */}
-                                    <div className={`absolute inset-0 rounded border-b-4 shadow-md transition-colors ${isCurrentUser
-                                        ? 'bg-amber-700 border-amber-900'
-                                        : 'bg-parchment border-[#cbbfa6]'
-                                        }`}></div>
-
-                                    {/* Content */}
-                                    <div className="relative p-2 flex items-center gap-3">
-                                        {/* Rank Icon Container */}
-                                        <div className="flex-shrink-0 relative">
-                                            <RankIcon tier={entry.rank} size={36} />
-                                            {/* Position Badge */}
-                                            <div className={`absolute -top-2 -left-2 w-6 h-6 rounded-full flex items-center justify-center font-pixel text-[10px] border-2 shadow-sm ${entry.position <= 3 ? 'bg-yellow-400 border-yellow-600 text-yellow-900' : 'bg-wood-dark border-wood text-parchment'
-                                                }`}>
-                                                {entry.position}
+                        <div className="space-y-2">
+                            {leaderboard.map((entry, index) => {
+                                const isCurrentUser = userId === entry.userId;
+                                return (
+                                    <motion.div
+                                        key={entry.userId}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className={`relative group rounded-lg overflow-hidden border-b-4 transition-transform hover:scale-[1.02] ${isCurrentUser
+                                            ? 'bg-amber-700 border-amber-900 z-10 ring-2 ring-yellow-400'
+                                            : 'bg-parchment border-[#cbbfa6]'}`}
+                                    >
+                                        <div className="relative p-3 flex items-center gap-3">
+                                            {/* Rank & Position */}
+                                            <div className="flex-shrink-0 relative">
+                                                <RankIcon tier={entry.rank} size={40} />
+                                                <div className={`absolute -top-1 -left-1 w-6 h-6 rounded-full flex items-center justify-center font-pixel text-[10px] border-2 shadow-sm ${entry.position <= 3
+                                                        ? 'bg-yellow-400 border-yellow-600 text-yellow-900'
+                                                        : 'bg-wood-dark border-wood text-parchment'
+                                                    }`}>
+                                                    {entry.position}
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        {/* User Info */}
-                                        <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                            <div className={`font-pixel text-sm truncate leading-tight ${isCurrentUser ? 'text-parchment' : 'text-coffee'
-                                                }`}>
-                                                {entry.username}
+                                            {/* User Details */}
+                                            <div className="flex-1 min-w-0">
+                                                <div className={`font-pixel text-sm truncate ${isCurrentUser ? 'text-parchment' : 'text-coffee'}`}>
+                                                    {entry.username || 'Anonymous Trader'}
+                                                </div>
+                                                <div className={`text-[10px] font-pixel uppercase ${isCurrentUser ? 'text-parchment/70' : 'text-wood-light'}`}>
+                                                    {entry.rankName}
+                                                </div>
                                             </div>
-                                            <div className={`text-[10px] font-pixel uppercase opacity-70 ${isCurrentUser ? 'text-parchment' : 'text-wood-light'
-                                                }`}>
-                                                {entry.rankName}
-                                            </div>
-                                        </div>
 
-                                        {/* Stats (Right Side) */}
-                                        <div className={`text-right ${isCurrentUser ? 'text-parchment' : 'text-coffee'}`}>
-                                            <div className="font-pixel text-xs">
+                                            {/* Profit */}
+                                            <div className={`text-right font-pixel text-sm ${isCurrentUser ? 'text-parchment' : 'text-coffee'}`}>
                                                 ₹{entry.totalProfit.toLocaleString()}
                                             </div>
                                         </div>
-                                    </div>
-                                </motion.div>
-                            );
-                        })
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
                     )}
                 </AnimatePresence>
             </div>

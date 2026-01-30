@@ -22,6 +22,13 @@ const generateUserId = () => {
   return 'user_' + Math.random().toString(36).slice(2, 11);
 };
 
+// Global error tracker for debugging
+let globalError = "";
+const logError = (msg: string) => {
+  console.error(msg);
+  globalError = msg;
+};
+
 const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
   return {
     userId,
@@ -65,10 +72,11 @@ const App: React.FC = () => {
         try {
           const doc = await createUserIfNotExists(user.uid, user.displayName || 'Trader');
           const userProfile = mapUserDocToProfile(doc, user.uid);
+          console.log("Loaded Profile from Firestore:", userProfile);
           setUserProfile(userProfile);
           setShowAuth(false);
-        } catch (error) {
-          console.error('Error loading user profile:', error);
+        } catch (error: any) {
+          logError('Error loading user profile: ' + (error.message || error));
         }
       } else {
         setUserId(''); // Clear user
@@ -119,6 +127,13 @@ const App: React.FC = () => {
       >
         {showAuth && (
           <Auth onLoginSuccess={() => setShowAuth(false)} />
+        )}
+
+        {/* DEBUG ERROR BANNER */}
+        {globalError && (
+          <div className="fixed top-0 left-0 right-0 bg-red-600 text-white p-2 z-50 text-center font-bold">
+            DEBUG ERROR: {globalError}
+          </div>
         )}
 
         <Routes>

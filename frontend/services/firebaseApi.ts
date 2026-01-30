@@ -50,7 +50,7 @@ export const createUserIfNotExists = async (
     if (!snap.exists()) {
         const newUser: UserDoc = {
             name: userName,
-            balance: 100000,
+            balance: 1000,
             totalProfit: 0,
             xp: 0,
             rankScore: 0,
