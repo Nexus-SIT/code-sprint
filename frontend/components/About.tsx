@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Mail } from 'lucide-react';
+import { Users, Mail, Github, Globe } from 'lucide-react';
 import { useStore } from '../store';
 
 const About: React.FC = () => {
@@ -9,7 +9,7 @@ const About: React.FC = () => {
     // Theme-based styles
     const bgColor = theme === 'dark' ? 'bg-gray-900' : 'bg-parchment';
     const textColor = theme === 'dark' ? 'text-gray-100' : 'text-coffee';
-    const cardBg = theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-vintage-gold';
+    const cardBg = theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-[#7C492E] border-vintage-gold text-white';
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -49,11 +49,11 @@ const About: React.FC = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full px-2">
                             {[
-                                { name: "Your Name", role: "Founder & Lead", email: "your.email@example.com", image: "" },
-                                { name: "Team Member 1", role: "Developer", email: "member1@example.com", image: "/team/member2.jpg" },
-                                { name: "Team Member 2", role: "Designer", email: "member2@example.com", image: "" },
-                                { name: "Team Member 3", role: "Analyst", email: "member3@example.com", image: "" }
-                            ].map((member, idx) => (
+                                { name: "Manish R Shetty", role: "Founder & Lead", email: "mmanishrshetty@gmail.com", image: "/team/manish.webp", github: "https://github.com/ManishRShetty", portfolio: "https://yourportfolio.com" },
+                                { name: "Anush", role: "Developer", email: "kulalanush18@gmail.com", image: "/team/member2.jpg", github: "https://github.com/Anush-kulal" },
+                                { name: "Karthik", role: "Designer", email: "karthikashetty@gmail.com", image: "/team/karthik.jpg", github: "https://github.com/Karthikshettyhub" },
+                                { name: "Chirag kulal", role: "Developer", email: "chiragkulal877@gmail.com", image: "/team/chiku.webp", github: "https://github.com/Chiragkulal07" }
+                            ].map((member: any, idx) => (
                                 <motion.div
                                     key={idx}
                                     variants={itemVariants}
@@ -67,9 +67,36 @@ const About: React.FC = () => {
                                         )}
                                     </div>
                                     <h3 className="font-black text-4xl mb-2">{member.name}</h3>
-                                    <div className="flex items-center justify-center gap-3 text-lg opacity-70 bg-black/5 dark:bg-white/5 py-2 px-4 rounded-lg">
-                                        <Mail className="w-5 h-5" />
-                                        <span className="text-sm md:text-base truncate max-w-[200px]">{member.email}</span>
+                                    <div className="flex flex-col gap-2 w-full max-w-[240px]">
+                                        <div className="flex items-center justify-center gap-3 text-lg opacity-90 bg-white/10 py-2 px-4 rounded-lg">
+                                            <Mail className="w-5 h-5" />
+                                            <span className="text-sm md:text-base truncate">{member.email}</span>
+                                        </div>
+
+                                        <div className="flex items-center justify-center gap-2">
+                                            {member.github && (
+                                                <a
+                                                    href={member.github}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="flex items-center gap-2 text-lg opacity-90 bg-white/10 py-2 px-4 rounded-lg hover:bg-white/20 transition-colors flex-1 justify-center"
+                                                >
+                                                    <Github className="w-5 h-5" />
+                                                    <span className="text-sm">GitHub</span>
+                                                </a>
+                                            )}
+                                            {member.portfolio && (
+                                                <a
+                                                    href={member.portfolio}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="flex items-center gap-2 text-lg opacity-90 bg-white/10 py-2 px-4 rounded-lg hover:bg-white/20 transition-colors flex-1 justify-center"
+                                                >
+                                                    <Globe className="w-5 h-5" />
+                                                    <span className="text-sm">Portfolio</span>
+                                                </a>
+                                            )}
+                                        </div>
                                     </div>
                                 </motion.div>
                             ))}
