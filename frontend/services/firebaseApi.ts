@@ -157,6 +157,115 @@ export const settleTrade = async (
     });
 };
 
+// --- Contests ---
+
+export interface ContestParticipant {
+    userId: string;
+    username: string;
+    profit: number;
+    roundsPlayed: number;
+    sellsUsed: number;
+    joinedAt: any;
+}
+
+export interface ContestDoc {
+    id: string;
+    title: string;
+    creatorId: string;
+    startingBalance: number;
+    maxRounds: number;
+    participants: Record<string, ContestParticipant>;
+    createdAt: any;
+    status: 'open' | 'active' | 'finished';
+}
+
+export const createContest = async (userId: string, username: string, title: string, startingBalance: number, maxRounds: number) => {
+    const contestId = Math.random().toString(36).substring(2, 8).toUpperCase();
+    const contestRef = doc(db, 'contests', contestId);
+
+    const newContest: ContestDoc = {
+        id: contestId,
+        title,
+        creatorId: userId,
+        startingBalance,
+        maxRounds,
+        participants: {
+            [userId]: {
+                userId,
+                username,
+                profit: 0,
+                roundsPlayed: 0,
+                sellsUsed: 0,
+                joinedAt: serverTimestamp(),
+            }
+        },
+        createdAt: serverTimestamp(),
+        status: 'open'
+    };
+
+    await setDoc(contestRef, newContest);
+    return contestId;
+};
+
+export const joinContest = async (userId: string, username: string, contestId: string) => {
+    const contestRef = doc(db, 'contests', contestId);
+
+    await runTransaction(db, async (tx) => {
+        const snap = await tx.get(contestRef);
+        if (!snap.exists()) throw new Error('Contest code invalid');
+
+        const contest = snap.data() as ContestDoc;
+        if (contest.status === 'finished') throw new Error('Contest already ended');
+
+        const participants = { ...contest.participants };
+        if (!participants[userId]) {
+            participants[userId] = {
+                userId,
+                username,
+                profit: 0,
+                roundsPlayed: 0,
+                sellsUsed: 0,
+                joinedAt: serverTimestamp(),
+            };
+            tx.update(contestRef, { participants });
+        }
+    });
+};
+
+export const updateContestProfit = async (contestId: string, userId: string, pnl: number, isSell: boolean) => {
+    const contestRef = doc(db, 'contests', contestId);
+
+    await runTransaction(db, async (tx) => {
+        const snap = await tx.get(contestRef);
+        if (!snap.exists()) return;
+
+        const contest = snap.data() as ContestDoc;
+        const participants = { ...contest.participants };
+
+        if (participants[userId]) {
+            participants[userId].profit += pnl;
+            participants[userId].roundsPlayed += 1;
+            if (isSell) {
+                participants[userId].sellsUsed += 1;
+            }
+
+            // Check if contest should be marked as finished globally (optional, but good for cleanup)
+            // For now, it stays active as long as participants are playing.
+
+            tx.update(contestRef, { participants });
+        }
+    });
+};
+
+export const subscribeToContest = (contestId: string, callback: (contest: ContestDoc) => void) => {
+    const contestRef = doc(db, 'contests', contestId);
+    return onSnapshot(contestRef, (snap) => {
+        if (snap.exists()) {
+            callback(snap.data() as ContestDoc);
+        }
+    });
+};
+
 // --- Leaderboard ---
 
 export const subscribeToLeaderboard = (
@@ -198,7 +307,7 @@ export const subscribeToLeaderboard = (
 // Helper
 const RANK_THRESHOLDS = [
     { tier: 0, name: 'Novice Trader', minProfit: -Infinity },
-    { tier: 1, name: 'Apprentice Trader', minProfit: 0 },
+    { tier: 1, name: 'Apprentice Trader', minProfit: 1000 },
     { tier: 2, name: 'Skilled Trader', minProfit: 50000 },
     { tier: 3, name: 'Expert Trader', minProfit: 150000 },
     { tier: 4, name: 'Master Trader', minProfit: 300000 },

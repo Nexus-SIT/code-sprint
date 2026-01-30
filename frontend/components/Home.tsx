@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import { auth } from '../firebase';
-import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap } from 'lucide-react';
+import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
             </div>
 
             {/* Game Mode Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-8 relative z-10">
                 {/* Tutorial Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
@@ -137,6 +137,35 @@ const Home: React.FC = () => {
                             className="w-full bg-purple-600 text-white border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-purple-500 transition-all shadow-lg"
                         >
                             VIEW RANKINGS
+                        </button>
+                    </div>
+                </motion.div>
+
+                {/* Contest Card - NEW */}
+                <motion.div
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all ${theme === 'dark'
+                        }`}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
+                >
+                    <div className="flex flex-col items-center text-center">
+                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-amber-900/30' : 'bg-amber-600/20'
+                            }`}>
+                            <Users size={40} className="text-amber-500" />
+                        </div>
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                            }`}>
+                            CONTEST
+                        </h3>
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                            }`}>
+                            Challenge friends.
+                        </p>
+                        <button
+                            onClick={() => navigate('/contest')}
+                            className="w-full bg-amber-600 text-white border-b-4 border-amber-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-amber-500 transition-all shadow-lg"
+                        >
+                            ENTER ARENA
                         </button>
                     </div>
                 </motion.div>

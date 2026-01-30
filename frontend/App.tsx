@@ -15,11 +15,14 @@ import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
 import Auth from './components/Auth'; // Import Auth
 import Footer from './components/Footer';
+import ContestLobby from './components/ContestLobby';
+import ContestGame from './components/ContestGame';
 import About from './components/About';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
 import { UserProfile } from './types';
+import { getRankName, getRankTier } from './utils/rankIcons';
 
 // Global error tracker for debugging
 let globalError = "";
@@ -28,7 +31,12 @@ const logError = (msg: string) => {
   globalError = msg;
 };
 
+
+
+// ...
+
 const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
+  const rankTier = getRankTier(doc.totalProfit);
   return {
     userId,
     username: doc.name,
@@ -36,8 +44,8 @@ const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
     totalProfit: doc.totalProfit,
     xp: doc.xp,
     level: 1, // Default
-    rank: doc.rankScore,
-    rankName: 'Novice', // Default
+    rank: rankTier,
+    rankName: getRankName(rankTier),
     totalTrades: 0,
     winningTrades: 0,
     losingTrades: 0,
@@ -108,7 +116,7 @@ const AppContent: React.FC = () => {
         balance: data.balance,
         xp: data.xp,
         totalProfit: data.totalProfit || 0,
-        rank: data.rankScore, // Corrected from data.rank
+        rank: getRankTier(data.totalProfit || 0), // Use Tier based on Profit
         completedRooms: data.completedRooms,
       });
     });
@@ -154,6 +162,8 @@ const AppContent: React.FC = () => {
         <Route path="/learn" element={<RoadmapPage />} />
         <Route path="/game" element={<GameMode />} />
         <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
+        <Route path="/contest" element={<ContestLobby />} />
+        <Route path="/contest/:contestId" element={<ContestGame />} />
       </Routes>
 
       {!hideFooter && <Footer />}
