@@ -1,88 +1,42 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../store';
-import { generateCandles } from '../utils/dataGenerator';
-import CandleChart from './CandleChart';
-import Mentor from './Mentor';
-import { Candle, MentorEmotion } from '../types';
-import { ArrowLeft, Play, Pause, RefreshCw } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { MentorEmotion } from '../types';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ModuleCard, modules } from './learning';
 
 const LearningMode: React.FC = () => {
-  const setMode = useStore((state) => state.setMode);
+  const { setMode, addXp } = useStore();
   
-  // Full dataset
-  const [fullData] = useState<Candle[]>(() => generateCandles(50, 150));
-  // Visible dataset
-  const [visibleData, setVisibleData] = useState<Candle[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  
-  // Mentor State
-  const [mentorState, setMentorState] = useState<{ emotion: MentorEmotion; text: string }>({
-    emotion: 'happy',
-    text: "Welcome to Trading 101! Let's watch the market move.",
-  });
+  const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
+  const [completedModules, setCompletedModules] = useState<string[]>([]);
+  const [totalPoints, setTotalPoints] = useState(0);
 
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const isComplete = currentModuleIndex >= modules.length;
 
-  useEffect(() => {
-    // Initial load
-    setVisibleData([fullData[0]]);
-    startSimulation();
-    
-    return () => stopSimulation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const handleModuleComplete = (isCorrect: boolean, points: number) => {
+    if (isCorrect) {
+      const currentModule = modules[currentModuleIndex];
+      const newCompleted = [...completedModules, currentModule.id];
+      setCompletedModules(newCompleted);
+      setTotalPoints(prev => prev + points);
+      addXp(points);
 
-  const stopSimulation = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-  };
-
-  const startSimulation = () => {
-    stopSimulation();
-    setIsPaused(false);
-    timerRef.current = setInterval(() => {
-      setCurrentIndex((prev) => prev + 1);
-    }, 2000);
-  };
-
-  useEffect(() => {
-    if (currentIndex >= fullData.length) {
-      stopSimulation();
-      setMentorState({ emotion: 'happy', text: "Lesson complete! Great job watching the trends." });
-      return;
+      // Move to next module
+      if (currentModuleIndex + 1 < modules.length) {
+        setTimeout(() => {
+          setCurrentModuleIndex(prev => prev + 1);
+        }, 2500);
+      }
     }
-
-    // Update Visible Data
-    setVisibleData(fullData.slice(0, currentIndex + 1));
-
-    // Pause Logic & Mentor Updates
-    if (currentIndex === 15) {
-      pauseAndMentor('alert', "Hold up! See that long wick on top? That means sellers are pushing back!");
-    } else if (currentIndex === 30) {
-      pauseAndMentor('thinking', "The price is consolidating here. It's moving sideways. Calm before the storm?");
-    } else if (currentIndex === 40) {
-      pauseAndMentor('happy', "Chart Pattern detected! 70% chance of upside movement here.");
-    } else if (currentIndex > 0 && currentIndex < 15) {
-        setMentorState({ emotion: 'neutral', text: "Watching price action..." });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex]);
-
-  const pauseAndMentor = (emotion: MentorEmotion, text: string) => {
-    stopSimulation();
-    setIsPaused(true);
-    setMentorState({ emotion, text });
   };
 
-  const handleContinue = () => {
-    startSimulation();
-    setMentorState({ emotion: 'neutral', text: "Resuming analysis..." });
+  const isModuleLocked = (index: number) => {
+    return index > completedModules.length;
   };
 
   return (
-    <div className="flex flex-col h-full relative p-4 max-w-5xl mx-auto">
+    <div className="flex flex-col h-full relative p-4 max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <button 
@@ -91,44 +45,141 @@ const LearningMode: React.FC = () => {
         >
           <ArrowLeft className="mr-2" size={20} /> Exit
         </button>
-        <h1 className="text-2xl font-bold text-green-400">Learning Mode</h1>
-        <div className="w-20" /> {/* Spacer */}
+        <h1 className="text-3xl font-bold text-indigo-400">📚 Stock Market Academy</h1>
+        <div className="text-right">
+          <div className="text-sm text-gray-400">Progress</div>
+          <div className="text-xl font-bold text-green-400">{completedModules.length}/{modules.length}</div>
+        </div>
       </div>
 
       {/* Main Content */}
-      <div className="relative flex-1 bg-gray-800 rounded-2xl p-6 border border-gray-700 shadow-2xl flex flex-col">
-        <Mentor emotion={mentorState.emotion} text={mentorState.text} />
-        
-        <div className="flex-1 min-h-[400px] relative">
-           <CandleChart data={visibleData} activeIndex={isPaused ? currentIndex : undefined} />
-           
-           {/* Overlays */}
-           {currentIndex === 40 && isPaused && (
-             <motion.div 
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500/20 border-2 border-green-500 text-green-400 px-6 py-3 rounded-full font-bold backdrop-blur-sm z-10"
-             >
-                🚀 70% Upside Chance
-             </motion.div>
-           )}
-        </div>
+      <div className="relative flex-1 bg-gray-800/30 rounded-2xl p-6 border border-gray-700 shadow-2xl flex flex-col overflow-auto">
+        {/* Progress Bar */}
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          className="mb-6 bg-gray-700/50 rounded-full h-3 overflow-hidden origin-left"
+        >
+          <motion.div
+            animate={{ width: `${(completedModules.length / modules.length) * 100}%` }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="h-full bg-gradient-to-r from-green-500 to-emerald-500"
+          />
+        </motion.div>
 
-        {/* Controls */}
-        <div className="mt-6 flex justify-center">
-            {isPaused ? (
-                <button 
-                  onClick={handleContinue}
-                  className="bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-8 rounded-full flex items-center shadow-lg hover:shadow-green-500/50 transition-all transform hover:scale-105"
+        {/* Modules Container */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
+          {!isComplete ? (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={modules[currentModuleIndex].id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+              >
+                <ModuleCard
+                  module={modules[currentModuleIndex]}
+                  onComplete={handleModuleComplete}
+                  isActive={true}
+                  isLocked={isModuleLocked(currentModuleIndex)}
+                />
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            // Completion Screen
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center justify-center py-12 text-center"
+            >
+              <motion.div
+                animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="text-8xl mb-6"
+              >
+                🏆
+              </motion.div>
+
+              <h2 className="text-4xl font-bold text-green-400 mb-4">Congratulations!</h2>
+              <p className="text-xl text-gray-300 mb-6">
+                You've completed all 8 modules and mastered Stock Market fundamentals!
+              </p>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-8 w-full">
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-indigo-900/40 border border-indigo-500/40 rounded-xl p-4"
                 >
-                  <Play className="mr-2" fill="currentColor" /> Continue Lesson
-                </button>
-            ) : (
-                <div className="text-gray-500 flex items-center gap-2">
-                    <div className="animate-pulse w-3 h-3 bg-green-500 rounded-full"></div>
-                    Live Simulation
+                  <div className="text-3xl font-bold text-indigo-300">{completedModules.length}</div>
+                  <div className="text-sm text-gray-400">Modules</div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="bg-green-900/40 border border-green-500/40 rounded-xl p-4"
+                >
+                  <div className="text-3xl font-bold text-green-300">+{totalPoints}</div>
+                  <div className="text-sm text-gray-400">XP Earned</div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="bg-yellow-900/40 border border-yellow-500/40 rounded-xl p-4"
+                >
+                  <div className="text-3xl font-bold text-yellow-300">100%</div>
+                  <div className="text-sm text-gray-400">Completion</div>
+                </motion.div>
+              </div>
+
+              {/* Modules Summary */}
+              <div className="w-full bg-gray-800/50 border border-gray-700/50 rounded-xl p-4 mb-8 text-left">
+                <h3 className="text-lg font-bold text-indigo-300 mb-3">📚 Modules Mastered</h3>
+                <div className="space-y-2 text-sm">
+                  {modules.map((mod, idx) => (
+                    <motion.div
+                      key={mod.id}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.8 + idx * 0.05 }}
+                      className="flex items-center gap-2 text-gray-300"
+                    >
+                      <CheckCircle2 size={16} className="text-green-400" />
+                      {mod.icon} {mod.title}
+                    </motion.div>
+                  ))}
                 </div>
-            )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 w-full">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setMode('GAME')}
+                  className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all"
+                >
+                  Start Trading Game 🎮
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setMode('HOME')}
+                  className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all"
+                >
+                  Back to Home 🏠
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

@@ -15,6 +15,7 @@ There is a need for a **safe, engaging, and practical learning platform** where 
 - Learn financial discipline
 - Compete and improve through gamification
 
+
 ---
 
 ## 💡 Solution Overview
