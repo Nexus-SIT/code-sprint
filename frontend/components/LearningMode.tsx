@@ -1,13 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
-import { MentorEmotion } from '../types';
+import { MentorEmotion, Candle } from '../types';
+import { generateCandles } from '../utils/dataGenerator';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ModuleCard, modules } from './learning';
 
 const LearningMode: React.FC = () => {
   const navigate = useNavigate();
+  const { addXp } = useStore();
+
+  const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
+  const [completedModules, setCompletedModules] = useState<number[]>([]);
+  const [totalPoints, setTotalPoints] = useState(0);
 
   // Full dataset
   const [fullData] = useState<Candle[]>(() => generateCandles(50, 150));
@@ -173,7 +179,7 @@ const LearningMode: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setMode('GAME')}
+                  onClick={() => navigate('/game')}
                   className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all"
                 >
                   Start Trading Game 🎮
@@ -182,7 +188,7 @@ const LearningMode: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setMode('HOME')}
+                  onClick={() => navigate('/')}
                   className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all"
                 >
                   Back to Home 🏠
