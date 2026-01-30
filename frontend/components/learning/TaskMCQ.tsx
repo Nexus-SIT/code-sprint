@@ -30,13 +30,13 @@ const TaskMCQ: React.FC<TaskMCQProps> = ({ question, options, onComplete }) => {
     setSubmitted(true);
   };
 
-  const handleFeedbackComplete = () => {
+  const handleFeedbackComplete = React.useCallback(() => {
     onComplete(isCorrect);
     if (!isCorrect) {
       setSubmitted(false);
       setSelected(null);
     }
-  };
+  }, [onComplete, isCorrect]);
 
   return (
     <>
@@ -70,8 +70,8 @@ const TaskMCQ: React.FC<TaskMCQProps> = ({ question, options, onComplete }) => {
               whileHover={!submitted ? { scale: 1.02, x: 8 } : {}}
               whileTap={!submitted ? { scale: 0.98 } : {}}
               className={`w-full p-4 rounded-xl border-2 text-left transition-all transform ${selected === option.id
-                  ? 'bg-indigo-600/40 border-indigo-400 shadow-lg shadow-indigo-500/30'
-                  : 'bg-gray-700/30 border-gray-600/40 hover:border-indigo-500/50'
+                ? 'bg-indigo-600/40 border-indigo-400 shadow-lg shadow-indigo-500/30'
+                : 'bg-gray-700/30 border-gray-600/40 hover:border-indigo-500/50'
                 } ${submitted ? 'cursor-not-allowed opacity-80' : 'cursor-pointer'}
               ${submitted && option.isCorrect
                   ? 'bg-green-600/40 border-green-400'
@@ -119,8 +119,8 @@ const TaskMCQ: React.FC<TaskMCQProps> = ({ question, options, onComplete }) => {
             whileHover={selected ? { scale: 1.05 } : {}}
             whileTap={selected ? { scale: 0.95 } : {}}
             className={`w-full py-3 rounded-xl font-bold text-lg transition-all ${selected
-                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-black hover:shadow-lg hover:shadow-green-500/50 cursor-pointer'
-                : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
+              ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-black hover:shadow-lg hover:shadow-green-500/50 cursor-pointer'
+              : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
               }`}
           >
             Submit Answer 🚀
@@ -134,8 +134,8 @@ const TaskMCQ: React.FC<TaskMCQProps> = ({ question, options, onComplete }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 }}
             className={`mt-4 p-4 rounded-xl text-center font-bold text-lg ${isCorrect
-                ? 'bg-green-600/30 text-green-300 border border-green-500'
-                : 'bg-red-600/30 text-red-300 border border-red-500'
+              ? 'bg-green-600/30 text-green-300 border border-green-500'
+              : 'bg-red-600/30 text-red-300 border border-red-500'
               }`}
           >
             {isCorrect ? '🎉 Awesome! You got it right!' : '💡 Oops! That\'s not quite right. Learn more and try again!'}

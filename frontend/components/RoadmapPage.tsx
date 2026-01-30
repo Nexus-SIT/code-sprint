@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Monitor, Layout, GitBranch, ArrowLeft } from 'lucide-react';
 import { modules } from './learning/modulesData';
 import RoadmapView from './RoadmapView';
-import DashboardView from './DashboardView';
+
 import { Path, Module, Room } from '../types';
 import { useStore } from '../store';
 
 const RoadmapPage: React.FC = () => {
     const navigate = useNavigate();
     const { theme, completedModules } = useStore();
-    const [viewMode, setViewMode] = useState<'dashboard' | 'path'>('path');
+
 
     // Helper to convert our flat modules to the Path structure
     const createPathFromModules = (): Path => {
@@ -80,57 +80,24 @@ const RoadmapPage: React.FC = () => {
                             <span className="hidden sm:inline">Trading Valley Path</span>
                         </h1>
                     </div>
-
-                    {/* View Toggle */}
-                    <div className={`flex p-1 rounded-lg border backdrop-blur-sm
-                        ${theme === 'dark' ? 'bg-gray-900/50 border-gray-700' : 'bg-wood-dark/50 border-wood-light'}
-                    `}>
-                        <button
-                            onClick={() => setViewMode('dashboard')}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-pixel transition-all
-                                ${viewMode === 'dashboard'
-                                    ? (theme === 'dark' ? 'bg-gray-700 text-white shadow-sm' : 'bg-parchment text-wood-dark shadow-sm')
-                                    : (theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-wood-light hover:text-parchment')
-                                }`}
-                        >
-                            <Layout size={14} /> DASHBOARD
-                        </button>
-                        <button
-                            onClick={() => setViewMode('path')}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-md text-xs font-pixel transition-all
-                                ${viewMode === 'path'
-                                    ? (theme === 'dark' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-parchment text-wood-dark shadow-sm')
-                                    : (theme === 'dark' ? 'text-gray-400 hover:text-gray-200' : 'text-wood-light hover:text-parchment')
-                                }`}
-                        >
-                            <GitBranch size={14} /> PATH
-                        </button>
-                    </div>
                 </div>
             </header>
 
             <main className="flex-1 flex flex-col relative z-10">
-                {viewMode === 'dashboard' ? (
-                    <DashboardView
-                        path={learningPath}
-                        stats={{ totalModules: modules.length, completedModules: completedModules.length, averageScore: 100 }}
-                        completedRooms={completedModules}
-                        onSelectRoom={handleEnterRoom}
-                    />
-                ) : (
-                    <RoadmapView
-                        path={learningPath}
-                        completedRooms={completedModules}
-                        onSelectRoom={handleEnterRoom}
-                    />
-                )}
+                <RoadmapView
+                    path={learningPath}
+                    completedRooms={completedModules}
+                    onSelectRoom={handleEnterRoom}
+                />
             </main>
 
             {/* Background Pattern for Light Mode */}
-            {theme !== 'dark' && (
-                <div className="absolute inset-0 pointer-events-none opacity-10 z-0" style={{ backgroundImage: "url('/tile.png')", backgroundSize: '128px' }}></div>
-            )}
-        </div>
+            {
+                theme !== 'dark' && (
+                    <div className="absolute inset-0 pointer-events-none opacity-10 z-0" style={{ backgroundImage: "url('/tile.png')", backgroundSize: '128px' }}></div>
+                )
+            }
+        </div >
     );
 };
 

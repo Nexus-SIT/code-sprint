@@ -19,6 +19,7 @@ const LearningMode: React.FC = () => {
   const initialIndex = modules.findIndex(m => m.id === moduleId);
   const [currentModuleIndex, setCurrentModuleIndex] = useState(initialIndex >= 0 ? initialIndex : 0);
   const currentModule = modules[currentModuleIndex] || modules[0];
+  const isLastModule = currentModuleIndex === modules.length - 1;
 
   // Sync index if URL changes
   useEffect(() => {
@@ -78,11 +79,11 @@ const LearningMode: React.FC = () => {
       setMentorEmotion('happy');
       setStage('result');
 
-      // Trigger completion logic after short delay
-      setTimeout(() => {
-        markModuleComplete(currentModule.id);
-        addXp(currentModule.points);
-      }, 1000);
+      setStage('result');
+
+      // Mark complete immediately when showing result
+      markModuleComplete(currentModule.id);
+      addXp(currentModule.points);
 
     } else {
       setDisplayedText(currentModule.taskIncorrectMessage);
@@ -133,6 +134,19 @@ const LearningMode: React.FC = () => {
         </div>
 
         <div className="max-w-3xl mx-auto relative z-10 h-full flex flex-col justify-center">
+
+          {/* Header: MODULE INFO */}
+          <div className="mb-6 border-b-2 border-[#8D6E63]/20 pb-4">
+            <h2 className="font-pixel text-[#5D4037] text-2xl font-bold flex items-center gap-3">
+              <span className="bg-[#8D6E63] text-white px-3 py-1 rounded-lg text-sm tracking-wider">
+                MODULE {currentModuleIndex + 1}
+              </span>
+              {currentModule.title}
+            </h2>
+            <p className="text-[#8D6E63] mt-1 text-sm font-medium opacity-80 pl-1">
+              {currentModule.description}
+            </p>
+          </div>
 
           {/* Header: MENTOR EXPLANATION */}
           <div className="mb-4">
@@ -194,7 +208,7 @@ const LearningMode: React.FC = () => {
                     <TaskMCQ
                       question={''} // Text is already in the main bubble
                       options={currentModule.task.options || []}
-                      onAnswer={handleTaskComplete}
+                      onComplete={handleTaskComplete}
                     />
                   )}
                   {currentModule.task.type === 'MATCH' && (
@@ -216,7 +230,7 @@ const LearningMode: React.FC = () => {
                       scenario={currentModule.task.prediction!.scenario}
                       correctAnswer={currentModule.task.prediction!.correctAnswer}
                       emoji={currentModule.task.prediction!.emoji}
-                      onAnswer={handleTaskComplete}
+                      onComplete={handleTaskComplete}
                     />
                   )}
                 </motion.div>
@@ -233,9 +247,13 @@ const LearningMode: React.FC = () => {
 
                   <button
                     onClick={handleNextModule}
-                    className="bg-[#4CAF50] text-white px-8 py-4 rounded-xl border-b-4 border-[#1B5E20] font-bold text-xl active:border-b-0 active:translate-y-1 shadow-xl hover:bg-[#43A047] transition-all font-pixel"
+                    className={`px-8 py-4 rounded-xl border-b-4 font-bold text-xl active:border-b-0 active:translate-y-1 shadow-xl transition-all font-pixel
+                      ${isLastModule
+                        ? 'bg-[#3F51B5] text-white border-[#1A237E] hover:bg-[#303F9F]'
+                        : 'bg-[#4CAF50] text-white border-[#1B5E20] hover:bg-[#43A047]'
+                      }`}
                   >
-                    CONTINUE ➡
+                    {isLastModule ? 'RETURN TO MAP 🗺️' : 'NEXT MODULE ➡'}
                   </button>
                 </motion.div>
               )}

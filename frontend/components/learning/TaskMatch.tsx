@@ -46,13 +46,13 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
     setSubmitted(true);
   };
 
-  const handleFeedbackComplete = () => {
+  const handleFeedbackComplete = React.useCallback(() => {
     onComplete(isCorrect);
     if (!isCorrect) {
       setSubmitted(false);
       setConnections({});
     }
-  };
+  }, [onComplete, isCorrect]);
 
   return (
     <>
@@ -99,8 +99,8 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
                   whileHover={!submitted ? { scale: 1.05 } : {}}
                   whileTap={!submitted ? { scale: 0.95 } : {}}
                   className={`w-full p-3 rounded-lg text-left transition-all border-2 ${connections[match.id]
-                      ? 'bg-indigo-600/40 border-indigo-400'
-                      : 'bg-gray-700/30 border-gray-600/40 hover:border-indigo-500/50'
+                    ? 'bg-indigo-600/40 border-indigo-400'
+                    : 'bg-gray-700/30 border-gray-600/40 hover:border-indigo-500/50'
                     }`}
                 >
                   <div className="flex items-center gap-2">
@@ -137,8 +137,8 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
                     whileTap={!submitted && isConnected ? { scale: 0.95 } : {}}
                     disabled={!isConnected && submitted}
                     className={`w-full p-3 rounded-lg text-left transition-all border-2 ${isConnected
-                        ? 'bg-emerald-600/40 border-emerald-400 cursor-pointer'
-                        : 'bg-gray-700/20 border-gray-600/30 opacity-50'
+                      ? 'bg-emerald-600/40 border-emerald-400 cursor-pointer'
+                      : 'bg-gray-700/20 border-gray-600/30 opacity-50'
                       }`}
                   >
                     <div className="flex items-center gap-2">
@@ -195,8 +195,8 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
             whileHover={Object.keys(connections).length === matches.length ? { scale: 1.05 } : {}}
             whileTap={Object.keys(connections).length === matches.length ? { scale: 0.95 } : {}}
             className={`w-full py-3 rounded-xl font-bold text-lg transition-all ${Object.keys(connections).length === matches.length
-                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-black hover:shadow-lg hover:shadow-green-500/50 cursor-pointer'
-                : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
+              ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-black hover:shadow-lg hover:shadow-green-500/50 cursor-pointer'
+              : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
               }`}
           >
             Check Matches 🎯
@@ -210,8 +210,8 @@ const TaskMatch: React.FC<TaskMatchProps> = ({ matches, onComplete }) => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 }}
             className={`mt-4 p-4 rounded-xl text-center font-bold text-lg ${isCorrect
-                ? 'bg-green-600/30 text-green-300 border border-green-500'
-                : 'bg-red-600/30 text-red-300 border border-red-500'
+              ? 'bg-green-600/30 text-green-300 border border-green-500'
+              : 'bg-red-600/30 text-red-300 border border-red-500'
               }`}
           >
             {isCorrect ? '🎉 Perfect matches!' : '💡 Not quite right. Try again!'}
