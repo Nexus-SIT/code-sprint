@@ -73,12 +73,12 @@ const RoadmapPage: React.FC = () => {
                         >
                             <ArrowLeft size={16} /> <span className="hidden md:inline">EXIT</span>
                         </button>
-                        <h1 className={`text-xl font-bold font-pixel flex items-center gap-2
+                        {/* <h1 className={`text-xl font-bold font-pixel flex items-center gap-2
                             ${theme === 'dark' ? 'text-amber-400' : 'text-wood-light'}
                         `}>
                             <Monitor className={theme === 'dark' ? 'text-indigo-400' : 'text-wood-light'} />
-                            <span className="hidden sm:inline">Trading Valley Path</span>
-                        </h1>
+                            <span className="hidden sm:inline">CandleCrush - Trading Valley Path</span>
+                        </h1> */}
                     </div>
                 </div>
             </header>

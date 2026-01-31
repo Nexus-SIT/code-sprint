@@ -85,10 +85,10 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
     `}>
       <div className="max-w-4xl mx-auto space-y-12">
         <header className="space-y-4">
-          <h1 className={`text-3xl md:text-4xl font-bold font-pixel
+          <h1 className={`text-2xl md:text-3xl font-bold font-pixel
             ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'}
           `}>
-            Trading Valley Path
+            CandleCrush-Trading Valley
           </h1>
           <p className={`max-w-2xl font-medium opacity-80
             ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/80'}

@@ -2,6 +2,8 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MentorEmotion } from '../types';
 
+import { useStore } from '../store';
+
 interface MentorProps {
   emotion: MentorEmotion;
   text: string;
@@ -9,11 +11,11 @@ interface MentorProps {
 
 const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
   const [isMouthOpen, setIsMouthOpen] = React.useState(false);
+  const { isMuted } = useStore();
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   React.useEffect(() => {
     // Only animate mouth if text is present and emotion involves "talking" (thinking/neutral generally)
-    // We avoid animating for happy/sad/alert as they might have specific fixed expressions, 
-    // but user request implies general talking. Let's limit to neutral/thinking for now as requested.
     if (text && (emotion === 'thinking' || emotion === 'neutral')) {
       const interval = setInterval(() => {
         setIsMouthOpen(prev => !prev);
@@ -23,6 +25,31 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
       setIsMouthOpen(false);
     }
   }, [text, emotion]);
+
+  // 🔊 Cat Speaking Sound Effect
+  // React.useEffect(() => {
+  //   if (!audioRef.current) {
+  //     audioRef.current = new Audio('/sounds/cat.mp3');
+  //     audioRef.current.loop = true;
+  //     audioRef.current.volume = 0.3;
+  //   }
+
+  //   const audio = audioRef.current;
+  //   const isTalking = text && (emotion === 'thinking' || emotion === 'neutral');
+
+  //   if (isTalking && !isMuted) {
+  //     audio.play().catch(() => { });
+  //   } else {
+  //     audio.pause();
+  //     if (!isTalking) {
+  //       audio.currentTime = 0; // Reset only if stopped talking
+  //     }
+  //   }
+
+  //   return () => {
+  //     audio.pause();
+  //   };
+  // }, [text, emotion, isMuted]);
 
   const getImage = (emotion: MentorEmotion) => {
     switch (emotion) {

@@ -71,6 +71,68 @@ const AppContent: React.FC = () => {
   const [showAuth, setShowAuth] = React.useState(false);
   const location = useLocation();
 
+  // 🔊 Global Audio Manager
+  const { isMuted } = useStore();
+  const bgMusicRef = React.useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Initialize Audio once
+    if (!bgMusicRef.current) {
+      bgMusicRef.current = new Audio('/sounds/bg.mp3');
+      bgMusicRef.current.loop = true;
+      bgMusicRef.current.volume = 0.2;
+    }
+
+    const bgMusic = bgMusicRef.current;
+
+    // Handle Mute/Play State
+    if (!isMuted) {
+      bgMusic.play().catch(() => {
+        // Auto-play blocked
+      });
+    } else {
+      bgMusic.pause();
+    }
+
+    const handleInteraction = () => {
+      // Try to start music on interaction if not muted and currently paused
+      if (!useStore.getState().isMuted && bgMusic.paused) {
+        bgMusic.play().catch(() => { });
+      }
+
+      // Handle Click Sound
+      if (!useStore.getState().isMuted) {
+        // We do this check inside the event listener to get fresh state if needed, 
+        // though the effect dependency on isMuted might handle some of it. 
+        // Direct store access ensures we don't need to re-bind the listener constantly if unnecessary.
+      }
+    };
+
+    const playClickSound = (e: MouseEvent) => {
+      // 1. Try to start BG music if needed
+      handleInteraction();
+
+      // 2. Play Click Sound if not muted
+      if (useStore.getState().isMuted) return;
+
+      const target = e.target as HTMLElement;
+      const button = target.closest('button') || target.closest('[role="button"]');
+
+      if (button) {
+        const audio = new Audio('/sounds/click.wav');
+        audio.volume = 0.5;
+        audio.play().catch(() => { });
+      }
+    };
+
+    window.addEventListener('click', playClickSound);
+
+    return () => {
+      window.removeEventListener('click', playClickSound);
+      bgMusic.pause();
+    };
+  }, [isMuted]);
+
   // 🔥 Auth Listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
