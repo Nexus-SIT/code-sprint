@@ -8,6 +8,7 @@ import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
 import RankInfoModal from './RankInfoModal';
 import { Info } from 'lucide-react';
+import { playButtonClick } from '../utils/audioPlayer';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -203,15 +204,55 @@ const Home: React.FC = () => {
                 </div>
             </div>
 
-            {/* Bottom Section: Leaderboard */}
-            <div className="max-w-4xl mx-auto w-full relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                >
-                    <Leaderboard userId={userId || undefined} limit={5} />
-                </motion.div>
+            {/* Bottom Section: Leaderboard + Task Button */}
+            <div className="max-w-7xl mx-auto w-full relative z-10">
+                <div className="flex flex-col lg:flex-row gap-6 items-start">
+                    {/* Leaderboard - Takes more space */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="w-full lg:flex-1"
+                    >
+                        <Leaderboard userId={userId || undefined} limit={5} />
+                    </motion.div>
+
+                    {/* Task Button - Fixed width on desktop, aligned to top */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="w-full lg:w-80 lg:flex-shrink-0"
+                    >
+                        <div className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all hover:scale-105 hover:shadow-2xl flex flex-col items-center justify-center min-h-[300px]
+                            ${theme === 'dark' ? 'bg-gradient-to-br from-orange-900/30 to-orange-700/20 border-4 border-orange-600' : 'bg-gradient-to-br from-orange-200 to-orange-100 border-4 border-orange-700'}
+                        `}
+                            style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: 'contain', backgroundRepeat: 'repeat' } : {}}
+                        >
+                            <div className={`p-4 rounded-full mb-4 animate-bounce
+                                ${theme === 'dark' ? 'bg-orange-900/50' : 'bg-orange-600/30'}
+                            `}>
+                                <Target size={48} className="text-orange-500" />
+                            </div>
+                            <h3 className={`text-2xl font-pixel mb-2 text-center
+                                ${theme === 'dark' ? 'text-amber-300' : 'text-orange-900'}
+                            `}>
+                                TASKS
+                            </h3>
+                            <p className={`text-xs mb-4 text-center
+                                ${theme === 'dark' ? 'text-gray-400' : 'text-orange-800/80'}
+                            `}>
+                                Complete daily challenges
+                            </p>
+                            <button
+                                onClick={() => { playButtonClick(); navigate('/tasks'); }}
+                                className="w-full bg-orange-600 text-white border-b-4 border-orange-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-orange-500 transition-all shadow-lg"
+                            >
+                                VIEW TASKS
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
             </div>
             {/* Rank Info Modal */}
             <RankInfoModal

@@ -13,6 +13,7 @@ import LearningMode from './components/LearningMode';
 import TopicExplanationPage from './components/TopicExplanationPage';
 import GameMode from './components/GameMode';
 import Leaderboard from './components/Leaderboard';
+import TasksPage from './components/TasksPage';
 import Auth from './components/Auth'; // Import Auth
 import Footer from './components/Footer';
 
@@ -113,7 +114,6 @@ const AppContent: React.FC = () => {
         xp: data.xp,
         totalProfit: data.totalProfit || 0,
         rank: data.rankScore, // Corrected from data.rank
-        completedRooms: data.completedRooms,
       });
     });
 
@@ -157,6 +157,7 @@ const AppContent: React.FC = () => {
         <Route path="/learn" element={<RoadmapPage />} />
         <Route path="/game" element={<GameMode />} />
         <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
+        <Route path="/tasks" element={<TasksPage />} />
       </Routes>
 
       {!hideFooter && <Footer />}
