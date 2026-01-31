@@ -12,11 +12,11 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({ emotion, onBack }) => {
     // Map emotions to assets
     const getAsset = () => {
         switch (emotion) {
-            case 'happy': return '/mentor/CatJoyFull.png';
-            case 'sad': return '/mentor/CatSad.png';
-            case 'alert': return '/mentor/CatShocked.png';
+            case 'happy': return '/mentor/catjoyfull.webp';
+            case 'sad': return '/mentor/catsad.webp';
+            case 'alert': return '/mentor/catshocked.webp';
             case 'neutral':
-            default: return '/mentor/cat-normal-closed.png';
+            default: return '/mentor/catnormal.webp';
         }
     };
 

@@ -195,7 +195,7 @@ const GameMode: React.FC = () => {
 
           <div className="flex-1 flex justify-center">
             <img
-              src="/CCLogo.png"
+              src="/cclogo.webp"
               alt="Candle Crush"
               className="h-10 md:h-16 w-auto object-contain drop-shadow-sm transform hover:scale-105 transition-transform"
             />

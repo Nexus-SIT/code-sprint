@@ -42,11 +42,11 @@ const Home: React.FC = () => {
             </div>
 
             {/* Background Image */}
-            <div className="absolute inset-0 pointer-events-none opacity-50 z-0 blur-sm" style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+            <div className="absolute inset-0 pointer-events-none opacity-50 z-0 blur-sm" style={{ backgroundImage: "url('/bg.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
 
             <div className="text-center mb-8 z-10 relative mt-20 md:mt-0">
                 <img
-                    src="/CCLogo.png"
+                    src="/cclogo.webp"
                     alt="Candle Crush Logo"
                     className="w-40 md:w-96 mx-auto drop-shadow-pixel filter hover:scale-105 transition-transform duration-300"
                 />
@@ -66,7 +66,7 @@ const Home: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all aspect-square ${theme === 'dark'
                         }`}
-                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.webp')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
                 >
                     <div className="flex flex-col items-center justify-center h-full text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-green-900/30' : 'bg-green-600/20'
@@ -95,7 +95,7 @@ const Home: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all aspect-square ${theme === 'dark'
                         }`}
-                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.webp')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
                 >
                     <div className="flex flex-col items-center justify-center h-full text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-blue-900/30' : 'bg-blue-600/20'
@@ -127,7 +127,7 @@ const Home: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all aspect-square ${theme === 'dark'
                         }`}
-                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.webp')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
                 >
                     <div className="flex flex-col items-center justify-center h-full text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-amber-900/30' : 'bg-amber-600/20'
@@ -155,7 +155,7 @@ const Home: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -5 }}
                     className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all aspect-square ${theme === 'dark'
                         }`}
-                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.webp')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
                 >
                     <div className="flex flex-col items-center justify-center h-full text-center">
                         <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-600/20'

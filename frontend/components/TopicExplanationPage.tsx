@@ -105,7 +105,7 @@ const TopicExplanationPage: React.FC = () => {
         `}>
             {/* Background Image */}
             <div className="absolute inset-0 pointer-events-none opacity-20 z-0 blur-sm"
-                style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                style={{ backgroundImage: "url('/bg.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
             </div>
 
             {/* LEFT: Cat Mentor */}
@@ -134,7 +134,7 @@ const TopicExplanationPage: React.FC = () => {
                 >
                     <div className="w-full h-full bg-black/20 rounded-lg shadow-inner overflow-hidden relative flex items-end justify-center">
                         <img
-                            src={isMouthOpen ? '/mentor/cat-normal-open.png' : '/mentor/cat-normal-closed.png'}
+                            src={isMouthOpen ? '/mentor/catnormalopen.webp' : '/mentor/catnormal.webp'}
                             alt="Mentor"
                             className="h-[90%] object-contain filter drop-shadow-xl"
                         />

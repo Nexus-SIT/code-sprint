@@ -128,7 +128,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
                   : 'bg-wood-light/20 border-wood-light/50 text-wood-dark'}
               `}>
                 <div className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-60">
-                  SECTION {modIdx + 1}
+                  MODULE {modIdx + 1}
                 </div>
                 <h2 className="text-xl font-bold font-pixel">{module.title}</h2>
                 <p className="text-sm mt-2 opacity-80">{module.description}</p>
