@@ -18,7 +18,18 @@ const Home: React.FC = () => {
     return (
         <div className={`min-h-screen flex flex-col items-center p-4 md:p-6 relative font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'}`}>
 
-            {/* Theme Toggle - Top Right */}
+            {/* Left Header - Community & Theme */}
+            <div className="absolute top-4 left-4 md:top-6 md:left-6 z-20 flex gap-2 md:gap-4 items-center flex-wrap">
+                <button
+                    onClick={() => navigate('/community')}
+                    className="bg-pink-500 hover:bg-pink-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-pink-700 flex items-center gap-2"
+                >
+                    <MessageSquare size={14} /> <span className="hidden sm:inline">COMMUNITY</span>
+                </button>
+                <ThemeToggle />
+            </div>
+
+            {/* Right Header - Controls & Logout */}
             <div className="absolute top-4 right-4 md:top-6 md:right-6 z-20 flex gap-2 md:gap-4 items-center flex-wrap justify-end">
                 <button
                     onClick={toggleMute}
@@ -33,13 +44,6 @@ const Home: React.FC = () => {
                 >
                     <Info size={14} /> <span className="hidden sm:inline">RANK INFO</span>
                 </button>
-                <button
-                    onClick={() => navigate('/community')}
-                    className="bg-pink-500 hover:bg-pink-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-pink-700 flex items-center gap-2"
-                >
-                    <MessageSquare size={14} /> <span className="hidden sm:inline">COMMUNITY</span>
-                </button>
-                <ThemeToggle />
                 <button
                     onClick={() => auth.signOut()}
                     className="bg-red-500 hover:bg-red-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-red-700"
