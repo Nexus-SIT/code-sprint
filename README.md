@@ -1,6 +1,9 @@
 # Project Name: CandleCrush
+
 Problem Statement ID: CS06SF
+
 Team Name: Nexus-Alpha
+
 College Name: Srinivas Institute Of Technology, Valachil, Mangalore
 
 ---
