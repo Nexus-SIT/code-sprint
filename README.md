@@ -34,9 +34,19 @@ Our solution combines three core pillars:
 - **Leaderboards**: Global and friend-based leaderboards to foster healthy competition.
 
 ## Innovation & Creativity
-- Deterministic cat-mentor teaching system with typing animations and staged learning cards.
-- Gamified league with 7-tier ranking, achievements and XP to encourage retention.
-- Seamless hand-off from micro-lessons to practice scenarios — teaches then tests immediately.
+Unlike generic trading apps, CandleCrush introduces several novel approaches to financial literacy:
+
+1.  **"Companion-First" Pedagogy**:
+    Instead of dry text, we use an animated **Cat Mentor** that typifies the learning journey. The mentor reacts emotionally to your success and failure, lowering the intimidation barrier of complex financial topics and preventing user drop-off.
+
+2.  **The "Zero-Latency" Learning Loop**:
+    We solved the passive learning problem by enforcing immediate application. Users don't just read about a "Bullish Engulfing Pattern"; they must immediately identify it in a generated chart puzzle or predict its outcome within the same module context.
+
+3.  **Psychological "Safe-Box"**:
+    Most simulators only track numbers. Our "Contest Arena" is designed to simulate the *emotions* of trading (FOMO, panic selling) in a risk-free environment. By gamifying the P&L swings, we teach emotional regulation—the trader's most vital skill.
+
+4.  **Disarming Aesthetic**:
+    We deliberately chose a **Pixel-Art / RPG style** (reminiscent of Stardew Valley) to continuously signal "Game" over "Work". This visual innovation makes technical analysis feel like unlocking skills in a video game rather than studying for a finance exam.
 
 ## Technical Complexity & Stack
 Backend
