@@ -156,7 +156,7 @@ const LearningMode: React.FC = () => {
           {/* Background Texture */}
           <div className="absolute inset-0 pointer-events-none opacity-20"
             style={{
-              backgroundImage: "url('/bg.png')",
+              backgroundImage: "url('/bg.webp')",
               backgroundSize: "cover",
               backgroundPosition: "center"
             }}>
@@ -166,8 +166,8 @@ const LearningMode: React.FC = () => {
 
             {/* Header: MODULE INFO - Wooden Sign Style */}
             <div className="mb-10 text-center relative group">
-              <div className="inline-block bg-[#5D4037] text-[#FFE0B2] px-6 py-2 rounded-t-lg border-x-4 border-t-4 border-[#3E2723] shadow-lg relative z-10 font-pixel transform group-hover:-translate-y-1 transition-transform">
-                MODULE {currentModuleIndex + 1}
+              <div className="inline-block bg-[#5D4037] text-[#FFE0B2] px-8 py-3 rounded-t-lg border-x-4 border-t-4 border-[#3E2723] shadow-lg relative z-10 font-pixel text-xl transform group-hover:-translate-y-1 transition-transform">
+                UNIT {currentModuleIndex + 1}
               </div>
               <div className="bg-[#EFEBE9] border-4 border-[#5D4037] rounded-xl p-6 shadow-[0_8px_0_rgba(93,64,55,0.4)] relative">
                 {/* Nails */}

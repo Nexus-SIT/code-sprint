@@ -203,7 +203,7 @@ const ContestLobby: React.FC = () => {
             </main>
 
             {/* Background Texture */}
-            <div className="absolute inset-0 pointer-events-none opacity-10 blur-sm" style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover' }}></div>
+            <div className="absolute inset-0 pointer-events-none opacity-10 blur-sm" style={{ backgroundImage: "url('/bg.webp')", backgroundSize: 'cover' }}></div>
         </div>
     );
 };

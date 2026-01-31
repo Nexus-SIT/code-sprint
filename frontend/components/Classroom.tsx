@@ -93,7 +93,7 @@ const Classroom: React.FC = () => {
         `}>
             {/* Background Image */}
             <div className="absolute inset-0 pointer-events-none opacity-10 z-0 blur-sm"
-                style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                style={{ backgroundImage: "url('/bg.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
             </div>
 
             {/* Sidebar - Task List (Quest Log Style) */}

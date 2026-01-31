@@ -53,13 +53,13 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
 
   const getImage = (emotion: MentorEmotion) => {
     switch (emotion) {
-      case 'happy': return '/mentor/CatJoyFull.png';
-      case 'alert': return '/mentor/CatShocked.png';
-      case 'sad': return '/mentor/CatSad.png';
+      case 'happy': return '/mentor/catjoyfull.webp';
+      case 'alert': return '/mentor/catshocked.webp';
+      case 'sad': return '/mentor/catsad.webp';
       case 'thinking':
       default:
-        // Use CatNormalOpen.png when mouth should be open
-        return isMouthOpen ? '/mentor/cat-normal-open.png' : '/mentor/cat-normal-closed.png';
+        // Use catnormalopen.webp when mouth should be open
+        return isMouthOpen ? '/mentor/catnormalopen.webp' : '/mentor/catnormal.webp';
     }
   };
 
