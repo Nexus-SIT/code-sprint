@@ -51,7 +51,7 @@ const About: React.FC = () => {
 
                         {/* Retro Back Button */}
                         <motion.div variants={itemVariants} className="absolute top-4 left-4 md:top-8 md:left-8 z-50">
-                            <Link to="/" className="group relative inline-flex items-center justify-center px-6 py-2 font-pixel text-lg uppercase tracking-widest text-coffee dark:text-gray-100 border-4 border-current rounded-none hover:bg-coffee hover:text-parchment dark:hover:bg-gray-100 dark:hover:text-gray-900 transition-all duration-300">
+                            <Link to="/" className="group relative inline-flex items-center justify-center px-6 py-2 font-pixel text-lg uppercase tracking-widest text-white bg-[#A4243B] border-4 border-[#A4243B] rounded-none shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)] hover:translate-y-[2px] hover:translate-x-[2px] transition-all duration-200">
                                 <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
                                 <span>Back</span>
                             </Link>
