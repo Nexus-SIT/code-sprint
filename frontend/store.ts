@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { getRankName } from './utils/rankIcons';
 import { GameState, Theme, UserProfile } from './types';
 
 // Load theme from localStorage
@@ -18,6 +19,18 @@ const getInitialUserId = (): string | null => {
   return null;
 };
 
+const getInitialCompletedModules = (): string[] => {
+  if (typeof window !== 'undefined') {
+    try {
+      const saved = localStorage.getItem('completedModules');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
 export const useStore = create<GameState>((set) => ({
   theme: getInitialTheme(),
   userId: getInitialUserId(),
@@ -27,6 +40,7 @@ export const useStore = create<GameState>((set) => ({
   walletBalance: 0,
   userRank: 0,
   xp: 0,
+  completedRooms: [],
 
   toggleTheme: () =>
     set((state) => {
@@ -51,6 +65,7 @@ export const useStore = create<GameState>((set) => ({
       walletBalance: profile.walletBalance,
       xp: profile.xp,
       userRank: profile.rank ?? 0,
+      completedRooms: profile.completedRooms || [],
     }),
 
   syncFromFirebase: (data: {
@@ -58,6 +73,7 @@ export const useStore = create<GameState>((set) => ({
     xp: number;
     totalProfit: number;
     rank?: number;
+    completedRooms?: string[];
   }) =>
     set((state) => ({
       walletBalance: data.balance,
@@ -70,6 +86,7 @@ export const useStore = create<GameState>((set) => ({
           walletBalance: data.balance,
           xp: data.xp,
           rank: data.rank ?? 0,
+          rankName: getRankName(data.rank ?? 0),
         }
         : null,
     })),
@@ -77,4 +94,23 @@ export const useStore = create<GameState>((set) => ({
   // ❌ Local-only updates removed
   updateBalance: () => { },
   addXp: () => { },
+
+  // New persistent module tracking
+  completedModules: getInitialCompletedModules(),
+  markModuleComplete: (moduleId: string) =>
+    set((state) => {
+      if (!state.completedModules.includes(moduleId)) {
+        const newCompleted = [...state.completedModules, moduleId];
+        if (typeof window !== 'undefined') {
+          // Simple local persistence for guests
+          try {
+            localStorage.setItem('completedModules', JSON.stringify(newCompleted));
+          } catch (e) {
+            console.error('Failed to save progress', e);
+          }
+        }
+        return { completedModules: newCompleted };
+      }
+      return {};
+    }),
 }));

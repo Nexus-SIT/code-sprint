@@ -168,7 +168,7 @@ const GameMode: React.FC = () => {
     if (phase === 'SIMULATING') return { emotion: 'alert', text: "Hold onto your hat! The market is moving!" };
     if (phase === 'RESULT') {
       if (resultPnL > 0) return { emotion: 'happy', text: `Bountiful harvest! You made $${resultPnL.toFixed(0)}!` };
-      if (resultPnL < 0) return { emotion: 'alert', text: `Oh dear... Looks like a drought. Lost $${Math.abs(resultPnL).toFixed(0)}.` };
+      if (resultPnL < 0) return { emotion: 'sad', text: `Oh dear... Looks like a drought. Lost $${Math.abs(resultPnL).toFixed(0)}.` };
       return { emotion: 'neutral', text: "Steady as a rock." };
     }
     return { emotion: 'neutral', text: '' };
@@ -230,7 +230,7 @@ const GameMode: React.FC = () => {
               <Coins className="text-yellow-400 mr-1 md:mr-2 w-4 h-4 md:w-5 md:h-5" />
               <div className={`text-sm md:text-lg font-pixel ${walletBalance < 0 ? 'text-red-400' : theme === 'dark' ? 'text-gray-100' : 'text-parchment'
                 }`}>
-                ₹{walletBalance.toLocaleString()}
+                ₹{walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </div>
             </div>
           </div>
@@ -277,7 +277,7 @@ const GameMode: React.FC = () => {
                   />
                   <div className="flex justify-between text-xs text-parchment/70 mt-2 font-pixel">
                     <span>MIN: 100</span>
-                    <span>MAX: {walletBalance}</span>
+                    <span>MAX: {Math.floor(walletBalance).toLocaleString()}</span>
                   </div>
                 </div>
 

@@ -6,21 +6,29 @@ import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap } from 'l
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
-import { playButtonClick } from '../utils/audioPlayer';
+import RankInfoModal from './RankInfoModal';
+import { Info } from 'lucide-react';
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
     const { walletBalance, xp, userProfile, theme, userId } = useStore();
+    const [isRankModalOpen, setIsRankModalOpen] = React.useState(false);
 
     return (
         <div className={`min-h-screen flex flex-col items-center p-6 relative font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'}`}>
 
             {/* Theme Toggle - Top Right */}
-            <div className="absolute top-6 right-6 z-20 flex gap-4">
+            <div className="absolute top-6 right-6 z-20 flex gap-4 items-center">
+                <button
+                    onClick={() => setIsRankModalOpen(true)}
+                    className="bg-amber-500 hover:bg-amber-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-amber-700 flex items-center gap-2"
+                >
+                    <Info size={14} /> RANK INFO
+                </button>
                 <ThemeToggle />
                 <button
-                    onClick={() => { playButtonClick(); auth.signOut(); }}
-                    className="bg-red-500 hover:bg-red-600 text-white font-pixel text-xs px-4 py-2 rounded shadow-pixel border-2 border-red-700"
+                    onClick={() => auth.signOut()}
+                    className="bg-red-500 hover:bg-red-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-red-700"
                 >
                     LOGOUT
                 </button>
@@ -152,7 +160,7 @@ const Home: React.FC = () => {
                             </div>
                             <div className={`font-pixel text-2xl ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
                                 }`}>
-                                ${walletBalance.toLocaleString()}
+                                ${walletBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
                         </div>
                     </div>
@@ -186,7 +194,7 @@ const Home: React.FC = () => {
                                         TOTAL PROFIT
                                     </div>
                                     <div className={`font-pixel text-2xl ${userProfile.totalProfit >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                        ₹{userProfile.totalProfit.toLocaleString()}
+                                        ${userProfile.totalProfit.toLocaleString()}
                                     </div>
                                 </div>
                             </div>
@@ -196,17 +204,21 @@ const Home: React.FC = () => {
             </div>
 
             {/* Bottom Section: Leaderboard */}
-            {userProfile && userId && (
-                <div className="max-w-4xl mx-auto w-full relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                    >
-                        <Leaderboard userId={userId} limit={5} />
-                    </motion.div>
-                </div>
-            )}
+            <div className="max-w-4xl mx-auto w-full relative z-10">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                >
+                    <Leaderboard userId={userId || undefined} limit={5} />
+                </motion.div>
+            </div>
+            {/* Rank Info Modal */}
+            <RankInfoModal
+                isOpen={isRankModalOpen}
+                onClose={() => setIsRankModalOpen(false)}
+                theme={theme}
+            />
         </div >
 
     );

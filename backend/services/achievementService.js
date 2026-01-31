@@ -32,7 +32,7 @@ const ACHIEVEMENTS = {
     profit_50k: {
         id: 'profit_50k',
         name: 'Rising Star',
-        description: 'Reach ₹50,000 total profit',
+        description: 'Reach $50,000 total profit',
         icon: '⭐',
         rarity: 'uncommon',
         xpReward: 300
@@ -40,7 +40,7 @@ const ACHIEVEMENTS = {
     profit_100k: {
         id: 'profit_100k',
         name: 'Six Figures',
-        description: 'Reach ₹100,000 total profit',
+        description: 'Reach $100,000 total profit',
         icon: '💰',
         rarity: 'rare',
         xpReward: 500
@@ -48,7 +48,7 @@ const ACHIEVEMENTS = {
     profit_500k: {
         id: 'profit_500k',
         name: 'Market Master',
-        description: 'Reach ₹500,000 total profit',
+        description: 'Reach $500,000 total profit',
         icon: '👑',
         rarity: 'epic',
         xpReward: 2000
@@ -56,7 +56,7 @@ const ACHIEVEMENTS = {
     profit_1m: {
         id: 'profit_1m',
         name: 'Millionaire Trader',
-        description: 'Reach ₹1,000,000 total profit',
+        description: 'Reach $1,000,000 total profit',
         icon: '💎',
         rarity: 'legendary',
         xpReward: 5000
@@ -134,7 +134,7 @@ const ACHIEVEMENTS = {
     risk_taker: {
         id: 'risk_taker',
         name: 'Risk Taker',
-        description: 'Place a bet of ₹50,000 or more',
+        description: 'Place a bet of $50,000 or more',
         icon: '🎰',
         rarity: 'uncommon',
         xpReward: 300

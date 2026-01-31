@@ -27,7 +27,6 @@ const RoomNode: React.FC<{
       id={`room-node-${index}`}
       className={`relative flex items-center w-full min-h-[160px] ${isRight ? 'justify-end' : 'justify-start'}`}
     >
-      {/* Main Node Container */}
       <div
         className={`relative z-20 flex items-center gap-6 group cursor-pointer transition-transform hover:scale-105 ${isRight ? 'flex-row' : 'flex-row-reverse'}`}
         onClick={onClick}
@@ -47,21 +46,20 @@ const RoomNode: React.FC<{
           )}
         </div>
 
-        {/* 3D Platform Wrapper */}
+        {/* Isometric 3D Platform */}
         <div className="relative w-32 h-24 flex items-center justify-center">
-          {/* Shadow/Base */}
-          <div className="absolute bottom-2 w-24 h-12 bg-black/20 rounded-[100%] blur-md" />
+          <div className="absolute bottom-2 w-24 h-8 bg-black/40 rounded-[100%] blur-lg opacity-50" />
 
-          {/* The Isometric Block */}
-          <div className="relative w-24 h-14">
+          <div className="relative w-24 h-12 transform-gpu" style={{ transform: 'rotateX(55deg) rotateZ(-25deg)' }}>
+            {/* Front Side */}
+            <div className={`absolute top-4 left-0 w-full h-full rounded-xl ${completed ? 'bg-lime-700' : 'bg-slate-800'} border-b-8 border-black/30`} />
+
             {/* Top Surface */}
-            <div className={`absolute top-0 w-full h-full rounded-xl transition-all duration-300 
-              ${completed ? 'bg-lime-500' : 'bg-[#2d4a3e] group-hover:bg-[#3d5a4e]'} 
-              border-b-8 border-black/20 shadow-lg`}
-              style={{ transform: 'rotateX(45deg) rotateZ(-10deg)' }}
+            <div className={`absolute top-0 left-0 w-full h-full rounded-xl transition-all duration-300 shadow-xl
+              ${completed ? 'bg-lime-500' : 'bg-[#2d3a35] group-hover:bg-[#3d4a45]'} 
+              border border-white/10`}
             >
-              {/* Inner highlight */}
-              <div className="absolute inset-1 border border-white/10 rounded-lg" />
+              <div className="absolute inset-2 border border-white/5 rounded-lg" />
             </div>
 
             {/* The Icon (Floating above) */}
@@ -76,6 +74,8 @@ const RoomNode: React.FC<{
     </div>
   );
 };
+
+import Mascot from './Mascot';
 
 const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelectRoom }) => {
   const { theme } = useStore();
@@ -113,7 +113,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
                   : 'bg-wood-light/20 border-wood-light/50 text-wood-dark'}
               `}>
                 <div className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-60">
-                  Module {modIdx + 1}
+                  SECTION {modIdx + 1}
                 </div>
                 <h2 className="text-xl font-bold font-pixel">{module.title}</h2>
                 <p className="text-sm mt-2 opacity-80">{module.description}</p>

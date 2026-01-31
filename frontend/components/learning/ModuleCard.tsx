@@ -4,6 +4,7 @@ import { Module, ExplanationStep } from './modulesData';
 import TaskMCQ from './TaskMCQ';
 import TaskMatch from './TaskMatch';
 import TaskPrediction from './TaskPrediction';
+import TaskChart from './TaskChart';
 import CatMentor from './CatMentor';
 
 interface ModuleCardProps {
@@ -96,6 +97,8 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
   };
 
   const handleTaskComplete = (isCorrect: boolean) => {
+    if (stage === 'result') return; // Prevent double submission
+
     if (isCorrect) {
       setCatMessage(module.taskCompleteMessage);
       setStage('result');
@@ -212,7 +215,7 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
                   message={module.task.question || 'Let\'s test your knowledge!'}
                   position="right"
                   isTyping={false}
-                  onTypingComplete={() => {}}
+                  onTypingComplete={() => { }}
                 />
               </div>
 
@@ -240,6 +243,15 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
                       module.task.prediction?.correctAnswer || 'UP'
                     }
                     emoji={module.task.prediction?.emoji || ''}
+                    onAnswer={handleTaskComplete}
+                  />
+                )}
+
+                {module.task.type === 'CHART' && module.task.chart && (
+                  <TaskChart
+                    data={module.task.chart.data}
+                    correctIndices={module.task.chart.correctIndices}
+                    instruction={module.task.chart.instruction}
                     onAnswer={handleTaskComplete}
                   />
                 )}

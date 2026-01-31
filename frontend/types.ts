@@ -9,7 +9,7 @@ export interface Candle {
   close: number;
 }
 
-export type MentorEmotion = 'happy' | 'neutral' | 'alert' | 'thinking';
+export type MentorEmotion = 'happy' | 'neutral' | 'alert' | 'thinking' | 'sad';
 
 export interface RankTier {
   tier: number;
@@ -45,6 +45,7 @@ export interface UserProfile {
   currentStreak: number;
   longestStreak: number;
   achievements: string[];
+  completedRooms: string[];
 }
 
 export interface TradeHistory {
@@ -76,12 +77,15 @@ export interface GameState {
   walletBalance: number;
   userRank: number;
   xp: number;
+  completedRooms: string[];
+  completedModules: string[];
   toggleTheme: () => void;
   setUserId: (userId: string) => void;
   setUserProfile: (profile: UserProfile) => void;
   addXp: (amount: number) => void;
   syncFromFirebase: (data: { balance: number; xp: number; totalProfit: number; rank?: number }) => void;
   updateBalance: (amount: number) => void;
+  markModuleComplete: (moduleId: string) => void;
 }
 
 // --- Learning System Types ---
@@ -103,7 +107,8 @@ export enum TaskType {
   CLICK_CANDLE = 'CHART_SELECT',
   DRAW_LINE = 'DRAW_LINE',
   ACTION = 'ACTION',
-  WAIT_TASK = 'WAIT'
+  WAIT_TASK = 'WAIT',
+  PREDICT_PRICE = 'PREDICT'
 }
 
 export interface Task {

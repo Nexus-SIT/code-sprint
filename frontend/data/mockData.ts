@@ -20,9 +20,39 @@ const generateChart = (count: number, startPrice: number, volatility = 5): OHLCD
     return data;
 };
 
+
+// Helper for smoother, conceptual charts
+const generateConceptualChart = (count: number, startPrice: number, trend: 'up' | 'down' | 'volatile' | 'stable' = 'up'): OHLCData[] => {
+    const data: OHLCData[] = [];
+    let currentPrice = startPrice;
+
+    for (let i = 0; i < count; i++) {
+        const open = currentPrice;
+        let change = 0;
+
+        if (trend === 'up') change = (Math.random() * 0.8) + 0.1; // Mostly up
+        else if (trend === 'down') change = (Math.random() * -0.8) - 0.1; // Mostly down
+        else if (trend === 'volatile') change = (Math.random() - 0.5) * 5; // Big swings
+        else change = (Math.random() - 0.5) * 0.5; // Small chop
+
+        const close = open + change;
+        const high = Math.max(open, close) + Math.random() * 0.5;
+        const low = Math.min(open, close) - Math.random() * 0.5;
+
+        data.push({
+            time: `Concept-${(i + 1)}`,
+            open, high, low, close,
+            volume: Math.floor(Math.random() * 500) + 100
+        });
+        currentPrice = close;
+    }
+    return data;
+};
+
 export const TRADER_PATH: Path = {
     id: 'trading-mastery',
     title: 'The Elite Operator Path',
+    description: 'Master the art of trading from basic concepts to advanced strategies.',
     modules: [
         {
             id: 'mod1',
@@ -33,7 +63,8 @@ export const TRADER_PATH: Path = {
                 title: 'Ownership Concept',
                 description: 'Think like a business owner.',
                 iconType: 'shield',
-                chartData: generateChart(50, 100, 2), // Added chart data
+                // SHOW GROWTH to illustrate value increase
+                chartData: generateConceptualChart(20, 100, 'up'),
                 thumbnail: '',
                 tasks: [{
                     id: 't1',
@@ -64,7 +95,8 @@ export const TRADER_PATH: Path = {
                 title: 'Supply & Demand',
                 description: 'Why price moves up or down.',
                 iconType: 'target',
-                chartData: [],
+                // SHOW VOLATILITY to illustrate battle
+                chartData: generateConceptualChart(30, 100, 'volatile'),
                 thumbnail: '',
                 tasks: [{
                     id: 't2',
@@ -94,7 +126,8 @@ export const TRADER_PATH: Path = {
                 title: 'Primary vs Secondary',
                 description: 'Where money flows.',
                 iconType: 'terminal',
-                chartData: [],
+                // SHOW STABLE/GROWTH
+                chartData: generateConceptualChart(25, 50, 'up'),
                 thumbnail: '',
                 tasks: [{
                     id: 't3',
@@ -123,7 +156,8 @@ export const TRADER_PATH: Path = {
                 title: 'Goal Alignment',
                 description: 'Time decides the method.',
                 iconType: 'heart',
-                chartData: [],
+                // SHOW LONG TERM UP trend
+                chartData: generateConceptualChart(40, 10, 'up'),
                 thumbnail: '',
                 tasks: [{
                     id: 't4',
