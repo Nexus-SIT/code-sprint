@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, Mail, Github, Globe } from 'lucide-react';
+import { Users, Mail, Github, Globe, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../store';
 
 const About: React.FC = () => {
@@ -30,7 +31,7 @@ const About: React.FC = () => {
     };
 
     return (
-        <div className={`min-h-screen ${bgColor} ${textColor} p-2 flex flex-col items-center justify-center`}>
+        <div className={`min-h-screen ${bgColor} ${textColor} font-pixel p-2 flex flex-col items-center justify-center`}>
             <div className="w-full">
                 <motion.div
                     initial="hidden"
@@ -40,12 +41,21 @@ const About: React.FC = () => {
                 >
                     {/* Team Section */}
                     <div>
+
                         <motion.h1
                             variants={itemVariants}
-                            className={`text-6xl md:text-8xl font-black text-center mb-10 ${theme === 'dark' ? 'text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500' : 'text-coffee'}`}
+                            className={`text-4xl md:text-6xl font-black text-center mb-10 ${theme === 'dark' ? 'text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500' : 'text-coffee'}`}
                         >
                             Meet the Team
                         </motion.h1>
+
+                        {/* Retro Back Button */}
+                        <motion.div variants={itemVariants} className="absolute top-4 left-4 md:top-8 md:left-8 z-50">
+                            <Link to="/" className="group relative inline-flex items-center justify-center px-6 py-2 font-pixel text-lg uppercase tracking-widest text-coffee dark:text-gray-100 border-4 border-current rounded-none hover:bg-coffee hover:text-parchment dark:hover:bg-gray-100 dark:hover:text-gray-900 transition-all duration-300">
+                                <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+                                <span>Back</span>
+                            </Link>
+                        </motion.div>
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full px-2">
                             {[
@@ -66,11 +76,11 @@ const About: React.FC = () => {
                                             <Users className="w-24 h-24 opacity-50" />
                                         )}
                                     </div>
-                                    <h3 className="font-black text-4xl mb-2">{member.name}</h3>
+                                    <h3 className="font-black text-2xl mb-2">{member.name}</h3>
                                     <div className="flex flex-col gap-2 w-full max-w-[240px]">
-                                        <div className="flex items-center justify-center gap-3 text-lg opacity-90 bg-white/10 py-2 px-4 rounded-lg">
-                                            <Mail className="w-5 h-5" />
-                                            <span className="text-sm md:text-base truncate">{member.email}</span>
+                                        <div className="flex items-center justify-center gap-2 text-xs opacity-90 bg-white/10 py-1.5 px-3 rounded-lg overflow-hidden w-full">
+                                            <Mail className="w-3 h-3 flex-shrink-0" />
+                                            <span className="text-[10px] md:text-xs truncate">{member.email}</span>
                                         </div>
 
                                         <div className="flex items-center justify-center gap-2">
@@ -79,10 +89,10 @@ const About: React.FC = () => {
                                                     href={member.github}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className="flex items-center gap-2 text-lg opacity-90 bg-white/10 py-2 px-4 rounded-lg hover:bg-white/20 transition-colors flex-1 justify-center"
+                                                    className="flex items-center gap-1.5 text-xs opacity-90 bg-white/10 py-1.5 px-3 rounded-lg hover:bg-white/20 transition-colors flex-1 justify-center min-w-0"
                                                 >
-                                                    <Github className="w-5 h-5" />
-                                                    <span className="text-sm">GitHub</span>
+                                                    <Github className="w-3 h-3 flex-shrink-0" />
+                                                    <span className="text-[10px] md:text-xs truncate">GitHub</span>
                                                 </a>
                                             )}
                                             {member.portfolio && (
@@ -90,10 +100,10 @@ const About: React.FC = () => {
                                                     href={member.portfolio}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className="flex items-center gap-2 text-lg opacity-90 bg-white/10 py-2 px-4 rounded-lg hover:bg-white/20 transition-colors flex-1 justify-center"
+                                                    className="flex items-center gap-1.5 text-xs opacity-90 bg-white/10 py-1.5 px-3 rounded-lg hover:bg-white/20 transition-colors flex-1 justify-center min-w-0"
                                                 >
-                                                    <Globe className="w-5 h-5" />
-                                                    <span className="text-sm">Portfolio</span>
+                                                    <Globe className="w-3 h-3 flex-shrink-0" />
+                                                    <span className="text-[10px] md:text-xs truncate">Portfolio</span>
                                                 </a>
                                             )}
                                         </div>
