@@ -60,8 +60,8 @@ const About: React.FC = () => {
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full px-2">
                             {[
                                 { name: "Manish R Shetty", role: "Founder & Lead", email: "mmanishrshetty@gmail.com", image: "/team/manish.webp", github: "https://github.com/ManishRShetty", portfolio: "https://yourportfolio.com" },
-                                { name: "Anush", role: "Developer", email: "kulalanush18@gmail.com", image: "/team/member2.jpg", github: "https://github.com/Anush-kulal" },
-                                { name: "Karthik", role: "Designer", email: "karthikashetty@gmail.com", image: "/team/karthik.jpg", github: "https://github.com/Karthikshettyhub" },
+                                { name: "Anush", role: "Developer", email: "kulalanush18@gmail.com", image: "/team/anushkulal.webp", github: "https://github.com/Anush-kulal" },
+                                { name: "Karthik", role: "Designer", email: "karthikashetty@gmail.com", image: "/team/karthik (1).webp", github: "https://github.com/Karthikshettyhub" },
                                 { name: "Chirag kulal", role: "Developer", email: "chiragkulal877@gmail.com", image: "/team/chiku.webp", github: "https://github.com/Chiragkulal07" }
                             ].map((member: any, idx) => (
                                 <motion.div
