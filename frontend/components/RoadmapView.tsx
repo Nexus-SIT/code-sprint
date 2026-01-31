@@ -1,7 +1,7 @@
 import React from 'react';
 import { Path, Room } from '../types';
 import { useStore } from '../store';
-import { Play, CheckCircle } from 'lucide-react';
+import { Play, CheckCircle, Flag } from 'lucide-react';
 
 interface RoadmapViewProps {
   path: Path;
@@ -80,16 +80,32 @@ import Mascot from './Mascot';
 const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelectRoom }) => {
   const { theme } = useStore();
 
+  // Calculate Progress
+  const totalFlags = path.modules.reduce((acc, module) => acc + module.rooms.length, 0);
+  const collectedFlags = completedRooms.length;
+
   return (
-    <div className={`flex-1 overflow-y-auto p-6 md:p-12
+    <div className={`flex-1 overflow-y-auto p-6 md:p-12 relative
       ${theme === 'dark' ? 'bg-transparent text-gray-100' : 'bg-transparent text-coffee'}
     `}>
+      {/* Flags Counter */}
+      <div className={`absolute top-6 right-6 md:top-12 md:right-12 flex items-center gap-3 px-4 py-2 border-4 rounded-xl font-bold font-pixel shadow-pixel z-10
+        ${theme === 'dark'
+          ? 'bg-gray-800 border-gray-700 text-amber-400'
+          : 'bg-parchment border-wood text-wood-dark'}
+      `}>
+        <Flag className="w-5 h-5 fill-current animate-pulse" />
+        <span className="text-xl md:text-2xl tracking-widest">{collectedFlags} / {totalFlags}</span>
+      </div>
+
       <div className="max-w-4xl mx-auto space-y-12">
-        <header className="space-y-4">
-          <h1 className={`text-3xl md:text-4xl font-bold font-pixel
+        <header className="space-y-4 relative">
+
+
+          <h1 className={`text-2xl md:text-3xl font-bold font-pixel
             ${theme === 'dark' ? 'text-amber-400' : 'text-wood-dark'}
           `}>
-            Trading Valley Path
+            CandleCrush-Trading Valley
           </h1>
           <p className={`max-w-2xl font-medium opacity-80
             ${theme === 'dark' ? 'text-gray-400' : 'text-coffee/80'}
@@ -113,7 +129,7 @@ const RoadmapView: React.FC<RoadmapViewProps> = ({ path, completedRooms, onSelec
                   : 'bg-wood-light/20 border-wood-light/50 text-wood-dark'}
               `}>
                 <div className="text-[10px] font-black uppercase tracking-widest mb-1 opacity-60">
-                  SECTION {modIdx + 1}
+                  MODULE {modIdx + 1}
                 </div>
                 <h2 className="text-xl font-bold font-pixel">{module.title}</h2>
                 <p className="text-sm mt-2 opacity-80">{module.description}</p>

@@ -16,11 +16,14 @@ import Leaderboard from './components/Leaderboard';
 import TasksPage from './components/TasksPage';
 import Auth from './components/Auth'; // Import Auth
 import Footer from './components/Footer';
+import ContestLobby from './components/ContestLobby';
+import ContestGame from './components/ContestGame';
+import About from './components/About';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
 import { UserProfile } from './types';
-import { getRankName } from './utils/rankIcons';
+import { getRankName, getRankTier } from './utils/rankIcons';
 
 // Global error tracker for debugging
 let globalError = "";
@@ -34,6 +37,7 @@ const logError = (msg: string) => {
 // ...
 
 const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
+  const rankTier = getRankTier(doc.totalProfit);
   return {
     userId,
     username: doc.name,
@@ -41,8 +45,8 @@ const mapUserDocToProfile = (doc: UserDoc, userId: string): UserProfile => {
     totalProfit: doc.totalProfit,
     xp: doc.xp,
     level: 1, // Default
-    rank: doc.rankScore,
-    rankName: getRankName(doc.rankScore),
+    rank: rankTier,
+    rankName: getRankName(rankTier),
     totalTrades: 0,
     winningTrades: 0,
     losingTrades: 0,
@@ -68,31 +72,92 @@ const AppContent: React.FC = () => {
   const [showAuth, setShowAuth] = React.useState(false);
   const location = useLocation();
 
+  // 🔊 Global Audio Manager
+  const { isMuted } = useStore();
+  const bgMusicRef = React.useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Initialize Audio once
+    if (!bgMusicRef.current) {
+      bgMusicRef.current = new Audio('/sounds/bg.mp3');
+      bgMusicRef.current.loop = true;
+      bgMusicRef.current.volume = 0.2;
+    }
+
+    const bgMusic = bgMusicRef.current;
+
+    // Handle Mute/Play State
+    if (!isMuted) {
+      bgMusic.play().catch(() => {
+        // Auto-play blocked
+      });
+    } else {
+      bgMusic.pause();
+    }
+
+    const handleInteraction = () => {
+      // Try to start music on interaction if not muted and currently paused
+      if (!useStore.getState().isMuted && bgMusic.paused) {
+        bgMusic.play().catch(() => { });
+      }
+
+      // Handle Click Sound
+      if (!useStore.getState().isMuted) {
+        // We do this check inside the event listener to get fresh state if needed, 
+        // though the effect dependency on isMuted might handle some of it. 
+        // Direct store access ensures we don't need to re-bind the listener constantly if unnecessary.
+      }
+    };
+
+    const playClickSound = (e: MouseEvent) => {
+      // 1. Try to start BG music if needed
+      handleInteraction();
+
+      // 2. Play Click Sound if not muted
+      if (useStore.getState().isMuted) return;
+
+      const target = e.target as HTMLElement;
+      const button = target.closest('button') || target.closest('[role="button"]');
+
+      if (button) {
+        const audio = new Audio('/sounds/click.wav');
+        audio.volume = 0.5;
+        audio.play().catch(() => { });
+      }
+    };
+
+    window.addEventListener('click', playClickSound);
+
+    return () => {
+      window.removeEventListener('click', playClickSound);
+      bgMusic.pause();
+    };
+  }, [isMuted]);
+
   // 🔥 Auth Listener
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setUserId(user.uid);
+      try {
+        if (user) {
+          setUserId(user.uid);
 
-        // Load user profile
-        try {
+          // Load user profile
           const doc = await createUserIfNotExists(user.uid, user.displayName || 'Trader');
           const userProfile = mapUserDocToProfile(doc, user.uid);
           console.log("Loaded Profile from Firestore:", userProfile);
           setUserProfile(userProfile);
           setShowAuth(false);
-        } catch (error: any) {
-          const errMsg = error.message || error;
-          logError('Error loading user profile: ' + errMsg);
-          // If it's a permission error, we still want to hide the auth modal 
-          // if the user is technically authed, but show the error banner.
-          setShowAuth(false);
+        } else {
+          setUserId(''); // Clear user
+          setShowAuth(true); // Show login screen
         }
-      } else {
-        setUserId(''); // Clear user
-        setShowAuth(true); // Show login screen
+      } catch (error: any) {
+        const errMsg = error.message || error;
+        logError('Error loading user profile: ' + errMsg);
+        setShowAuth(false);
+      } finally {
+        setInitializing(false);
       }
-      setInitializing(false);
     });
 
     return () => unsubscribe();
@@ -113,7 +178,8 @@ const AppContent: React.FC = () => {
         balance: data.balance,
         xp: data.xp,
         totalProfit: data.totalProfit || 0,
-        rank: data.rankScore, // Corrected from data.rank
+        rank: getRankTier(data.totalProfit || 0), // Use Tier based on Profit
+        completedRooms: data.completedRooms,
       });
     });
 
@@ -150,6 +216,7 @@ const AppContent: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/roadmap" element={<RoadmapPage />} />
         <Route path="/module/:moduleId" element={<LearningMode />} />
         <Route path="/learn/:moduleId/:roomId" element={<TopicExplanationPage />} />
@@ -157,7 +224,8 @@ const AppContent: React.FC = () => {
         <Route path="/learn" element={<RoadmapPage />} />
         <Route path="/game" element={<GameMode />} />
         <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
-        <Route path="/tasks" element={<TasksPage />} />
+        <Route path="/contest" element={<ContestLobby />} />
+        <Route path="/contest/:contestId" element={<ContestGame />} />
       </Routes>
 
       {!hideFooter && <Footer />}

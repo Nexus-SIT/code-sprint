@@ -77,7 +77,7 @@ const RankDisplay: React.FC<RankDisplayProps> = ({
 
             {/* Tooltip for exact values */}
             <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 text-white text-xs px-2 py-1 rounded whitespace-nowrap pointer-events-none z-20 font-body">
-                {totalProfit.toLocaleString()} / {nextRankProfit?.toLocaleString()} XP
+                {totalProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / {nextRankProfit?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} XP
             </div>
         </div>
     );

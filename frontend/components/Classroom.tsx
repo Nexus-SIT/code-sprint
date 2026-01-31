@@ -93,7 +93,7 @@ const Classroom: React.FC = () => {
         `}>
             {/* Background Image */}
             <div className="absolute inset-0 pointer-events-none opacity-10 z-0 blur-sm"
-                style={{ backgroundImage: "url('/bg.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                style={{ backgroundImage: "url('/bg.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
             </div>
 
             {/* Sidebar - Task List (Quest Log Style) */}
@@ -220,7 +220,7 @@ const Classroom: React.FC = () => {
                 {/* Right: Interactive Area (Chart/Quiz - Terminal Style) */}
                 <div className={`flex-1 relative flex items-center justify-center overflow-hidden
                     ${isDark ? 'bg-black/50' : 'bg-[#2a2a2a]'}
-                `}>
+                 `}>
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
 
                     {/* CRT Scanline effect */}

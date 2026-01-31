@@ -2,6 +2,8 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MentorEmotion } from '../types';
 
+import { useStore } from '../store';
+
 interface MentorProps {
   emotion: MentorEmotion;
   text: string;
@@ -9,11 +11,11 @@ interface MentorProps {
 
 const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
   const [isMouthOpen, setIsMouthOpen] = React.useState(false);
+  const { isMuted } = useStore();
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   React.useEffect(() => {
     // Only animate mouth if text is present and emotion involves "talking" (thinking/neutral generally)
-    // We avoid animating for happy/sad/alert as they might have specific fixed expressions, 
-    // but user request implies general talking. Let's limit to neutral/thinking for now as requested.
     if (text && (emotion === 'thinking' || emotion === 'neutral')) {
       const interval = setInterval(() => {
         setIsMouthOpen(prev => !prev);
@@ -24,15 +26,40 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
     }
   }, [text, emotion]);
 
+  // 🔊 Cat Speaking Sound Effect
+  // React.useEffect(() => {
+  //   if (!audioRef.current) {
+  //     audioRef.current = new Audio('/sounds/cat.mp3');
+  //     audioRef.current.loop = true;
+  //     audioRef.current.volume = 0.3;
+  //   }
+
+  //   const audio = audioRef.current;
+  //   const isTalking = text && (emotion === 'thinking' || emotion === 'neutral');
+
+  //   if (isTalking && !isMuted) {
+  //     audio.play().catch(() => { });
+  //   } else {
+  //     audio.pause();
+  //     if (!isTalking) {
+  //       audio.currentTime = 0; // Reset only if stopped talking
+  //     }
+  //   }
+
+  //   return () => {
+  //     audio.pause();
+  //   };
+  // }, [text, emotion, isMuted]);
+
   const getImage = (emotion: MentorEmotion) => {
     switch (emotion) {
-      case 'happy': return '/mentor/CatJoyFull.png';
-      case 'alert': return '/mentor/CatShocked.png';
-      case 'sad': return '/mentor/CatSad.png';
+      case 'happy': return '/mentor/catjoyfull.webp';
+      case 'alert': return '/mentor/catshocked.webp';
+      case 'sad': return '/mentor/catsad.webp';
       case 'thinking':
       default:
-        // Use CatNormalOpen.png when mouth should be open
-        return isMouthOpen ? '/mentor/CatNormalOpen.png' : '/mentor/CatNormal.png';
+        // Use catnormalopen.webp when mouth should be open
+        return isMouthOpen ? '/mentor/catnormalopen.webp' : '/mentor/catnormal.webp';
     }
   };
 
@@ -47,7 +74,7 @@ const Mentor: React.FC<MentorProps> = ({ emotion, text }) => {
       {/* Avatar Container */}
       <div className="flex-shrink-0 w-24 h-24 bg-wood/20 border-2 border-wood-dark rounded flex items-center justify-center relative overflow-hidden">
         <motion.img
-          key={`${emotion}-${isMouthOpen}`} // Key change triggers re-render but we want smooth transition.
+          key={emotion} // Key change triggers re-render but we want smooth transition.
           // Actually, standard img src change is fast enough. 
           // Framer motion key might cause full unmount/remount flicker which is good for expression change but maybe not for talking.
           // Let's keep key as just emotion for big changes, but for talking we rely on src update.

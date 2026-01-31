@@ -18,7 +18,7 @@ type GamePhase = 'BETTING' | 'SIMULATING' | 'RESULT';
 
 const GameMode: React.FC = () => {
   const navigate = useNavigate();
-  const { walletBalance, userId, userProfile, setUserProfile, theme } = useStore();
+  const { walletBalance, userId, userProfile, setUserProfile, theme, updateBalance, addXp } = useStore();
 
   const [fullData, setFullData] = useState<Candle[]>([]);
   const [visibleData, setVisibleData] = useState<Candle[]>([]);
@@ -114,8 +114,8 @@ const GameMode: React.FC = () => {
     }
 
     setResultPnL(pnl);
-    // updateBalance(pnl); // Handled by Firebase sync
-    // addXp(pnl > 0 ? 100 : 10); // Handled by Firebase sync
+    updateBalance(pnl);
+    addXp(pnl > 0 ? 100 : 10);
 
     // Execute trade on backend if user is logged in
     if (userId) {
@@ -167,8 +167,8 @@ const GameMode: React.FC = () => {
     if (phase === 'BETTING') return { emotion: 'thinking', text: "The crops depend on this trade. Which way will it go?" };
     if (phase === 'SIMULATING') return { emotion: 'alert', text: "Hold onto your hat! The market is moving!" };
     if (phase === 'RESULT') {
-      if (resultPnL > 0) return { emotion: 'happy', text: `Bountiful harvest! You made $${resultPnL.toFixed(0)}!` };
-      if (resultPnL < 0) return { emotion: 'sad', text: `Oh dear... Looks like a drought. Lost $${Math.abs(resultPnL).toFixed(0)}.` };
+      if (resultPnL > 0) return { emotion: 'happy', text: `Bountiful harvest! You made ₹${resultPnL.toFixed(0)}!` };
+      if (resultPnL < 0) return { emotion: 'sad', text: `Oh dear... Looks like a drought. Lost ₹${Math.abs(resultPnL).toFixed(0)}.` };
       return { emotion: 'neutral', text: "Steady as a rock." };
     }
     return { emotion: 'neutral', text: '' };
@@ -205,9 +205,9 @@ const GameMode: React.FC = () => {
 
           <div className="flex-1 flex justify-center">
             <img
-              src="/CCLogo.png"
+              src="/cclogo.webp"
               alt="Candle Crush"
-              className="h-6 md:h-8 w-auto object-contain drop-shadow-sm"
+              className="h-10 md:h-16 w-auto object-contain drop-shadow-sm transform hover:scale-105 transition-transform"
             />
           </div>
 

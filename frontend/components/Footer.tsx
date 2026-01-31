@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../store';
 import { Github } from 'lucide-react';
 
@@ -12,12 +13,12 @@ const Footer: React.FC = () => {
             }`}>
             <div className="max-w-7xl mx-auto px-4 py-8">
                 <div className="flex flex-col md:flex-row justify-center items-center gap-6 w-full mb-6">
-                    <a
-                        href="/about"
+                    <Link
+                        to="/about"
                         className="font-pixel text-lg hover:text-yellow-400 transition-colors border-b-2 border-transparent hover:border-yellow-400"
                     >
                         About Us
-                    </a>
+                    </Link>
 
                     <a
                         href="https://github.com/Nexus-SIT/nexus-alpha"
