@@ -62,7 +62,7 @@ Frontend
 - Tailwind CSS for styling
 - Lucide React for icons
 
-See README_GUIDED_LEARNING.md and other docs in repo for detailed architecture and data models.
+
 
 ## Usability & Impact
 
@@ -120,3 +120,4 @@ GEMINI_API_KEY=your_gemini_api_key_here
 npm run dev
 ```
 Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
+# See README_GUIDED_LEARNING.md and other docs in repo for detailed architecture and data models.
