@@ -14,12 +14,24 @@ College Name: Srinivas Institute Of Technology, Valachil, Mangalore
 provide a safe, educational environment that teaches retail students core stock-market concepts, risk management and chart-reading by letting them practice in a simulated league instead of risking real capital. Theme: Stock market and FinTech.
 
 ## Proposed Solution
-We built a guided-learning + simulation platform that combines:
-- 8 structured learning modules with a deterministic 3-step cat-mentor explanation flow (left → center → right).
-- Interactive tasks immediately following lessons (MCQ, Matching, Prediction).
-- A simulated trading game with candlestick charts, virtual capital, ranks and achievements to apply learned concepts.
+We built **CandleCrush**, a gamified educational platform that transforms stock market learning into an engaging, risk-free experience. 
 
-This addresses inexperienced student traders by teaching practical rules (entry/exit, stop-loss, risk-reward, liquidity traps) and letting them practise in a safe league with rewards and progress tracking.
+Our solution combines three core pillars:
+
+### 1. Immersive Guided Learning
+- **Interactive Storytelling**: A "Stardew Valley" inspired pixel-art world where users are guided by a virtual cat mentor.
+- **Structured Curriculum**: 8 progressive learning modules (from basic terminology to advanced patterns) with a deterministic teaching flow.
+- **Active Recall**: Immediate knowledge reinforcement through interactive tasks (Match-the-following, Prediction challenges, Quizzes) embedded after every lesson.
+
+### 2. Gamified Trading Simulation (The Arena)
+- **Risk-Free Trading**: A real-time market simulation where students trade on live candlestick charts using virtual capital.
+- **Competitive League**: A 7-tier ranking system where users compete for higher ranks based on their portfolio performance (Profit/Loss).
+- **Dynamic Challenges**: Users execute Buy/Sell/Hold decisions in fast-paced scenarios to test their instincts.
+
+### 3. Social & Competitive Ecosystem
+- **Community Hub**: A built-in chat system for users to discuss strategies, share tips, and participate in community polls.
+- **Progression System**: A comprehensive XP and achievement system that rewards consistency, accurate predictions, and learning milestones.
+- **Leaderboards**: Global and friend-based leaderboards to foster healthy competition.
 
 ## Innovation & Creativity
 - Deterministic cat-mentor teaching system with typing animations and staged learning cards.
