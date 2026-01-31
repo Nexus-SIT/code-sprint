@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import { auth } from '../firebase';
-import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap, Users, Volume2, VolumeX } from 'lucide-react';
+import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap, Users, Volume2, VolumeX, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
@@ -32,6 +32,12 @@ const Home: React.FC = () => {
                     className="bg-amber-500 hover:bg-amber-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-amber-700 flex items-center gap-2"
                 >
                     <Info size={14} /> <span className="hidden sm:inline">RANK INFO</span>
+                </button>
+                <button
+                    onClick={() => navigate('/community')}
+                    className="bg-pink-500 hover:bg-pink-600 text-white font-pixel text-[10px] px-3 py-2 rounded shadow-pixel border-2 border-pink-700 flex items-center gap-2"
+                >
+                    <MessageSquare size={14} /> <span className="hidden sm:inline">COMMUNITY</span>
                 </button>
                 <ThemeToggle />
                 <button
@@ -119,9 +125,6 @@ const Home: React.FC = () => {
                         </button>
                     </div>
                 </motion.div>
-
-                {/* Leaderboard Card - NEW */}
-
 
                 {/* Contest Card - NEW */}
                 <motion.div

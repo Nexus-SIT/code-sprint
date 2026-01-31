@@ -19,6 +19,7 @@ import Footer from './components/Footer';
 import ContestLobby from './components/ContestLobby';
 import ContestGame from './components/ContestGame';
 import About from './components/About';
+import Community from './components/Community';
 
 import { createUserIfNotExists } from './services/firebaseApi';
 import { UserDoc } from './types/user';
@@ -226,6 +227,7 @@ const AppContent: React.FC = () => {
         <Route path="/leaderboard" element={<Leaderboard userId={userId || undefined} />} />
         <Route path="/contest" element={<ContestLobby />} />
         <Route path="/contest/:contestId" element={<ContestGame />} />
+        <Route path="/community" element={<Community />} />
       </Routes>
 
       {!hideFooter && <Footer />}
