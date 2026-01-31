@@ -65,9 +65,20 @@ Frontend
 See README_GUIDED_LEARNING.md and other docs in repo for detailed architecture and data models.
 
 ## Usability & Impact
-Users: students and novice retail traders.
-Interaction: follow learning modules, attempt tasks, then play the trading simulation to apply learning. Earn XP, badges and climb leaderboards.
-Impact: reduce early-money mistakes by teaching risk-management and disciplined entry/exit behavior before users trade real funds.
+
+### Target Audience
+- **Students & Gen Z**: Who find traditional finance apps boring or intimidating.
+- **Novice Investors**: People who want to trade but are afraid of losing money.
+
+### User Experience (UX)
+- **Gamified Onboarding**: Users essentially "play" a tutorial level rather than reading a manual.
+- **Intuitive Design**: Familiar WASD/gaming controls and interface logic make the platform instantly usable for digital natives.
+- **Responsive & Accessible**: High-contrast pixel art and clear, bite-sized text ensure readability across devices.
+
+### Social & Educational Impact
+1.  **Financial Safety Net**: We provide a sandbox where "blowing up an account" is a learning moment, not a financial disaster.
+2.  **Behavioral Correction**: The system rewards *discipline* (setting stop-losses, patience) over gambling-like behavior, instilling good habits before real capital is at risk.
+3.  **Community Learning**: By shifting trading from a lonely activity to a social one (polls, chats), we accelerate learning through peer exchange.
 
 ## Setup Instructions (Local)
 1. Clone repository
