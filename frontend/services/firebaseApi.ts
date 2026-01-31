@@ -340,3 +340,12 @@ const getRankName = (profit: number) => {
     }
     return 'Novice Trader';
 };
+export const awardXP = async (userId: string, amount: number) => {
+    const userRef = doc(db, 'users', userId);
+    await runTransaction(db, async (tx) => {
+        const snap = await tx.get(userRef);
+        if (!snap.exists()) return;
+        const currentXp = (snap.data() as UserDoc).xp || 0;
+        tx.update(userRef, { xp: currentXp + amount });
+    });
+};
