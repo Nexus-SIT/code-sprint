@@ -180,7 +180,7 @@ const Community: React.FC = () => {
     };
 
     return (
-        <div className={`min-h-screen p-4 md:p-6 relative font-body transition-colors flex flex-col ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'
+        <div className={`h-screen overflow-hidden p-4 md:p-6 relative font-body transition-colors flex flex-col ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-parchment text-coffee'
             }`}>
             {/* Header */}
             <div className={`p-4 flex items-center gap-4 border-4 shadow-pixel z-10 rounded-xl mb-6 ${theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-wood-dark border-wood text-white'}`}>
