@@ -23,6 +23,42 @@ const TopicExplanationPage: React.FC = () => {
     const module = TRADER_PATH.modules.find(m => m.id === moduleId);
     const room = module?.rooms.find(r => r.id === roomId);
 
+    // Calculate Next Room URL
+    let nextRoomUrl: string | null = null;
+    if (module && room) {
+        const moduleIdx = TRADER_PATH.modules.findIndex(m => m.id === moduleId);
+        const roomIdx = module.rooms.findIndex(r => r.id === roomId);
+
+        if (roomIdx < module.rooms.length - 1) {
+            // Next room in current module
+            nextRoomUrl = `/learn/${moduleId}/${module.rooms[roomIdx + 1].id}`;
+        } else if (moduleIdx < TRADER_PATH.modules.length - 1) {
+            // First room of next module
+            const nextModule = TRADER_PATH.modules[moduleIdx + 1];
+            if (nextModule.rooms.length > 0) {
+                nextRoomUrl = `/learn/${nextModule.id}/${nextModule.rooms[0].id}`;
+            }
+        }
+    }
+
+    // Calculate Previous Room URL
+    let prevRoomUrl: string | null = null;
+    if (module && room) {
+        const moduleIdx = TRADER_PATH.modules.findIndex(m => m.id === moduleId);
+        const roomIdx = module.rooms.findIndex(r => r.id === roomId);
+
+        if (roomIdx > 0) {
+            // Previous room in current module
+            prevRoomUrl = `/learn/${moduleId}/${module.rooms[roomIdx - 1].id}`;
+        } else if (moduleIdx > 0) {
+            // Last room of previous module
+            const prevModule = TRADER_PATH.modules[moduleIdx - 1];
+            if (prevModule.rooms.length > 0) {
+                prevRoomUrl = `/learn/${prevModule.id}/${prevModule.rooms[prevModule.rooms.length - 1].id}`;
+            }
+        }
+    }
+
     // Load content
     useEffect(() => {
         if (room) {
@@ -91,10 +127,16 @@ const TopicExplanationPage: React.FC = () => {
         navigate('/learn');
     };
 
-    // Quick skip
-    const handleSkip = () => {
-        setCurrentLineIndex(lines.length - 1);
-        setShowContinue(true);
+    const handleNext = () => {
+        if (nextRoomUrl) {
+            navigate(nextRoomUrl);
+        }
+    };
+
+    const handlePrev = () => {
+        if (prevRoomUrl) {
+            navigate(prevRoomUrl);
+        }
     };
 
     if (!room) return <div>Loading...</div>;
@@ -150,8 +192,36 @@ const TopicExplanationPage: React.FC = () => {
 
             {/* RIGHT: Content */}
             <div className={`w-full md:w-7/12 flex flex-col relative z-10 h-[60vh] md:h-screen
-                ${theme === 'dark' ? 'bg-gray-900/95' : 'bg-parchment/95'}
-            `}>
+                 ${theme === 'dark' ? 'bg-gray-900/95' : 'bg-parchment/95'}
+             `}>
+                {/* Next Button */}
+                {nextRoomUrl && (
+                    <button
+                        onClick={handleNext}
+                        className={`absolute top-6 right-6 flex items-center gap-2 z-20 transition-all font-pixel text-xs px-4 py-2 rounded shadow-pixel border-b-4 active:border-b-0 active:translate-y-1 active:mt-1
+                             ${theme === 'dark'
+                                ? 'bg-gray-700 text-gray-300 border-gray-900 hover:bg-gray-600'
+                                : 'bg-wood-light text-wood-dark border-wood-dark hover:bg-parchment'}
+                         `}
+                    >
+                        NEXT <ArrowRight size={16} />
+                    </button>
+                )}
+
+                {/* Previous Button */}
+                {prevRoomUrl && (
+                    <button
+                        onClick={handlePrev}
+                        className={`absolute top-6 right-24 flex items-center gap-2 z-20 transition-all font-pixel text-xs px-4 py-2 rounded shadow-pixel border-b-4 active:border-b-0 active:translate-y-1 active:mt-1
+                             ${theme === 'dark'
+                                ? 'bg-gray-700 text-gray-300 border-gray-900 hover:bg-gray-600'
+                                : 'bg-wood-light text-wood-dark border-wood-dark hover:bg-parchment'}
+                         `}
+                    >
+                        <ArrowLeft size={16} /> PREV
+                    </button>
+                )}
+
                 <div className="flex-1 overflow-y-auto p-6 md:p-12 pb-32">
                     <div className="max-w-2xl mx-auto w-full">
                         {/* Header */}
@@ -211,55 +281,46 @@ const TopicExplanationPage: React.FC = () => {
                                 ))}
                             </div>
 
-                            {/* Skip Button (if not done) */}
-                            {!showContinue && (
-                                <button
-                                    onClick={handleSkip}
-                                    className="absolute bottom-2 right-2 text-xs opacity-50 hover:opacity-100 font-bold uppercase tracking-widest"
-                                >
-                                    Skip »
-                                </button>
-                            )}
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {/* Footer Action Area - Fixed at bottom */}
-                <div className={`absolute bottom-0 left-0 right-0 p-6 border-t-4 backdrop-blur-md
+            {/* Footer Action Area - Fixed at bottom */}
+            <div className={`absolute bottom-0 left-0 right-0 p-6 border-t-4 backdrop-blur-md
                     ${theme === 'dark'
-                        ? 'bg-gray-900/90 border-gray-700'
-                        : 'bg-wood/90 border-wood-dark'}
+                    ? 'bg-gray-900/90 border-gray-700'
+                    : 'bg-wood/90 border-wood-dark'}
                 `}>
-                    <div className="max-w-2xl mx-auto flex justify-between items-center">
-                        <div className="text-xs font-bold uppercase tracking-widest opacity-60">
-                            {currentLineIndex + 1} / {lines.length} SEGMENTS
-                        </div>
-
-                        {showContinue ? (
-                            <motion.button
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleContinue}
-                                className={`px-8 py-4 rounded-xl font-bold font-pixel flex items-center gap-3 shadow-pixel border-b-4 active:border-b-0 active:translate-y-1 active:mt-1 transition-all
-                                    ${theme === 'dark'
-                                        ? 'bg-indigo-600 hover:bg-indigo-500 text-white border-indigo-900'
-                                        : 'bg-success hover:bg-green-600 text-white border-green-800'}
-                                `}
-                            >
-                                START CHALLENGES <ArrowRight size={20} />
-                            </motion.button>
-                        ) : (
-                            <button
-                                onClick={() => setCurrentLineIndex(prev => Math.min(prev + 1, lines.length - 1))}
-                                disabled={!isComplete && currentLineIndex < lines.length - 1}
-                                className="px-6 py-3 rounded-lg bg-gray-500/20 font-bold opacity-50 cursor-not-allowed"
-                            >
-                                ...
-                            </button>
-                        )}
+                <div className="max-w-2xl mx-auto flex justify-between items-center">
+                    <div className="text-xs font-bold uppercase tracking-widest opacity-60">
+                        {currentLineIndex + 1} / {lines.length} SEGMENTS
                     </div>
+
+                    {showContinue ? (
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={handleContinue}
+                            className={`px-8 py-4 rounded-xl font-bold font-pixel flex items-center gap-3 shadow-pixel border-b-4 active:border-b-0 active:translate-y-1 active:mt-1 transition-all
+                                    ${theme === 'dark'
+                                    ? 'bg-indigo-600 hover:bg-indigo-500 text-white border-indigo-900'
+                                    : 'bg-success hover:bg-green-600 text-white border-green-800'}
+                                `}
+                        >
+                            START CHALLENGES <ArrowRight size={20} />
+                        </motion.button>
+                    ) : (
+                        <button
+                            onClick={() => setCurrentLineIndex(prev => Math.min(prev + 1, lines.length - 1))}
+                            disabled={!isComplete && currentLineIndex < lines.length - 1}
+                            className="px-6 py-3 rounded-lg bg-gray-500/20 font-bold opacity-50 cursor-not-allowed"
+                        >
+                            ...
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
