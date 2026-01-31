@@ -130,17 +130,17 @@ const ContestLobby: React.FC = () => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-pixel text-wood-dark uppercase">Starting Virtual Funds ($)</label>
+                                    <label className="text-[10px] font-pixel text-wood-dark uppercase">Starting Virtual Funds (₹)</label>
                                     <select
                                         value={startingBalance}
                                         onChange={(e) => setStartingBalance(e.target.value)}
                                         className="w-full bg-white dark:bg-gray-700 border-4 border-wood-dark/20 rounded-xl py-3 px-4 font-pixel text-sm focus:border-amber-500 outline-none transition-all"
                                     >
-                                        <option value="1000">$1,000</option>
-                                        <option value="5000">$5,000</option>
-                                        <option value="10000">$10,000</option>
-                                        <option value="50000">$50,000</option>
-                                        <option value="100000">$100,000</option>
+                                        <option value="1000">₹1,000</option>
+                                        <option value="5000">₹5,000</option>
+                                        <option value="10000">₹10,000</option>
+                                        <option value="50000">₹50,000</option>
+                                        <option value="100000">₹100,000</option>
                                     </select>
                                 </div>
                                 <div className="space-y-2">

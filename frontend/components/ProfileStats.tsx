@@ -64,21 +64,21 @@ const ProfileStats: React.FC<ProfileStatsProps> = ({ userId: propUserId }) => {
         {
             icon: <TrendingUp className="w-6 h-6" />,
             label: 'Total Profit',
-            value: `$${userProfile.totalProfit.toLocaleString()}`,
+            value: `₹${userProfile.totalProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
             color: userProfile.totalProfit >= 0 ? 'text-green-500' : 'text-red-500',
             bgColor: userProfile.totalProfit >= 0 ? 'bg-green-500/10' : 'bg-red-500/10'
         },
         {
             icon: <Award className="w-6 h-6" />,
             label: 'Best Trade',
-            value: `$${userProfile.bestTrade.toLocaleString()}`,
+            value: `₹${userProfile.bestTrade.toLocaleString()}`,
             color: 'text-yellow-500',
             bgColor: 'bg-yellow-500/10'
         },
         {
             icon: <TrendingDown className="w-6 h-6" />,
             label: 'Worst Trade',
-            value: `$${userProfile.worstTrade.toLocaleString()}`,
+            value: `₹${userProfile.worstTrade.toLocaleString()}`,
             color: 'text-red-500',
             bgColor: 'bg-red-500/10'
         },

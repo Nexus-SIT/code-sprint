@@ -123,7 +123,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ userId, limit = 10, showBack 
 
                                             {/* Profit */}
                                             <div className={`text-right font-pixel text-sm ${isCurrentUser ? 'text-parchment' : 'text-coffee'}`}>
-                                                ${entry.totalProfit.toLocaleString()}
+                                                ₹{entry.totalProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </div>
                                         </div>
                                     </motion.div>

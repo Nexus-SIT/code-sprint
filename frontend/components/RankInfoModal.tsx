@@ -93,7 +93,7 @@ const RankInfoModal: React.FC<RankInfoModalProps> = ({ isOpen, onClose, theme })
                                             <div className="flex items-center md:justify-end gap-2">
                                                 <span className={`text-[10px] font-pixel uppercase tracking-tighter opacity-50`}>Req. Profit</span>
                                                 <div className={`font-pixel text-sm ${theme === 'dark' ? 'text-green-400' : 'text-success'}`}>
-                                                    {tier.minProfit <= -1000000 ? 'START' : `$${tier.minProfit.toLocaleString()}`}
+                                                    {tier.minProfit <= -1000000 ? 'START' : `₹${tier.minProfit.toLocaleString()}`}
                                                 </div>
                                             </div>
                                             <p className={`text-xs italic opacity-60 mt-1`}>
