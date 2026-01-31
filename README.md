@@ -81,7 +81,42 @@ See README_GUIDED_LEARNING.md and other docs in repo for detailed architecture a
 3.  **Community Learning**: By shifting trading from a lonely activity to a social one (polls, chats), we accelerate learning through peer exchange.
 
 ## Setup Instructions (Local)
-1. Clone repository
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm or yarn
+
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/Nexus-SIT/nexus-alpha.git
 cd nexus-alpha
+```
+
+### 2. Backend Setup
+The backend handles API requests and data persistence.
+```bash
+cd backend
+npm install
+npm start
+```
+*The backend server should now be running on port 5000 (default).*
+
+### 3. Frontend Setup
+Open a new terminal for the frontend.
+```bash
+# From the root directory
+cd frontend
+npm install
+```
+
+#### Configuration
+Create a `.env.local` file in the `frontend` directory and add your API keys:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+#### Run the Application
+```bash
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
