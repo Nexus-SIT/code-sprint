@@ -120,33 +120,7 @@ const Home: React.FC = () => {
                 </motion.div>
 
                 {/* Leaderboard Card - NEW */}
-                <motion.div
-                    whileHover={{ scale: 1.02, y: -5 }}
-                    className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all aspect-square ${theme === 'dark'
-                        }`}
-                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
-                >
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-600/20'
-                            }`}>
-                            <Award size={40} className="text-purple-400" />
-                        </div>
-                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
-                            }`}>
-                            LEADERBOARD
-                        </h3>
-                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
-                            }`}>
-                            Check top traders.
-                        </p>
-                        <button
-                            onClick={() => navigate('/leaderboard')}
-                            className="w-full bg-purple-600 text-white border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-purple-500 transition-all shadow-lg mt-auto"
-                        >
-                            VIEW RANKINGS
-                        </button>
-                    </div>
-                </motion.div>
+
 
                 {/* Contest Card - NEW */}
                 <motion.div
@@ -173,6 +147,34 @@ const Home: React.FC = () => {
                             className="w-full bg-amber-600 text-white border-b-4 border-amber-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-amber-500 transition-all shadow-lg mt-auto"
                         >
                             ENTER ARENA
+                        </button>
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all aspect-square ${theme === 'dark'
+                        }`}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.png')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
+                >
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-purple-900/30' : 'bg-purple-600/20'
+                            }`}>
+                            <Award size={40} className="text-purple-400" />
+                        </div>
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                            }`}>
+                            LEADERBOARD
+                        </h3>
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                            }`}>
+                            Check top traders.
+                        </p>
+                        <button
+                            onClick={() => navigate('/leaderboard')}
+                            className="w-full bg-purple-600 text-white border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-purple-500 transition-all shadow-lg mt-auto"
+                        >
+                            VIEW RANKINGS
                         </button>
                     </div>
                 </motion.div>
