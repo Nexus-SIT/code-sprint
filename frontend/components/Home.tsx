@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store';
 import { auth } from '../firebase';
-import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap, Users, Volume2, VolumeX } from 'lucide-react';
+import { BookOpen, Trophy, TrendingUp, Coins, Star, Award, Target, Zap, Users, Volume2, VolumeX, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
 import Leaderboard from './Leaderboard';
@@ -60,7 +60,7 @@ const Home: React.FC = () => {
             </div>
 
             {/* Game Mode Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl w-full mx-auto mb-8 relative z-10 px-2 md:px-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl w-full mx-auto mb-8 relative z-10 px-2 md:px-0">
                 {/* Tutorial Card */}
                 <motion.div
                     whileHover={{ scale: 1.02, y: -5 }}
@@ -175,6 +175,35 @@ const Home: React.FC = () => {
                             className="w-full bg-purple-600 text-white border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-purple-500 transition-all shadow-lg mt-auto"
                         >
                             VIEW RANKINGS
+                        </button>
+                    </div>
+                </motion.div>
+
+                {/* Community Card - NEW */}
+                <motion.div
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    className={`rounded-xl p-6 shadow-pixel cursor-pointer transition-all aspect-square ${theme === 'dark'
+                        }`}
+                    style={theme !== 'dark' ? { backgroundImage: "url('/tile.webp')", backgroundSize: '100% 100%', backgroundRepeat: 'no-repeat' } : {}}
+                >
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                        <div className={`p-4 rounded-full mb-4 ${theme === 'dark' ? 'bg-pink-900/30' : 'bg-pink-600/20'
+                            }`}>
+                            <MessageSquare size={40} className="text-pink-500" />
+                        </div>
+                        <h3 className={`text-xl font-pixel mb-2 ${theme === 'dark' ? 'text-amber-300' : 'text-parchment'
+                            }`}>
+                            COMMUNITY
+                        </h3>
+                        <p className={`text-xs mb-4 ${theme === 'dark' ? 'text-gray-400' : 'text-parchment/80'
+                            }`}>
+                            Chat with traders.
+                        </p>
+                        <button
+                            onClick={() => navigate('/community')}
+                            className="w-full bg-pink-600 text-white border-b-4 border-pink-900 active:border-b-0 active:translate-y-1 rounded-lg py-3 font-pixel text-xs hover:bg-pink-500 transition-all shadow-lg mt-auto"
+                        >
+                            OPEN CHAT
                         </button>
                     </div>
                 </motion.div>
