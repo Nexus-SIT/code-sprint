@@ -4,7 +4,7 @@ import { useStore } from '../store';
 import { db } from '../firebase';
 import { awardXP } from '../services/firebaseApi';
 import { collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp, updateDoc, doc, arrayUnion, runTransaction } from 'firebase/firestore';
-import { ArrowLeft, Send, MessageSquare, Plus, Clock, BarChart2, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Send, MessageSquare, Plus, Clock, BarChart2, CheckCircle2, ArrowDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface PollOption {
@@ -37,10 +37,20 @@ const Community: React.FC = () => {
     const [showPollCreator, setShowPollCreator] = useState(false);
     const [pollQuestion, setPollQuestion] = useState('');
     const [pollOptions, setPollOptions] = useState(['Yes', 'No']);
+    const [showScrollButton, setShowScrollButton] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const chatContainerRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        setShowScrollButton(false);
+    };
+
+    const handleScroll = () => {
+        if (!chatContainerRef.current) return;
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+        const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+        setShowScrollButton(!isNearBottom);
     };
 
     useEffect(() => {
@@ -275,7 +285,11 @@ const Community: React.FC = () => {
 
             {/* Chat Container */}
             <div className="max-w-4xl w-full mx-auto flex-1 flex flex-col relative z-10 overflow-hidden rounded-2xl border-4 border-wood-dark shadow-pixel bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-                <div className="flex-1 overflow-y-auto p-4 space-y-6">
+                <div
+                    ref={chatContainerRef}
+                    onScroll={handleScroll}
+                    className="flex-1 overflow-y-auto p-4 space-y-6"
+                >
                     <AnimatePresence initial={false}>
                         {messages.map((msg) => {
                             const isMe = msg.senderId === userId;
@@ -397,6 +411,21 @@ const Community: React.FC = () => {
                     </AnimatePresence>
                     <div ref={messagesEndRef} />
                 </div>
+
+                {/* Scroll to Bottom Button */}
+                <AnimatePresence>
+                    {showScrollButton && (
+                        <motion.button
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
+                            onClick={scrollToBottom}
+                            className="absolute bottom-20 right-8 z-20 bg-amber-500 text-white p-3 rounded-full shadow-lg border-2 border-white dark:border-gray-800 hover:bg-amber-600 transition-colors"
+                        >
+                            <ArrowDown size={24} />
+                        </motion.button>
+                    )}
+                </AnimatePresence>
 
                 {/* Input Area */}
                 <div className="p-4 bg-wood/10 dark:bg-gray-900/50 border-t-4 border-wood-dark">
