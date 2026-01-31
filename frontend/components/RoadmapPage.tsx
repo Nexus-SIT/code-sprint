@@ -94,7 +94,7 @@ const RoadmapPage: React.FC = () => {
             {/* Background Pattern for Light Mode */}
             {
                 theme !== 'dark' && (
-                    <div className="absolute inset-0 pointer-events-none opacity-10 z-0" style={{ backgroundImage: "url('/tile.webp')", backgroundSize: '128px' }}></div>
+                    <div className="fixed inset-0 pointer-events-none opacity-10 z-0" style={{ backgroundImage: "url('/bg.webp')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}></div>
                 )
             }
         </div >
