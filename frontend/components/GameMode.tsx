@@ -184,7 +184,7 @@ const GameMode: React.FC = () => {
         onDismiss={dismissAchievement}
       />
 
-      <div className={`flex flex-col h-screen relative p-2 md:p-3 max-w-7xl mx-auto font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'text-gray-100' : 'text-coffee'
+      <div className={`flex flex-col h-[100dvh] relative p-1.5 md:p-3 max-w-7xl mx-auto font-body selection:bg-wood-light selection:text-parchment transition-colors ${theme === 'dark' ? 'text-gray-100' : 'text-coffee'
         }`}>
         {/* Theme Toggle - Top Right */}
         <div className="absolute top-4 right-4 z-30">
@@ -237,10 +237,10 @@ const GameMode: React.FC = () => {
         </div>
 
         {/* Main Game Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 md:gap-4 flex-1 min-h-0 overflow-hidden">
+        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-2 md:gap-4 flex-1 min-h-0 overflow-hidden">
 
           {/* Chart Section (The Window) */}
-          <div className="lg:col-span-3 flex flex-col gap-2 md:gap-3 min-h-0">
+          <div className="flex-1 lg:flex-initial lg:col-span-3 flex flex-col gap-2 md:gap-3 min-h-0">
             {/* The Chart Window */}
             <div className="bg-parchment rounded-lg border-4 border-wood-dark shadow-pixel relative flex flex-col flex-1 p-1 overflow-hidden min-h-0">
               {/* Window Frame Inner Border */}
@@ -252,53 +252,55 @@ const GameMode: React.FC = () => {
             </div>
 
             {/* Mentor Dialogue Box - MORE COMPACT */}
-            <div className="h-28 md:h-32 w-full flex-shrink-0">
+            <div className="h-24 md:h-32 w-full flex-shrink-0">
               <Mentor emotion={mentor.emotion} text={mentor.text} />
             </div>
           </div>
 
           {/* Controls Section (Wood Panel) */}
-          <div className="bg-wood rounded-lg border-4 border-wood-dark shadow-pixel p-4 flex flex-col justify-between gap-4 relative">
+          <div className="bg-wood rounded-lg border-4 border-wood-dark shadow-pixel p-2 md:p-4 flex flex-col justify-between gap-2 md:gap-4 relative text-sm md:text-base">
             {/* Wood Grain Texture Overlay (CSS handled) */}
 
             {phase === 'BETTING' && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex flex-col gap-6 h-full"
+                className="flex flex-col gap-2 md:gap-6 h-full"
               >
-                <div className="bg-parchment/10 p-4 rounded border-2 border-wood-dark/50">
-                  <label className="text-parchment text-sm font-pixel mb-2 block text-center">WAGER AMOUNT</label>
-                  <input
-                    type="number"
-                    value={betAmount}
-                    onChange={(e) => setBetAmount(e.target.value)}
-                    className="w-full bg-parchment border-4 border-wood-dark rounded p-3 text-coffee font-pixel text-lg focus:ring-4 focus:ring-wood-light outline-none text-center shadow-inner"
-                  />
-                  <div className="flex justify-between text-xs text-parchment/70 mt-2 font-pixel">
-                    <span>MIN: 100</span>
-                    <span>MAX: {Math.floor(walletBalance).toLocaleString()}</span>
+                <div className="bg-parchment/10 p-2 md:p-4 rounded border-2 border-wood-dark/50 flex flex-row md:flex-col items-center gap-4 md:gap-0 justify-between">
+                  <label className="text-parchment text-xs md:text-sm font-pixel md:mb-2 block text-center whitespace-nowrap">WAGER:</label>
+                  <div className="w-full">
+                    <input
+                      type="number"
+                      value={betAmount}
+                      onChange={(e) => setBetAmount(e.target.value)}
+                      className="w-full bg-parchment border-4 border-wood-dark rounded p-1.5 md:p-3 text-coffee font-pixel text-base md:text-lg focus:ring-4 focus:ring-wood-light outline-none text-center shadow-inner"
+                    />
+                    <div className="flex justify-between text-[10px] md:text-xs text-parchment/70 mt-1 md:mt-2 font-pixel">
+                      <span>MIN: 100</span>
+                      <span>MAX: {Math.floor(walletBalance).toLocaleString()}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3 flex-1 justify-center">
+                <div className="flex flex-row md:flex-col gap-2 md:gap-3 flex-1 justify-center">
                   <button
                     onClick={() => handleBet('BUY')}
-                    className="w-full bg-success text-white border-b-[6px] border-green-900 active:border-b-0 active:translate-y-[6px] rounded-lg py-5 font-pixel text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+                    className="flex-1 md:w-full bg-success text-white border-b-[4px] md:border-b-[6px] border-green-900 active:border-b-0 active:translate-y-[4px] md:active:translate-y-[6px] rounded-lg py-3 md:py-5 font-pixel text-xs md:text-sm flex items-center justify-center gap-1 md:gap-2 hover:brightness-110 transition-all"
                   >
-                    <TrendingUp size={24} /> BUY (LONG)
+                    <TrendingUp className="w-4 h-4 md:w-6 md:h-6" /> <span className="hidden sm:inline">BUY (LONG)</span><span className="sm:hidden">BUY</span>
                   </button>
                   <button
                     onClick={() => handleBet('SELL')}
-                    className="w-full bg-failure text-white border-b-[6px] border-red-900 active:border-b-0 active:translate-y-[6px] rounded-lg py-5 font-pixel text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+                    className="flex-1 md:w-full bg-failure text-white border-b-[4px] md:border-b-[6px] border-red-900 active:border-b-0 active:translate-y-[4px] md:active:translate-y-[6px] rounded-lg py-3 md:py-5 font-pixel text-xs md:text-sm flex items-center justify-center gap-1 md:gap-2 hover:brightness-110 transition-all"
                   >
-                    <TrendingDown size={24} /> SELL (SHORT)
+                    <TrendingDown className="w-4 h-4 md:w-6 md:h-6" /> <span className="hidden sm:inline">SELL (SHORT)</span><span className="sm:hidden">SELL</span>
                   </button>
                   <button
                     onClick={() => handleBet('HOLD')}
-                    className="w-full bg-wood-light text-parchment border-b-[6px] border-wood-dark active:border-b-0 active:translate-y-[6px] rounded-lg py-5 font-pixel text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all"
+                    className="flex-1 md:w-full bg-wood-light text-parchment border-b-[4px] md:border-b-[6px] border-wood-dark active:border-b-0 active:translate-y-[4px] md:active:translate-y-[6px] rounded-lg py-3 md:py-5 font-pixel text-xs md:text-sm flex items-center justify-center gap-1 md:gap-2 hover:brightness-110 transition-all"
                   >
-                    <Minus size={24} /> SKIP DAY
+                    <Minus className="w-4 h-4 md:w-6 md:h-6" /> <span className="hidden sm:inline">SKIP DAY</span><span className="sm:hidden">SKIP</span>
                   </button>
                 </div>
               </motion.div>
