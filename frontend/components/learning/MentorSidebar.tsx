@@ -21,52 +21,96 @@ const MentorSidebar: React.FC<MentorSidebarProps> = ({ emotion, onBack }) => {
     };
 
     return (
-        <div className="w-full md:w-[400px] bg-[#5D4037] flex flex-col items-center p-6 relative border-r-4 border-[#3E2723] shadow-2xl">
-            {/* Back Button */}
-            <div className="w-full mb-8">
+        <>
+            {/* DESKTOP SIDEBAR (Detailed) */}
+            <div className="hidden md:flex w-[400px] bg-[#5D4037] flex-col items-center p-6 relative border-r-4 border-[#3E2723] shadow-2xl h-full z-20">
+                {/* Back Button */}
+                <div className="w-full mb-8">
+                    <button
+                        onClick={onBack}
+                        className="flex items-center gap-2 bg-[#8D6E63] text-[#EFEBE9] px-4 py-2 rounded-lg border-b-4 border-[#3E2723] active:border-b-0 active:translate-y-1 hover:bg-[#A1887F] font-bold font-pixel text-sm uppercase transition-all shadow-lg"
+                    >
+                        <ArrowLeft size={16} /> Back
+                    </button>
+                </div>
+
+                {/* Pattern Background Overlay */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none"
+                    style={{
+                        backgroundImage: `radial-gradient(#3E2723 15%, transparent 16%), radial-gradient(#3E2723 15%, transparent 16%)`,
+                        backgroundSize: '20px 20px',
+                        backgroundPosition: '0 0, 10px 10px'
+                    }}>
+                </div>
+
+                {/* Portrait Frame */}
+                <div className="relative z-10 w-full aspect-square max-w-[320px] bg-[#EFEBE9] p-4 rounded-xl border-4 border-[#D7CCC8] shadow-[0_0_0_8px_#8D6E63,0_10px_20px_rgba(0,0,0,0.5)]">
+                    <div className="w-full h-full bg-[#D7CCC8] rounded-lg overflow-hidden flex items-end justify-center relative inner-shadow">
+                        {/* Inner Shadow for depth */}
+                        <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] pointer-events-none z-20"></div>
+
+                        <motion.img
+                            key={`desktop-${emotion}`}
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+                            src={getAsset()}
+                            alt="Mentor Cat"
+                            className="w-[90%] object-contain relative z-10 drop-shadow-xl filter contrast-125"
+                        />
+                    </div>
+                </div>
+
+                {/* Nameplate */}
+                <div className="relative z-20 -mt-6">
+                    <div className="bg-[#3E2723] text-[#FFE0B2] px-10 py-3 rounded-lg border-2 border-[#8D6E63] shadow-lg font-pixel text-xl tracking-widest uppercase text-shadow">
+                        MENTOR
+                    </div>
+                </div>
+            </div>
+
+            {/* MOBILE HEADER (Compact) */}
+            <div className="flex md:hidden w-full bg-[#5D4037] items-center p-3 relative border-b-4 border-[#3E2723] shadow-xl z-20 shrink-0">
+                {/* Top Pattern Overlay */}
+                <div className="absolute inset-0 opacity-10 pointer-events-none"
+                    style={{
+                        backgroundImage: `radial-gradient(#3E2723 15%, transparent 16%), radial-gradient(#3E2723 15%, transparent 16%)`,
+                        backgroundSize: '10px 10px',
+                    }}>
+                </div>
+
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-2 bg-[#8D6E63] text-[#EFEBE9] px-4 py-2 rounded-lg border-b-4 border-[#3E2723] active:border-b-0 active:translate-y-1 hover:bg-[#A1887F] font-bold font-pixel text-sm uppercase transition-all shadow-lg"
+                    className="flex items-center justify-center bg-[#8D6E63] text-[#EFEBE9] w-10 h-10 rounded-lg border-b-4 border-[#3E2723] active:border-b-0 active:translate-y-1 hover:bg-[#A1887F] font-bold font-pixel transition-all shadow-md mr-4 relative z-10"
                 >
-                    <ArrowLeft size={16} /> Back
+                    <ArrowLeft size={18} />
                 </button>
-            </div>
 
-            {/* Pattern Background Overlay */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none"
-                style={{
-                    backgroundImage: `radial-gradient(#3E2723 15%, transparent 16%), radial-gradient(#3E2723 15%, transparent 16%)`,
-                    backgroundSize: '20px 20px',
-                    backgroundPosition: '0 0, 10px 10px'
-                }}>
-            </div>
+                {/* Compact Portrait */}
+                <div className="relative z-10 w-12 h-12 bg-[#EFEBE9] p-1 rounded-lg border-2 border-[#D7CCC8] shadow-[0_0_0_2px_#8D6E63] mr-3">
+                    <div className="w-full h-full bg-[#D7CCC8] rounded overflow-hidden flex items-end justify-center relative">
+                        <motion.img
+                            key={`mobile-${emotion}`}
+                            initial={{ scale: 0.8 }}
+                            animate={{ scale: 1 }}
+                            src={getAsset()}
+                            alt="Mentor"
+                            className="w-full object-contain"
+                        />
+                    </div>
+                </div>
 
-            {/* Portrait Frame */}
-            <div className="relative z-10 w-full aspect-square max-w-[320px] bg-[#EFEBE9] p-4 rounded-xl border-4 border-[#D7CCC8] shadow-[0_0_0_8px_#8D6E63,0_10px_20px_rgba(0,0,0,0.5)]">
-                <div className="w-full h-full bg-[#D7CCC8] rounded-lg overflow-hidden flex items-end justify-center relative inner-shadow">
-                    {/* Inner Shadow for depth */}
-                    <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] pointer-events-none z-20"></div>
-
-                    <motion.img
-                        key={emotion}
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                        src={getAsset()}
-                        alt="Mentor Cat"
-                        className="w-[90%] object-contain relative z-10 drop-shadow-xl filter contrast-125"
-                    />
+                {/* Text Info */}
+                <div className="relative z-10">
+                    <div className="text-[#FFE0B2] font-pixel text-sm tracking-widest uppercase text-shadow leading-none">
+                        MENTOR
+                    </div>
+                    <div className="text-[#A1887F] text-xs font-bold leading-none mt-1">
+                        Here to help!
+                    </div>
                 </div>
             </div>
-
-            {/* Nameplate */}
-            <div className="relative z-20 -mt-6">
-                <div className="bg-[#3E2723] text-[#FFE0B2] px-10 py-3 rounded-lg border-2 border-[#8D6E63] shadow-lg font-pixel text-xl tracking-widest uppercase text-shadow">
-                    MENTOR
-                </div>
-            </div>
-
-        </div>
+        </>
     );
 };
 
