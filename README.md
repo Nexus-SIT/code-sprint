@@ -107,13 +107,7 @@ Open a new terminal for the frontend.
 # From the root directory
 cd frontend
 npm install
-```
 
-#### Configuration
-Create a `.env.local` file in the `frontend` directory and add your API keys:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-```
 
 #### Run the Application
 ```bash
